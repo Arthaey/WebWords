@@ -5,11 +5,17 @@ describe("Page", function() {
     dom.cleanup();
   });
 
-  it("starts with no words", function() {
+  it("starts with no words", function(asyncDone) {
     const page = new Page();
     expect(page.langCode).toBeNull();
+    expect(page.totalWordCount).toBe(0);
+    expect(page.uniqueWordCount).toBe(0);
+    expect(page.knownWordCount).toBe(0);
     expect(page.words).toBeEmpty();
-    expect(page.uniqueWords).toBeEmpty();
+    page.loaded().then(function(returnedPage) {
+      expect(returnedPage).toEqual(page);
+      asyncDone();
+    });
   });
 
   it("creates a Word for each supported element", function() {
@@ -26,15 +32,17 @@ describe("Page", function() {
     const page = new Page("es", elements);
 
     expect(page.langCode).toEqual("es");
-    expect(page.words.length).toBe(8);
-    expect(page.words).toContain(new Word(dom.createElement("h1", {}, "uno")));
-    expect(page.words).toContain(new Word(dom.createElement("h2", {}, "dos")));
-    expect(page.words).toContain(new Word(dom.createElement("h3", {}, "tres")));
-    expect(page.words).toContain(new Word(dom.createElement("h4", {}, "cuatro")));
-    expect(page.words).toContain(new Word(dom.createElement("h5", {}, "cinco")));
-    expect(page.words).toContain(new Word(dom.createElement("h6", {}, "seis")));
-    expect(page.words).toContain(new Word(dom.createElement("p", {}, "siete")));
-    expect(page.words).toContain(new Word(dom.createElement("article", {}, "ocho")));
+    expect(page.totalWordCount).toBe(8);
+    expect(page.uniqueWordCount).toBe(8);
+    expect(page.knownWordCount).toBe(0);
+    expect(page.words["uno"]).toEqual([new Word("uno")]);
+    expect(page.words["dos"]).toEqual([new Word("dos")]);
+    expect(page.words["tres"]).toEqual([new Word("tres")]);
+    expect(page.words["cuatro"]).toEqual([new Word("cuatro")]);
+    expect(page.words["cinco"]).toEqual([new Word("cinco")]);
+    expect(page.words["seis"]).toEqual([new Word("seis")]);
+    expect(page.words["siete"]).toEqual([new Word("siete")]);
+    expect(page.words["ocho"]).toEqual([new Word("ocho")]);
   });
 
   it("counts unique words", function() {
@@ -46,11 +54,13 @@ describe("Page", function() {
 
     const page = new Page("es", elements);
 
-    expect(Object.keys(page.uniqueWords).length).toBe(3);
-    expect(page.uniqueWords["uno"]).toBe(2);
-    expect(page.uniqueWords["dos"]).toBe(2);
-    expect(page.uniqueWords["tres"]).toBe(1);
-    expect(page.uniqueWords["cuatro"]).toBeUndefined();
+    expect(page.totalWordCount).toBe(5);
+    expect(page.uniqueWordCount).toBe(3);
+    expect(page.knownWordCount).toBe(0);
+    expect(page.words["uno"].length).toBe(2);
+    expect(page.words["dos"].length).toBe(2);
+    expect(page.words["tres"].length).toBe(1);
+    expect(page.words["cuatro"]).toBeUndefined();
   });
 
   it("wraps each word in an element", function() {
@@ -76,8 +86,11 @@ describe("Page", function() {
 
     expect(page.elements.length).toBe(1);
     expect(page.elements[0].innerText).toEqual(text);
-    expect(Object.keys(page.uniqueWords).length).toBe(2);
-    expect(page.uniqueWords["uno"]).toBe(1);
-    expect(page.uniqueWords["dos"]).toBe(1);
+    expect(page.totalWordCount).toBe(2);
+    expect(page.uniqueWordCount).toBe(2);
+    expect(page.knownWordCount).toBe(0);
+    expect(page.words["uno"]).toEqual([new Word("uno")]);
+    expect(page.words["dos"]).toEqual([new Word("dos")]);
+  });
   });
 });

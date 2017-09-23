@@ -1,22 +1,26 @@
 'use strict';
 
 const Page = function(langCode, rootElement) {
-  this.reset();
-
+  this.resetWords();
   this.langCode = langCode || null;
-  this.parseWords(rootElement);
+
+  this.loadedPromise = this.parseWords(rootElement);
 };
 
-Page.prototype.reset = function() {
-  this.words = [];
-  this.uniqueWords = [];
+Page.prototype.resetWords = function() {
+  this.words = []; // hash of string => array of Word
+  this.totalWordCount = 0;
+  this.uniqueWordCount = 0;
+  this.knownWordCount = 0;
   this.elements = [];
 };
 
 Page.prototype.parseWords = function(rootElement) {
-  if (!rootElement) return;
+  if (!rootElement) {
+    return Promise.resolve(this);
+  }
 
-  this.reset();
+  this.resetWords();
 
   const rootContainerElement = document.createElement("div");
   rootContainerElement.appendChild(rootElement);
@@ -34,12 +38,15 @@ Page.prototype.parseWords = function(rootElement) {
     Page.replaceContents(element, wrappedElements);
     thisPage.elements.push(element);
   });
+
+  return Promise.resolve(this);
 };
 
 Page.prototype.wrapWord = function(text) {
   let element;
 
   if (text.match(WebWords.splitRegex)) {
+    // punctuation, spaces, etc
     element = document.createTextNode(text);
   } else {
     element = document.createElement("span");
@@ -47,16 +54,22 @@ Page.prototype.wrapWord = function(text) {
     element.classList.add("unknown");
     element.innerHTML = text;
 
-    const word = new Word(element);
-    this.words.push(word);
+    const textKey = text.toLowerCase();
+    this.totalWordCount += 1;
 
-    if (!this.uniqueWords[word.text]) {
-      this.uniqueWords[word.text] = 0;
+    if (!this.words[textKey]) {
+      this.uniqueWordCount += 1;
+      this.words[textKey] = [];
     }
-    this.uniqueWords[word.text] += 1;
+
+    this.words[textKey].push(new Word(element));
   }
 
   return element;
+};
+
+Page.prototype.loaded = function() {
+  return this.loadedPromise;
 };
 
 Page.replaceContents = function(containerElement, childElements) {
@@ -65,17 +78,3 @@ Page.replaceContents = function(containerElement, childElements) {
     containerElement.appendChild(childElement);
   });
 };
-
-/*
-Page.getTextNodes = function(element) {
-  const textNodes = [];
-  const walker = document.createTreeWalker(element ,NodeFilter.SHOW_TEXT, null, false);
-
-  let textNode = null;
-  while (textNode = walker.next()) {
-    textNodes.push(textNode);
-  }
-
-  return textNodes;
-};
-*/

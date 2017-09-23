@@ -10,6 +10,33 @@ const InfoBox = function(page) {
   this.update(page);
 };
 
+InfoBox.prototype.update = function(page) {
+  this.element.innerHTML = "";
+  if (!page) return;
+
+  const totalWordCount = page.totalWordCount;
+  const uniqueWordCount = page.uniqueWordCount;
+  const knownWordCount = page.knownWordCount;
+  const percentWords = knownWordCount / totalWordCount; // TODO
+  const percentPage = knownWordCount / totalWordCount; // TODO
+
+  const langCode = document.createElement("p");
+  langCode.innerHTML = `language: ${page.langCode.toUpperCase()}`;
+  this.element.appendChild(langCode);
+
+  const percentWordsKnown = document.createElement("p");
+  percentWordsKnown.innerHTML = `${percentWords}% words known`;
+  this.element.appendChild(percentWordsKnown);
+
+  const percentPageKnown = document.createElement("p");
+  percentPageKnown.innerHTML = `${percentPage}% page known`;
+  this.element.appendChild(percentPageKnown);
+
+  const wordCount = document.createElement("p");
+  wordCount.innerHTML = `${totalWordCount} words, ${uniqueWordCount} unique`;
+  this.element.appendChild(wordCount);
+};
+
 InfoBox.addStylesheet = function() {
   const id = "webwords-stylesheet";
   if (document.getElementById(id)) return;
@@ -43,23 +70,4 @@ InfoBox.addStylesheet = function() {
 
 InfoBox.addCssRule = function(stylesheet, rule) {
   stylesheet.insertRule(rule, stylesheet.cssRules.length);
-};
-
-InfoBox.prototype.update = function(page) {
-  this.element.innerHTML = "";
-  if (!page) return;
-
-  const totalWordCount = page.words.length;
-  const uniqueWordCount = Object.keys(page.uniqueWords).length;
-  const knownWordCount = 0;
-  const percent = knownWordCount / totalWordCount;
-
-  const langAndPercentKnown = document.createElement("p");
-  langAndPercentKnown.innerHTML = `${page.langCode.toUpperCase()}: ${percent}% known`;
-
-  const wordCount = document.createElement("p");
-  wordCount.innerHTML = `${totalWordCount} words, ${uniqueWordCount} unique`;
-
-  this.element.appendChild(langAndPercentKnown);
-  this.element.appendChild(wordCount);
 };

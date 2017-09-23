@@ -42,11 +42,15 @@ describe("InfoBox", function() {
     });
 
     it("shows percent words known", function() {
-      expect(infoBox.element).toHaveText("0% known");
+      expect(infoBox.element).toHaveText("0% words known");
+    });
+
+    it("shows percent page known", function() {
+      expect(infoBox.element).toHaveText("0% page known");
     });
 
     it("shows language code", function() {
-      expect(infoBox.element).toHaveText("ES: ");
+      expect(infoBox.element).toHaveText("language: ES");
     });
   });
 });

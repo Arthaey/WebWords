@@ -1,11 +1,14 @@
 'use strict';
 
-const Word = function(parentElement, learningStatus = "unknown") {
-  const lowercase = parentElement.innerText.trim().toLowerCase()
-  this.text = lowercase.replace(WebWords.punctRegex, "");
-  this.learningStatus = learningStatus;
+const Word = function(textOrElement, learningStatus = "unknown") {
+  let text = textOrElement;
+  if ("string" !== typeof textOrElement) {
+    text = textOrElement.innerText;
+    textOrElement.addEventListener("click", this.markAsKnown.bind(this));
+  }
 
-  parentElement.addEventListener("click", this.markAsKnown.bind(this));
+  this.text = text.trim().toLowerCase().replace(WebWords.punctRegex, "");
+  this.learningStatus = learningStatus;
 };
 
 Word.prototype.markAsKnown = function() {

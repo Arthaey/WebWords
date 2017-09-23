@@ -16,7 +16,31 @@ beforeEach(function() {
       return {
         compare: function(actualElement, expectedText) {
           return {
-            pass: actualElement.innerText === expectedText
+            pass: actualElement.innerText.includes(expectedText),
+            message: `Expected '${expectedText}' but was '${actualElement.innerText}'`
+          };
+        }
+      };
+    },
+
+    toHaveClass: function() {
+      return {
+        compare: function(actualElement, expectedClass) {
+          return {
+            pass: actualElement.classList.contains(expectedClass)
+          };
+        }
+      };
+    },
+
+    toHaveStyle: function() {
+      return {
+        compare: function(actualElement, attribute, expectedValue) {
+          var styles = window.getComputedStyle(actualElement);
+          var actualValue = styles.getPropertyValue(attribute) ;
+          return {
+            pass: actualValue === expectedValue,
+            message: `Expected ${attribute} = '${expectedValue}' but was '${actualValue}'`
           };
         }
       };

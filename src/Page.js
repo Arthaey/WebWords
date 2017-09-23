@@ -1,7 +1,9 @@
 'use strict';
 
-const Page = function(rootElement) {
+const Page = function(langCode, rootElement) {
   this.reset();
+
+  this.langCode = langCode || null;
   this.parseWords(rootElement);
 };
 

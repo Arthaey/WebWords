@@ -7,6 +7,7 @@ describe("Page", function() {
 
   it("starts with no words", function() {
     const page = new Page();
+    expect(page.langCode).toBeNull();
     expect(page.words).toBeEmpty();
     expect(page.uniqueWords).toBeEmpty();
   });
@@ -22,8 +23,9 @@ describe("Page", function() {
       dom.createElement("p", {}, "siete"),
       dom.createElement("article", {}, "ocho"),
     );
-    const page = new Page(elements);
+    const page = new Page("es", elements);
 
+    expect(page.langCode).toEqual("es");
     expect(page.words.length).toBe(8);
     expect(page.words).toContain(new Word(dom.createElement("h1", {}, "uno")));
     expect(page.words).toContain(new Word(dom.createElement("h2", {}, "dos")));
@@ -42,7 +44,7 @@ describe("Page", function() {
       dom.createElement("p", {}, "tres dos uno"),
     );
 
-    const page = new Page(elements);
+    const page = new Page("es", elements);
 
     expect(Object.keys(page.uniqueWords).length).toBe(3);
     expect(page.uniqueWords["uno"]).toBe(2);
@@ -59,7 +61,7 @@ describe("Page", function() {
       '<span class="L1 unknown">dos</span> ' +
       '<span class="L1 unknown">tres</span>';
 
-    const page = new Page(element);
+    const page = new Page("es", element);
 
     expect(page.elements.length).toBe(1);
     expect(page.elements[0].innerText).toEqual(text);
@@ -70,7 +72,7 @@ describe("Page", function() {
     const text = "'¿Uno, dos?'";
     const element = dom.createElement("p", {}, text);
 
-    const page = new Page(element);
+    const page = new Page("es", element);
 
     expect(page.elements.length).toBe(1);
     expect(page.elements[0].innerText).toEqual(text);

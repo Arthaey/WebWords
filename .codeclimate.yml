@@ -19,4 +19,4 @@ ratings:
   - "**.jsx"
   - "**.module"
 exclude_paths:
-- spec/
+- spec/lib/

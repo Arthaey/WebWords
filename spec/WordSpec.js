@@ -2,7 +2,7 @@
 
 describe("Word", function() {
   it("requires text", function() {
-    expect(function() { new Word() }).toThrow();
+    expect(function() { new Word() }).toThrow(); /* eslint no-new: "off" */
   });
 
   it("has text from a string", function() {

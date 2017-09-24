@@ -7,7 +7,7 @@ describe("InfoBox", function() {
     beforeEach(function() {
       const elements = dom.createElement("div", {},
         dom.createElement("p", {}, "Esta es una frase."),
-        dom.createElement("p", {}, "Y esta es otra."),
+        dom.createElement("p", {}, "Y esta es otra.")
       );
       const page = new Page("es", elements);
 
@@ -55,7 +55,7 @@ describe("InfoBox", function() {
 
       const elements = dom.createElement("div", {},
         dom.createElement("p", {}, "Esta es una frase."),
-        dom.createElement("p", {}, "Y esta es otra."),
+        dom.createElement("p", {}, "Y esta es otra.")
       );
       const page = new Page("es", elements);
 

@@ -3,11 +3,11 @@ const FIELDBOOK_URL = "https://api.fieldbook.com/v1/sheetId/";
 beforeEach(function() {
   const wordEqualityTester = function(first, second) {
     if (first instanceof Word && second instanceof Word) {
-      return first.text == second.text &&
-             first.learningStatus == second.learningStatus &&
-             first.occurrences.length == second.occurrences.length &&
+      return first.text === second.text &&
+             first.learningStatus === second.learningStatus &&
+             first.occurrences.length === second.occurrences.length &&
              first.occurrences.every(function(el, i) {
-               return Word.normalizeText(el) == Word.normalizeText(second.occurrences[i])
+               return Word.normalizeText(el) === Word.normalizeText(second.occurrences[i])
              })
              ;
     }
@@ -32,7 +32,7 @@ beforeEach(function() {
       return {
         compare: function(actualElement) {
           return {
-            pass: actualElement.length == 0
+            pass: actualElement.length === 0
           };
         }
       };
@@ -91,7 +91,7 @@ window.dom = (function() {
         element[attr] = attrs[attr];
       }
 
-      if (content.length == 1 && "string" === typeof content[0]) {
+      if (content.length === 1 && "string" === typeof content[0]) {
         element.innerText = content[0];
       } else {
         for (var i = 0; i < content.length; i++) {
@@ -115,7 +115,7 @@ window.dom = (function() {
       }
     }
   };
-})();
+}());
 
 var mockAjaxRequest = function(expectedUrl, expectedResponse) {
     var request = jasmine.Ajax.requests.mostRecent();

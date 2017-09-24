@@ -24,7 +24,7 @@ describe("Page", function() {
       dom.createElement("h5", {}, "cinco"),
       dom.createElement("h6", {}, "seis"),
       dom.createElement("p", {}, "siete"),
-      dom.createElement("article", {}, "ocho"),
+      dom.createElement("article", {}, "ocho")
     );
 
     const page = new Page("es", elements);
@@ -48,7 +48,7 @@ describe("Page", function() {
     const elements = dom.createElement("div", {},
       dom.createElement("p", {}, "uno"),
       dom.createElement("p", {}, "dos"),
-      dom.createElement("p", {}, "tres dos uno"),
+      dom.createElement("p", {}, "tres dos uno")
     );
 
     const page = new Page("es", elements);
@@ -121,7 +121,7 @@ describe("Page", function() {
 
       const elements = dom.createElement("div", {},
         dom.createElement("p", {}, "Esta es una frase."),
-        dom.createElement("p", {}, "Y esta es otra."),
+        dom.createElement("p", {}, "Y esta es otra.")
       );
 
       const page = new Page("es", elements);

@@ -25,7 +25,7 @@ Word.prototype.addOccurrence = function(element) {
 };
 
 Word.prototype.updateCssClasses = function() {
-  const otherStatus = (this.learningStatus == Word.KNOWN) ? Word.UNKNOWN : Word.KNOWN;
+  const otherStatus = (this.learningStatus === Word.KNOWN) ? Word.UNKNOWN : Word.KNOWN;
 
   const thisWord = this;
   this.occurrences.forEach(function(element) {
@@ -52,7 +52,7 @@ Word.create = function(textOrElement, learningStatus) {
   if (learningStatus) {
     const previousStatus = word.learningStatus;
     word.learningStatus = learningStatus;
-    if (learningStatus != previousStatus) {
+    if (learningStatus !== previousStatus) {
       word.updateCssClasses();
     }
   }

@@ -19,11 +19,11 @@ Page.prototype.resetWords = function() {
 };
 
 Page.prototype.percentKnownUniqueWords = function() {
-  return Math.round(this.uniqueKnownWordCount * 100.0 / this.uniqueWordCount);
+  return Page._formatPercent(this.uniqueKnownWordCount, this.uniqueWordCount);
 };
 
 Page.prototype.percentKnownPageWords = function() {
-  return Math.round(this.totalKnownWordCount * 100.0 / this.totalWordCount);
+  return Page._formatPercent(this.totalKnownWordCount, this.totalWordCount);
 };
 
 Page.prototype.parseWords = function(rootElement) {
@@ -83,7 +83,7 @@ Page.prototype.addWord = function(element) {
   const textKey = element.innerText.toLowerCase();
 
   const isNew = !this.words[textKey];
-  const isKnown = (word.learningStatus == Word.KNOWN);
+  const isKnown = (word.learningStatus === Word.KNOWN);
 
   this.totalWordCount += 1;
   if (isNew) this.uniqueWordCount += 1;
@@ -128,7 +128,7 @@ Page.prototype.parseSavedData = function(savedData) {
   records.forEach(function(record) {
     const wordOnPage = thisPage.words[record.word];
     if (!wordOnPage) return;
-    if (wordOnPage.learningStatus != Word.KNOWN && record.how_well_known == Word.KNOWN) {
+    if (wordOnPage.learningStatus !== Word.KNOWN && record.how_well_known === Word.KNOWN) {
       thisPage.uniqueKnownWordCount += 1;
       thisPage.totalKnownWordCount += wordOnPage.occurrences.length;
       wordOnPage.markAsKnown();
@@ -141,4 +141,8 @@ Page.replaceContents = function(containerElement, childElements) {
   childElements.forEach(function(childElement) {
     containerElement.appendChild(childElement);
   });
+};
+
+Page._formatPercent = function(nominator, denominator) {
+  return Math.round(nominator * 100.0 / denominator);
 };

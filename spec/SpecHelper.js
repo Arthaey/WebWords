@@ -62,8 +62,8 @@ beforeEach(function() {
     toHaveStyle: function() {
       return {
         compare: function(actualElement, attribute, expectedValue) {
-          var styles = window.getComputedStyle(actualElement);
-          var actualValue = styles.getPropertyValue(attribute) ;
+          const styles = window.getComputedStyle(actualElement);
+          const actualValue = styles.getPropertyValue(attribute) ;
           return {
             pass: actualValue === expectedValue,
             message: `Expected ${attribute} = '${expectedValue}' but was '${actualValue}'`
@@ -80,21 +80,21 @@ afterEach(function() {
   dom.cleanup();
 });
 
-window.dom = (function() {
-  var elements = [];
+const dom = (function() {
+  const elements = [];
 
   return {
     createElement: function(tag, attrs, ...content) {
-      var element = document.createElement(tag);
+      const element = document.createElement(tag);
 
-      for (var attr in attrs) {
+      for (let attr in attrs) {
         element[attr] = attrs[attr];
       }
 
       if (content.length === 1 && "string" === typeof content[0]) {
         element.innerText = content[0];
       } else {
-        for (var i = 0; i < content.length; i++) {
+        for (let i = 0; i < content.length; i++) {
           element.appendChild(content[i]);
         }
       }
@@ -106,8 +106,8 @@ window.dom = (function() {
     },
 
     cleanup: function() {
-      for (var i in elements) {
-        var element = elements[i];
+      for (let i in elements) {
+        const element = elements[i];
         if (element && element.parentNode) {
           element.parentNode.removeChild(element);
         }
@@ -117,8 +117,8 @@ window.dom = (function() {
   };
 }());
 
-var mockAjaxRequest = function(expectedUrl, expectedResponse) {
-    var request = jasmine.Ajax.requests.mostRecent();
+const mockAjaxRequest = function(expectedUrl, expectedResponse) {
+    const request = jasmine.Ajax.requests.mostRecent();
 
     request.respondWith({
       status: 200,

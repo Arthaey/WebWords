@@ -24,6 +24,9 @@ beforeEach(function() {
     stylesheet.parentNode.removeChild(stylesheet);
   }
 
+  localStorage.setItem(WebWords.fieldbookKeyId, "test-fieldbook-key");
+  localStorage.setItem(WebWords.fieldbookSecretId, "test-fieldbook-secret");
+
   jasmine.Ajax.install();
 
   jasmine.addMatchers({

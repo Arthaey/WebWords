@@ -155,5 +155,29 @@ describe("Page", function() {
 
       mockAjaxRequest(FIELDBOOK_URL + "es", json);
     });
+
+    it("does not request data if no key set", function(asyncDone) {
+      localStorage.removeItem(WebWords.fieldbookKeyId);
+      localStorage.setItem(WebWords.fieldbookSecretId, "something");
+
+      const page = new Page("es", dom.createElement("p", {}, "palabra"));
+      page.loaded().catch(function(errorMsg) {
+        expect(errorMsg).toContain("missing Fieldbook key");
+        expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
+        asyncDone();
+      });
+    });
+
+    it("does not request data if no secret set", function(asyncDone) {
+      localStorage.removeItem(WebWords.fieldbookSecretId);
+      localStorage.setItem(WebWords.fieldbookKeyId, "something");
+
+      const page = new Page("es", dom.createElement("p", {}, "palabra"));
+      page.loaded().catch(function(errorMsg) {
+        expect(errorMsg).toContain("missing Fieldbook secret");
+        expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
+        asyncDone();
+      });
+    });
   });
 });

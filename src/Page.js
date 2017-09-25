@@ -98,7 +98,19 @@ Page.prototype.loaded = function() {
 };
 
 Page.prototype.loadSavedData = function() {
-  const fieldbookAuth = btoa(`${WebWords.fieldbookKey}:${WebWords.fieldbookSecret}`);
+  const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
+  const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
+
+  if (!fieldbookKey) {
+    this.loadedPromise = Promise.reject("ERROR: missing Fieldbook key");
+    return this.loadedPromise;
+  }
+  if (!fieldbookSecret) {
+    this.loadedPromise = Promise.reject("ERROR: missing Fieldbook secret");
+    return this.loadedPromise;
+  }
+
+  const fieldbookAuth = btoa(`${fieldbookKey}:${WebWords.fieldbookSecret}`);
   const fieldbookSheetUrl = WebWords.fieldbookUrl + this.langCode;
 
   const promise = new Promise((resolve, reject) => {

@@ -5,8 +5,8 @@ const WebWords = {
   splitRegex: /([\s.,:;'"?!¿¡]+)/,
 
   fieldbookUrl: "https://api.fieldbook.com/v1/59c3d8c68c1f2a030083673e/",
-  fieldbookKey: "SECRET-DO-NOT-COMMIT",
-  fieldbookSecret: "SECRET-DO-NOT-COMMIT",
+  fieldbookKeyId: "WebWords-FieldbookKey",
+  fieldbookSecretId: "WebWords-FieldbookSecret",
 
   stylesheetId: "webwords-stylesheet",
 

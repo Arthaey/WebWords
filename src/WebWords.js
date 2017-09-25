@@ -10,7 +10,12 @@ const WebWords = {
 
   stylesheetId: "webwords-stylesheet",
 
-  init: function(langCode, rootElement) {
+  init: function(rootElement) {
+    if (!rootElement) return null;
+
+    const langCode = Language.identify(rootElement.innerText);
+    if (!langCode) return new Page();
+
     WebWords.addCssRules(InfoBox.cssRules);
     return new Page(langCode, rootElement);
   },

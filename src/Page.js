@@ -2,7 +2,7 @@
 
 const Page = function(langCode, rootElement) {
   this.resetWords();
-  this.langCode = langCode || null;
+  this.langCode = langCode || Language.UNKNOWN;
   this.loadedPromise = null;
 
   this.parseWords(rootElement);

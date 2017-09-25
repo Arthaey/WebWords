@@ -13,7 +13,7 @@ beforeEach(function() {
     }
   };
 
-  WebWords.init();
+  WebWords.init(dom.createElement("div", {}, ""));
   WebWords.fieldbookUrl = FIELDBOOK_URL;
   jasmine.addCustomEqualityTester(wordEqualityTester);
 

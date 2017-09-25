@@ -3,7 +3,7 @@
 describe("Page", function() {
   it("starts with no words", function(asyncDone) {
     const page = new Page();
-    expect(page.langCode).toBeNull();
+    expect(page.langCode).toEqual(Language.UNKNOWN);
     expect(page.totalWordCount).toBe(0);
     expect(page.uniqueWordCount).toBe(0);
     expect(page.totalKnownWordCount).toBe(0);
@@ -27,9 +27,9 @@ describe("Page", function() {
       dom.createElement("article", {}, "ocho")
     );
 
-    const page = new Page("es", elements);
+    const page = new Page(Language.SPANISH, elements);
 
-    expect(page.langCode).toEqual("es");
+    expect(page.langCode).toEqual(Language.SPANISH);
     expect(page.totalWordCount).toBe(8);
     expect(page.uniqueWordCount).toBe(8);
     expect(page.totalKnownWordCount).toBe(0);
@@ -51,7 +51,7 @@ describe("Page", function() {
       dom.createElement("p", {}, "tres dos uno")
     );
 
-    const page = new Page("es", elements);
+    const page = new Page(Language.SPANISH, elements);
 
     expect(page.totalWordCount).toBe(5);
     expect(page.uniqueWordCount).toBe(3);
@@ -71,7 +71,7 @@ describe("Page", function() {
       '<span class="L2 unknown">dos</span> ' +
       '<span class="L2 unknown">tres</span>';
 
-    const page = new Page("es", element);
+    const page = new Page(Language.SPANISH, element);
 
     expect(page.pageElements.length).toBe(1);
     expect(page.pageElements[0].innerText).toEqual(text);
@@ -82,7 +82,7 @@ describe("Page", function() {
     const text = "'¿Uno, dos?'";
     const element = dom.createElement("p", {}, text);
 
-    const page = new Page("es", element);
+    const page = new Page(Language.SPANISH, element);
 
     expect(page.pageElements.length).toBe(1);
     expect(page.pageElements[0].innerText).toEqual(text);
@@ -92,7 +92,7 @@ describe("Page", function() {
     Word.create("dos", "known");
     const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");
 
-    const page = new Page("es", element);
+    const page = new Page(Language.SPANISH, element);
 
     expect(page.totalWordCount).toBe(6);
     expect(page.uniqueWordCount).toBe(4);
@@ -124,7 +124,7 @@ describe("Page", function() {
         dom.createElement("p", {}, "Y esta es otra.")
       );
 
-      const page = new Page("es", elements);
+      const page = new Page(Language.SPANISH, elements);
 
       expect(page.totalWordCount).toBe(8);
       expect(page.uniqueWordCount).toBe(6);
@@ -153,14 +153,14 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + "es", json);
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
     });
 
     it("does not request data if no key set", function(asyncDone) {
       localStorage.removeItem(WebWords.fieldbookKeyId);
       localStorage.setItem(WebWords.fieldbookSecretId, "something");
 
-      const page = new Page("es", dom.createElement("p", {}, "palabra"));
+      const page = new Page(Language.SPANISH, dom.createElement("p", {}, "palabra"));
       page.loaded().catch(function(errorMsg) {
         expect(errorMsg).toContain("missing Fieldbook key");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
@@ -172,7 +172,7 @@ describe("Page", function() {
       localStorage.removeItem(WebWords.fieldbookSecretId);
       localStorage.setItem(WebWords.fieldbookKeyId, "something");
 
-      const page = new Page("es", dom.createElement("p", {}, "palabra"));
+      const page = new Page(Language.SPANISH, dom.createElement("p", {}, "palabra"));
       page.loaded().catch(function(errorMsg) {
         expect(errorMsg).toContain("missing Fieldbook secret");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();

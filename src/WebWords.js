@@ -10,8 +10,9 @@ const WebWords = {
 
   stylesheetId: "webwords-stylesheet",
 
-  init: function() {
+  init: function(langCode, rootElement) {
     WebWords.addCssRules(InfoBox.cssRules);
+    return new Page(langCode, rootElement);
   },
 
   addCssRules: function(rules) {

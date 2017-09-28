@@ -3,6 +3,7 @@
 const WebWords = {
   punctRegex:    /[.,:;'"?!¿¡]+/g,
   splitRegex: /([\s.,:;'"?!¿¡]+)/,
+  ignoreRegex: /\d+/,
 
   fieldbookUrl: "https://api.fieldbook.com/v1/59c3d8c68c1f2a030083673e/",
   fieldbookKeyId: "WebWords-FieldbookKey",

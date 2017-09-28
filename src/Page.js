@@ -79,7 +79,7 @@ Page.prototype.waitForSavedData = function() {
 Page.prototype.wrapWord = function(text) {
   let element;
 
-  if (text.match(WebWords.splitRegex)) {
+  if (text.match(WebWords.splitRegex) || text.match(WebWords.ignoreRegex)) {
     // punctuation, spaces, etc
     element = document.createTextNode(text);
   } else {

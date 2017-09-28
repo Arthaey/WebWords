@@ -85,6 +85,19 @@ describe("Page", function() {
     expect(page.pageElements[0].innerText).toEqual(text);
   });
 
+  it("ignores numeric 'words'", function() {
+    const text = "uno 2 tres 42";
+    const element = dom.createElement("p", {}, text);
+
+    const page = new Page(Language.SPANISH, element);
+
+    expect(page.pageElements.length).toBe(1);
+    expect(page.pageElements[0].innerText).toEqual(text);
+    expect(page.totalWordCount).toBe(2);
+    expect(page.words["uno"].text).toBe("uno");
+    expect(page.words["tres"].text).toBe("tres");
+  });
+
   it("calculates percent of known words", function() {
     Word.create("dos", "known");
     const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");

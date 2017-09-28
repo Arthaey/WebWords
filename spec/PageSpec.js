@@ -198,6 +198,10 @@ describe("Page", function() {
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
     });
 
+    it("does NOT update Fieldbook if word is already known ", function() {
+      pending("TODO");
+    });
+
     it("creates an InfoBox", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
       expect(page.infoBox).toBeNull();
@@ -208,6 +212,22 @@ describe("Page", function() {
       });
 
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
+    });
+
+    it("immediately shows the language in the InfoBox on page load ", function() {
+      pending("TODO");
+    });
+
+    it("updates the InfoBox after the page is parsed ", function() {
+      pending("TODO");
+    });
+
+    it("updates the InfoBox after saved data is loaded ", function() {
+      pending("TODO");
+    });
+
+    it("updates the InfoBox after marking a word as known ", function() {
+      pending("TODO");
     });
 
     it("does not blow up on bad Fieldbook records", function(asyncDone) {

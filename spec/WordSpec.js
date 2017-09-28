@@ -64,6 +64,10 @@ describe("Word", function() {
     expect(word.occurrences[0].classList).toContain("known");
   });
 
+  it("ignores when right-clicked", function() {
+    pending("TODO");
+  });
+
   it("adds CSS classes to the element", function() {
     const element = dom.createElement("p", {}, "palabra");
     const word = new Word(element);

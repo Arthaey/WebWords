@@ -22,6 +22,10 @@ describe("InfoBox", function() {
       expect(infoBox.element).toHaveText("6 unique");
     });
 
+    it("shows count of known words", function() {
+      pending("TODO");
+    });
+
     it("shows percent words known", function() {
       expect(infoBox.element).toHaveText("0% words known");
     });
@@ -109,6 +113,10 @@ describe("InfoBox", function() {
       });
 
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("updates stats", function() {
+      pending("TODO");
     });
   });
 });

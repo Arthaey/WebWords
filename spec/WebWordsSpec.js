@@ -29,6 +29,18 @@ describe("WebWords", function() {
     expect(page.totalWordCount).toEqual(3);
   });
 
+  it("prompts to run on the page when it identifies the language", function() {
+    pending("TODO");
+  });
+
+  it("prompts again when 'not now' was selected", function() {
+    pending("TODO");
+  });
+
+  it("does NOT prompt again when 'never' was selected", function() {
+    pending("TODO");
+  });
+
   it("adds exactly one stylesheet", function() {
     WebWords.addCssRules([".foo { color: red }", ".bar { color: blue }"]);
     expect(countStylesheets()).toBe(startingStylesheetCount + 1);

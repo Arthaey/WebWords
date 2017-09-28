@@ -21,16 +21,11 @@ Page.prototype.reset = function() {
   this.uniqueKnownWordCount = 0;
 };
 
-Page.prototype.percentKnownUniqueWords = function() {
-  return Page._formatPercent(this.uniqueKnownWordCount, this.uniqueWordCount);
-};
-
-Page.prototype.percentKnownPageWords = function() {
-  return Page._formatPercent(this.totalKnownWordCount, this.totalWordCount);
-};
-
 Page.prototype.markAsKnown = function(word) {
   word.markAsKnown();
+  if (this.infoBox) {
+    this.infoBox.addKnownWord(word);
+  }
   return Fieldbook.createRecord(this.langCode, word);
 };
 
@@ -137,8 +132,4 @@ Page.replaceContents = function(containerElement, childElements) {
   childElements.forEach(function(childElement) {
     containerElement.appendChild(childElement);
   });
-};
-
-Page._formatPercent = function(nominator, denominator) {
-  return Math.round(nominator * 100.0 / denominator);
 };

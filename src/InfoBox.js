@@ -1,45 +1,70 @@
 'use strict';
 
 const InfoBox = function(page) {
+  this.langCode = page ? page.langCode : Language.UNKNOWN;
   this.element = document.createElement("div");
+
   this.element.classList.add("webwords-infobox");
   document.body.appendChild(this.element);
 
-  this.update(page);
+  this.setStatisticsFromPage(page);
+  this.update();
 };
 
-InfoBox.prototype.update = function(page) {
+InfoBox.prototype.setStatisticsFromPage = function(page) {
+  this.totalWordCount = page.totalWordCount;
+  this.uniqueWordCount = page.uniqueWordCount;
+  this.totalKnownWordCount = page.totalKnownWordCount;
+  this.uniqueKnownWordCount = page.uniqueKnownWordCount;
+};
+
+InfoBox.prototype.update = function() {
   this.element.innerHTML = "";
-  if (!page) return;
 
-  if (page.langCode) {
-    const langCode = document.createElement("p");
-    langCode.innerHTML = `language: ${page.langCode.toUpperCase()}`;
-    this.element.appendChild(langCode);
-  }
+  const langCodeEl = document.createElement("p");
+  langCodeEl.innerHTML = `language: ${this.langCode.toUpperCase()}`;
+  this.element.appendChild(langCodeEl);
 
-  const wordCount = document.createElement("p");
-  wordCount.innerHTML = `${page.totalWordCount} words, ${page.uniqueWordCount} unique`;
-  this.element.appendChild(wordCount);
+  const wordCountEl = document.createElement("p");
+  wordCountEl.innerHTML = `${this.totalWordCount} words, ${this.uniqueWordCount} unique`;
+  this.element.appendChild(wordCountEl);
 
-  const percentWordsKnown = document.createElement("p");
-  percentWordsKnown.innerHTML = `${page.percentKnownUniqueWords()}% words known`;
-  this.element.appendChild(percentWordsKnown);
+  const percentWordsKnownEl = document.createElement("p");
+  percentWordsKnownEl.innerHTML = `${this.percentKnownUniqueWords()}% words known`;
+  this.element.appendChild(percentWordsKnownEl);
 
-  const knownPageWords = page.percentKnownPageWords();
-  const percentPageKnown = document.createElement("p");
-  percentPageKnown.innerHTML = `${knownPageWords}% page known`;
-  this.element.appendChild(percentPageKnown);
+  const percentPageKnownEl = document.createElement("p");
+  percentPageKnownEl.innerHTML = `${this.percentKnownPageWords()}% page known`;
+  this.element.appendChild(percentPageKnownEl);
 
-  if (knownPageWords >= 95) {
+  const percent = this.percentKnownPageWords();
+  if (percent >= 95) {
     this.element.classList.add("well-known");
-  } else if (knownPageWords >= 85) {
+  } else if (percent >= 85) {
     this.element.classList.add("known");
-  } else if (knownPageWords >= 75) {
+  } else if (percent >= 75) {
     this.element.classList.add("somewhat-known");
   } else {
     this.element.classList.add("unknown");
   }
+};
+
+InfoBox.prototype.addKnownWord = function(word) {
+  this.uniqueKnownWordCount += 1;
+  this.totalKnownWordCount += word.occurrences.length;
+  this.update();
+};
+
+InfoBox.prototype.percentKnownUniqueWords = function() {
+  return InfoBox._formatPercent(this.uniqueKnownWordCount, this.uniqueWordCount);
+};
+
+InfoBox.prototype.percentKnownPageWords = function() {
+  return InfoBox._formatPercent(this.totalKnownWordCount, this.totalWordCount);
+};
+
+InfoBox._formatPercent = function(nominator, denominator) {
+  return Math.round(nominator * 100.0 / denominator);
 };
 
 InfoBox.cssRules = [

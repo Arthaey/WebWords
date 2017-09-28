@@ -98,7 +98,11 @@ describe("Page", function() {
     expect(page.words["tres"].text).toBe("tres");
   });
 
-  it("calculates percent of known words", function() {
+  it("preserves links", function() {
+    pending("TODO");
+  });
+
+  it("counts known vs unknown words, and unique words", function() {
     Word.create("dos", "known");
     const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");
 
@@ -108,8 +112,6 @@ describe("Page", function() {
     expect(page.uniqueWordCount).toBe(4);
     expect(page.totalKnownWordCount).toBe(2);
     expect(page.uniqueKnownWordCount).toBe(1);
-    expect(page.percentKnownUniqueWords()).toBe(25); // 1 out of 4
-    expect(page.percentKnownPageWords()).toBe(33); // 2 out of 6
   });
 
   describe("with saved data", function() {

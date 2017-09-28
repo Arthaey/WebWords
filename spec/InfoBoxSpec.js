@@ -37,6 +37,12 @@ describe("InfoBox", function() {
     it("shows language code", function() {
       expect(infoBox.element).toHaveText("language: ES");
     });
+
+    it("updates stats", function() {
+      infoBox.addKnownWord(Word.create("es"));
+      expect(infoBox.element).toHaveText("17% words known");
+      expect(infoBox.element).toHaveText("25% page known");
+    });
   });
 
   describe("with saved data", function() {
@@ -113,10 +119,6 @@ describe("InfoBox", function() {
       });
 
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
-    });
-
-    it("updates stats", function() {
-      pending("TODO");
     });
   });
 });

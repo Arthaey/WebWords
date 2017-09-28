@@ -111,12 +111,4 @@ describe("InfoBox", function() {
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
     });
   });
-
-  const fakeFieldbookRecords = function(texts) {
-    const records = [];
-    texts.forEach(function(text) {
-      records.push({id: 0, record_url: "", word: text, how_well_known: "known"})
-    });
-    return JSON.stringify(records);
-  };
 });

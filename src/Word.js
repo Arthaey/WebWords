@@ -3,6 +3,7 @@
 const Word = function(textOrElement, learningStatus) {
   this.text = Word.normalizeText(textOrElement);
   this.learningStatus = learningStatus || Word.UNKNOWN;
+  this.fieldbookId = null;
   this.occurrences = [];
 
   if (!Word.isString(textOrElement)) {

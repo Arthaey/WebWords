@@ -35,6 +35,11 @@ describe("Word", function() {
     expect(word.learningStatus).toEqual("unknown");
   });
 
+  it("defaults to no Fieldbook ID", function() {
+    const word = new Word("palabra");
+    expect(word.fieldbookId).toBeNull();
+  });
+
   it("can have custom learning status", function() {
     const word = new Word("palabra", "known");
     expect(word.learningStatus).toEqual("known");
@@ -65,7 +70,6 @@ describe("Word", function() {
 
     expect(word.occurrences[0].classList).toContain("L2");
   });
-
 
   it("adds occurrences to the same Word with same text", function() {
     const word1 = Word.create(dom.createElement("p", {}, "palabra"));

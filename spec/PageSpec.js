@@ -132,11 +132,8 @@ describe("Page", function() {
       expect(page.totalKnownWordCount).toBe(0);
       expect(page.uniqueKnownWordCount).toBe(0);
 
-      expect(page.words["es"].occurrences[0].classList).not.toContain("known");
-      expect(page.words["es"].occurrences[1].classList).not.toContain("known");
       expect(page.words["es"].occurrences[0].classList).toContain("unknown");
       expect(page.words["es"].occurrences[1].classList).toContain("unknown");
-      expect(page.words["y"].occurrences[0].classList).not.toContain("known");
       expect(page.words["y"].occurrences[0].classList).toContain("unknown");
 
       page.waitForSavedData().then(function() {
@@ -147,14 +144,58 @@ describe("Page", function() {
 
         expect(page.words["es"].occurrences[0].classList).toContain("known");
         expect(page.words["es"].occurrences[1].classList).toContain("known");
-        expect(page.words["es"].occurrences[0].classList).not.toContain("unknown");
-        expect(page.words["es"].occurrences[1].classList).not.toContain("unknown");
         expect(page.words["y"].occurrences[0].classList).toContain("known");
-        expect(page.words["y"].occurrences[0].classList).not.toContain("unknown");
         asyncDone();
       });
 
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
+    });
+
+    it("adds Fieldbook IDs to words ", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+      const word = page.words["y"];
+
+      expect(word.fieldbookId).toBeNull();
+
+      page.waitForSavedData().then(function() {
+        expect(word.fieldbookId).not.toBeNull();
+        asyncDone();
+      });
+
+      const records = fakeFieldbookRecords(["y"]);
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("marks a word as known when text is clicked", function() {
+      const page = new Page(Language.SPANISH, elements);
+      spyOn(Page, "createRecord");
+
+      page.words["y"].occurrences[0].click();
+
+      expect(Page.createRecord).toHaveBeenCalled();
+    });
+
+    it("updates Fieldbook when marking a word as known", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+      const word = page.words["y"];
+
+      page.waitForSavedData().then(function() {
+        expect(word.occurrences[0].classList).toContain("unknown");
+        expect(word.fieldbookId).toBeNull();
+      })
+      .then(function() {
+        const records = fakeFieldbookRecords(["y"]);
+        const promise = page.markAsKnown(word);
+        mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+        return promise;
+      })
+      .then(function() {
+        expect(word.occurrences[0].classList).toContain("known");
+        expect(word.fieldbookId).not.toBeNull();
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
     });
 
     it("creates an InfoBox", function(asyncDone) {

@@ -14,9 +14,11 @@ const WebWords = {
     if (!rootElement) return null;
 
     const langCode = Language.identify(rootElement.innerText);
-    if (!langCode) return new Page();
+    if (!langCode) return null;
 
+    WebWords.addCssRules(Word.cssRules);
     WebWords.addCssRules(InfoBox.cssRules);
+
     return new Page(langCode, rootElement);
   },
 

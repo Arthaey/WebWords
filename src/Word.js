@@ -74,3 +74,14 @@ Word.normalizeText = function(textOrElement) {
 Word.isString = function(textOrElement) {
   return "string" === typeof textOrElement;
 };
+
+Word.cssRules = [
+  `.L2.unknown {
+      border-radius: 2px;
+      background-color: yellow;
+  }`,
+  `.L2.known {
+      background-color: initial;
+      border-bottom: 2px solid green;
+  }`,
+];

@@ -9,7 +9,7 @@ describe("InfoBox", function() {
         dom.createElement("p", {}, "Esta es una frase."),
         dom.createElement("p", {}, "Y esta es otra.")
       );
-      const page = new Page("es", elements);
+      const page = new Page(Language.SPANISH, elements);
 
       infoBox = new InfoBox(page);
     });
@@ -57,17 +57,16 @@ describe("InfoBox", function() {
         dom.createElement("p", {}, "Esta es una frase."),
         dom.createElement("p", {}, "Y esta es otra.")
       );
-      const page = new Page("es", elements);
+      const page = new Page(Language.SPANISH, elements);
 
-      page.loaded().then(function(savedData) {
+      page.waitForSavedData().then(function() {
         const infoBox = new InfoBox(page);
         expect(infoBox.element).toHaveText("33% words known");
         expect(infoBox.element).toHaveText("38% page known");
-
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + "es", json);
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
     });
   });
 });

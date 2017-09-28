@@ -1,7 +1,7 @@
 'use strict';
 
 describe("Page", function() {
-  it("starts with no words", function(asyncDone) {
+  it("starts with no words", function() {
     const page = new Page();
     expect(page.langCode).toEqual(Language.UNKNOWN);
     expect(page.totalWordCount).toBe(0);
@@ -9,10 +9,7 @@ describe("Page", function() {
     expect(page.totalKnownWordCount).toBe(0);
     expect(page.uniqueKnownWordCount).toBe(0);
     expect(page.words).toBeEmpty();
-    page.loaded().then(function(returnedPage) {
-      expect(returnedPage).toEqual(page);
-      asyncDone();
-    });
+    expect(page.infoBox).toBeNull();
   });
 
   it("creates a Word for each supported element", function() {
@@ -103,6 +100,15 @@ describe("Page", function() {
   });
 
   describe("with saved data", function() {
+    let elements;
+
+    beforeEach(function() {
+      elements = dom.createElement("div", {},
+        dom.createElement("p", {}, "Esta es una frase."),
+        dom.createElement("p", {}, "Y esta es otra.")
+      );
+    });
+
     it("loads learning statuses", function(asyncDone) {
       const json = `[
         {
@@ -119,11 +125,6 @@ describe("Page", function() {
         }
       ]`;
 
-      const elements = dom.createElement("div", {},
-        dom.createElement("p", {}, "Esta es una frase."),
-        dom.createElement("p", {}, "Y esta es otra.")
-      );
-
       const page = new Page(Language.SPANISH, elements);
 
       expect(page.totalWordCount).toBe(8);
@@ -138,7 +139,7 @@ describe("Page", function() {
       expect(page.words["y"].occurrences[0].classList).not.toContain("known");
       expect(page.words["y"].occurrences[0].classList).toContain("unknown");
 
-      page.loaded().then(function(savedData) {
+      page.waitForSavedData().then(function() {
         expect(page.totalWordCount).toBe(8);
         expect(page.uniqueWordCount).toBe(6);
         expect(page.totalKnownWordCount).toBe(3);
@@ -156,12 +157,35 @@ describe("Page", function() {
       mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
     });
 
+    it("creates an InfoBox", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+      expect(page.infoBox).toBeNull();
+
+      page.waitForSavedData().then(function() {
+        expect(page.infoBox).not.toBeNull();
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
+    });
+
+    it("does not blow up on bad Fieldbook records", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().then(function() {
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "not valid json");
+    });
+
     it("does not request data if no key set", function(asyncDone) {
       localStorage.removeItem(WebWords.fieldbookKeyId);
       localStorage.setItem(WebWords.fieldbookSecretId, "something");
 
-      const page = new Page(Language.SPANISH, dom.createElement("p", {}, "palabra"));
-      page.loaded().catch(function(errorMsg) {
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().catch(function(errorMsg) {
         expect(errorMsg).toContain("missing Fieldbook key");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         asyncDone();
@@ -172,8 +196,9 @@ describe("Page", function() {
       localStorage.removeItem(WebWords.fieldbookSecretId);
       localStorage.setItem(WebWords.fieldbookKeyId, "something");
 
-      const page = new Page(Language.SPANISH, dom.createElement("p", {}, "palabra"));
-      page.loaded().catch(function(errorMsg) {
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().catch(function(errorMsg) {
         expect(errorMsg).toContain("missing Fieldbook secret");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         asyncDone();

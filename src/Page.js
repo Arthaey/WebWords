@@ -1,14 +1,17 @@
 'use strict';
 
 const Page = function(langCode, rootElement) {
-  this.resetWords();
+  this.reset();
   this.langCode = langCode || Language.UNKNOWN;
-  this.loadedPromise = null;
 
-  this.parseWords(rootElement);
+  if (rootElement) {
+    this.parseWords(rootElement);
+  }
 };
 
-Page.prototype.resetWords = function() {
+Page.prototype.reset = function() {
+  this.infoBox = null;
+
   this.pageElements = [];
   this.words = [];
 
@@ -27,15 +30,17 @@ Page.prototype.percentKnownPageWords = function() {
 };
 
 Page.prototype.parseWords = function(rootElement) {
-  if (!rootElement) {
-    this.loadedPromise = Promise.resolve(this);
-    return this.loadedPromise;
-  }
+  let didLoadAndParse, failedToLoadAndParse;
+  this._loadedAndParsedDataPromise = new Promise((resolve, reject) => {
+    didLoadAndParse = resolve;
+    failedToLoadAndParse = reject;
+  });
 
   const thisPage = this;
 
-  this.resetWords();
+  this.reset();
 
+  const originalContainer = rootElement.parentNode || document.body;
   const rootContainerElement = document.createElement("div");
   rootContainerElement.appendChild(rootElement);
 
@@ -52,15 +57,18 @@ Page.prototype.parseWords = function(rootElement) {
     Page.replaceContents(element, wrappedElements);
     thisPage.pageElements.push(element);
   });
+  originalContainer.appendChild(rootElement);
 
   // ...then go back and re-mark based on saved data.
   this.loadSavedData()
     .then(thisPage.parseSavedData.bind(thisPage))
-    .then(function() {
-      thisPage.loadedPromise = Promise.resolve(this);
-    });
+    .then(() => thisPage.infoBox = new InfoBox(thisPage))
+    .then(didLoadAndParse)
+    .catch(failedToLoadAndParse);
+};
 
-  return this.loadedPromise;
+Page.prototype.waitForSavedData = function() {
+  return this._loadedAndParsedDataPromise;
 };
 
 Page.prototype.wrapWord = function(text) {
@@ -93,24 +101,18 @@ Page.prototype.addWord = function(element) {
   this.words[textKey] = word;
 };
 
-Page.prototype.loaded = function() {
-  return this.loadedPromise;
-};
-
 Page.prototype.loadSavedData = function() {
   const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
   const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
 
   if (!fieldbookKey) {
-    this.loadedPromise = Promise.reject("ERROR: missing Fieldbook key");
-    return this.loadedPromise;
+    return Promise.reject("ERROR: missing Fieldbook key");
   }
   if (!fieldbookSecret) {
-    this.loadedPromise = Promise.reject("ERROR: missing Fieldbook secret");
-    return this.loadedPromise;
+    return Promise.reject("ERROR: missing Fieldbook secret");
   }
 
-  const fieldbookAuth = btoa(`${fieldbookKey}:${WebWords.fieldbookSecret}`);
+  const fieldbookAuth = btoa(`${fieldbookKey}:${fieldbookSecret}`);
   const fieldbookSheetUrl = WebWords.fieldbookUrl + this.langCode;
 
   const promise = new Promise((resolve, reject) => {
@@ -121,21 +123,26 @@ Page.prototype.loadSavedData = function() {
     xhr.onload = () => resolve(xhr.responseText);
     xhr.onerror = (progressEvent) => reject(progressEvent, xhr.statusText);
     xhr.send();
-  })
-  .catch(function(progressEvent, statusText) {
+  });
+
+  promise.catch(function(progressEvent, statusText) {
     console.error(`ERROR connecting to ${fieldbookSheetUrl}: '${statusText}'`);
     console.error(progressEvent);
   });
 
-  this.loadedPromise = promise;
-  return this.loadedPromise;
+  return promise;
 }
 
 Page.prototype.parseSavedData = function(savedData) {
   if (!savedData) return;
 
   const thisPage = this;
-  const records = JSON.parse(savedData);
+
+  let records = new Array();
+  try {
+    records = JSON.parse(savedData);
+  }
+  catch (e) { /* do nothing */ }
 
   records.forEach(function(record) {
     const wordOnPage = thisPage.words[record.word];

@@ -168,11 +168,11 @@ describe("Page", function() {
 
     it("marks a word as known when text is clicked", function() {
       const page = new Page(Language.SPANISH, elements);
-      spyOn(Page, "createRecord");
+      spyOn(Fieldbook, "createRecord");
 
       page.words["y"].occurrences[0].click();
 
-      expect(Page.createRecord).toHaveBeenCalled();
+      expect(Fieldbook.createRecord).toHaveBeenCalled();
     });
 
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
@@ -227,7 +227,7 @@ describe("Page", function() {
       const page = new Page(Language.SPANISH, elements);
 
       page.waitForSavedData().catch(function(errorMsg) {
-        expect(errorMsg).toContain("missing Fieldbook key");
+        expect(errorMsg).toContain("missing Fieldbook key and/or secret");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         asyncDone();
       });
@@ -240,7 +240,7 @@ describe("Page", function() {
       const page = new Page(Language.SPANISH, elements);
 
       page.waitForSavedData().catch(function(errorMsg) {
-        expect(errorMsg).toContain("missing Fieldbook secret");
+        expect(errorMsg).toContain("missing Fieldbook key and/or secret");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         asyncDone();
       });

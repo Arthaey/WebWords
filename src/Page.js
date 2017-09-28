@@ -31,7 +31,7 @@ Page.prototype.percentKnownPageWords = function() {
 
 Page.prototype.markAsKnown = function(word) {
   word.markAsKnown();
-  return Page.createRecord(this.langCode, word);
+  return Fieldbook.createRecord(this.langCode, word);
 };
 
 Page.prototype.parseWords = function(rootElement) {
@@ -65,7 +65,7 @@ Page.prototype.parseWords = function(rootElement) {
   originalContainer.appendChild(rootElement);
 
   // ...then go back and re-mark based on saved data.
-  Page.loadSavedData(this.langCode)
+  Fieldbook.loadSavedData(this.langCode)
     .then(thisPage.parseSavedData.bind(thisPage))
     .then(() => thisPage.infoBox = new InfoBox(thisPage))
     .then(didLoadAndParse)
@@ -105,107 +105,6 @@ Page.prototype.addWord = function(element) {
 
   this.words[textKey] = word;
   element.addEventListener("click", this.markAsKnown.bind(this, word));
-};
-
-Page.loadSavedData = function(langCode) {
-  const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
-  const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
-
-  if (!fieldbookKey) {
-    return Promise.reject("ERROR: missing Fieldbook key");
-  }
-  if (!fieldbookSecret) {
-    return Promise.reject("ERROR: missing Fieldbook secret");
-  }
-
-  const fieldbookAuth = btoa(`${fieldbookKey}:${fieldbookSecret}`);
-  const fieldbookSheetUrl = WebWords.fieldbookUrl + langCode;
-
-  const promise = new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", fieldbookSheetUrl);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Basic " + fieldbookAuth);
-    xhr.onload = () => resolve(xhr.responseText);
-    xhr.onerror = (progressEvent) => reject(progressEvent, xhr.statusText);
-    xhr.send();
-  });
-
-  promise.catch(function(progressEvent, statusText) {
-    console.error(`ERROR connecting to ${fieldbookSheetUrl}: '${statusText}'`);
-    console.error(progressEvent);
-  });
-
-  return promise;
-}
-
-Page.createRecord = function(langCode, word) {
-  const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
-  const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
-
-  if (!fieldbookKey) {
-    return Promise.reject("ERROR: missing Fieldbook key");
-  }
-  if (!fieldbookSecret) {
-    return Promise.reject("ERROR: missing Fieldbook secret");
-  }
-
-  const fieldbookAuth = btoa(`${fieldbookKey}:${fieldbookSecret}`);
-  const fieldbookSheetUrl = WebWords.fieldbookUrl + langCode;
-
-  const promise = new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", fieldbookSheetUrl);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Basic " + fieldbookAuth);
-    xhr.onload = () => resolve(xhr.responseText);
-    xhr.onerror = (progressEvent) => reject(progressEvent, xhr.statusText);
-    xhr.send(JSON.stringify({word: word.text, how_well_known: "known"}));
-  });
-
-  promise.then(function(records) {
-    word.fieldbookId = records[0].id;
-  });
-
-  promise.catch(function(progressEvent, statusText) {
-    console.error(`ERROR connecting to ${fieldbookSheetUrl}: '${statusText}'`);
-    console.error(progressEvent);
-  });
-
-  return promise;
-};
-
-Page.updateData = function(langCode, wordId) {
-  const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
-  const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
-
-  if (!fieldbookKey) {
-    return Promise.reject("ERROR: missing Fieldbook key");
-  }
-  if (!fieldbookSecret) {
-    return Promise.reject("ERROR: missing Fieldbook secret");
-  }
-
-  const fieldbookAuth = btoa(`${fieldbookKey}:${fieldbookSecret}`);
-  const fieldbookSheetUrl = WebWords.fieldbookUrl + langCode;
-
-  const promise = new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", `${fieldbookSheetUrl}/${wordId}`);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Authorization", "Basic " + fieldbookAuth);
-    xhr.onload = () => resolve(xhr.responseText);
-    xhr.onerror = (progressEvent) => reject(progressEvent, xhr.statusText);
-    xhr.send(JSON.stringify({how_well_known: "known"}));
-  });
-
-  promise.catch(function(progressEvent, statusText) {
-    console.error(`ERROR connecting to ${fieldbookSheetUrl}: '${statusText}'`);
-    console.error(progressEvent);
-  });
-
-  return promise;
 };
 
 Page.prototype.parseSavedData = function(savedData) {

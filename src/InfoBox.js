@@ -41,6 +41,7 @@ InfoBox.cssRules = [
       border: 2px solid;
       border-radius: 10px;
       background-color: #ccc;
+      z-index: 100;
   }`,
   `.webwords-infobox p {
       margin: 0px;

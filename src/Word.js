@@ -80,8 +80,7 @@ Word.cssRules = [
       border-radius: 2px;
       background-color: yellow;
   }`,
-  `.L2.known {
-      background-color: initial;
+  `.L2.known:hover {
       border-bottom: 2px solid green;
   }`,
 ];

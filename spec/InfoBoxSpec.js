@@ -36,27 +36,17 @@ describe("InfoBox", function() {
   });
 
   describe("with saved data", function() {
-    it("shows percent words known", function(asyncDone) {
-      const url = "https://api.fieldbook.com/v1/sheetId/es";
-      const json = `[
-        {
-          "id": 1,
-          "record_url": "https://fieldbook.com/records/abc",
-          "word": "es",
-          "how_well_known": "known"
-        },
-        {
-          "id": 2,
-          "record_url": "https://fieldbook.com/records/xyz",
-          "word": "y",
-          "how_well_known": "known"
-        }
-      ]`;
+    let elements;
 
-      const elements = dom.createElement("div", {},
+    beforeEach(function() {
+      elements = dom.createElement("div", {},
         dom.createElement("p", {}, "Esta es una frase."),
         dom.createElement("p", {}, "Y esta es otra.")
       );
+    });
+
+    it("shows percent words known", function(asyncDone) {
+      const records = fakeFieldbookRecords(["es", "y"]);
       const page = new Page(Language.SPANISH, elements);
 
       page.waitForSavedData().then(function() {
@@ -66,7 +56,67 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("considers the page well-known at >= 95% known", function(asyncDone) {
+      const records = fakeFieldbookRecords(["esta", "es", "una", "frase", "y", "otra"]);
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().then(function() {
+        const infoBox = new InfoBox(page);
+        expect(infoBox.element.classList).toContain("well-known");
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("considers the page known at >= 85% known", function(asyncDone) {
+      const records = fakeFieldbookRecords(["esta", "es", "una", "frase", "y"]);
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().then(function() {
+        const infoBox = new InfoBox(page);
+        expect(infoBox.element.classList).toContain("known");
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("considers the page somewhat-known at >= 75% known", function(asyncDone) {
+      const records = fakeFieldbookRecords(["esta", "es", "una", "frase"]);
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().then(function() {
+        const infoBox = new InfoBox(page);
+        expect(infoBox.element.classList).toContain("somewhat-known");
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+    });
+
+    it("considers the page unknown at < 75% known", function(asyncDone) {
+      const records = fakeFieldbookRecords(["esta"]);
+      const page = new Page(Language.SPANISH, elements);
+
+      page.waitForSavedData().then(function() {
+        const infoBox = new InfoBox(page);
+        expect(infoBox.element.classList).toContain("unknown");
+        asyncDone();
+      });
+
+      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
     });
   });
+
+  const fakeFieldbookRecords = function(texts) {
+    const records = [];
+    texts.forEach(function(text) {
+      records.push({id: 0, record_url: "", word: text, how_well_known: "known"})
+    });
+    return JSON.stringify(records);
+  };
 });

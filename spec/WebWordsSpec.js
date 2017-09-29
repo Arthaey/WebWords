@@ -30,15 +30,15 @@ describe("WebWords", function() {
   });
 
   it("prompts to run on the page when it identifies the language", function() {
-    pending("TODO");
+    pending("FUTURE FEATURE");
   });
 
   it("prompts again when 'not now' was selected", function() {
-    pending("TODO");
+    pending("FUTURE FEATURE");
   });
 
   it("does NOT prompt again when 'never' was selected", function() {
-    pending("TODO");
+    pending("FUTURE FEATURE");
   });
 
   it("adds exactly one stylesheet", function() {

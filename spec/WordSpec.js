@@ -51,7 +51,7 @@ describe("Word", function() {
   });
 
   it("ignores when right-clicked", function() {
-    pending("TODO");
+    pending("FUTURE FEATURE");
   });
 
   it("adds CSS classes to the element", function() {

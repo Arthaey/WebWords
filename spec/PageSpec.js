@@ -133,7 +133,7 @@ describe("Page", function() {
   });
 
   it("preserves links", function() {
-    pending("TODO");
+    pending("FUTURE FEATURE");
   });
 
   it("counts known vs unknown words, and unique words", function() {
@@ -263,19 +263,19 @@ describe("Page", function() {
     });
 
     it("immediately shows the language in the InfoBox on page load ", function() {
-      pending("TODO");
+      pending("FUTURE FEATURE");
     });
 
     it("updates the InfoBox after the page is parsed ", function() {
-      pending("TODO");
+      pending("FUTURE FEATURE");
     });
 
     it("updates the InfoBox after saved data is loaded ", function() {
-      pending("TODO");
+      pending("FUTURE FEATURE");
     });
 
     it("updates the InfoBox after marking a word as known ", function() {
-      pending("TODO");
+      pending("FUTURE FEATURE");
     });
 
     it("does not blow up on bad Fieldbook records", function(asyncDone) {

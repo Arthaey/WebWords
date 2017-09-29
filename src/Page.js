@@ -66,7 +66,7 @@ Page.prototype.parseWords = function(rootElement) {
   // ...then go back and re-mark based on saved data.
   Fieldbook.getRecords(this.langCode)
     .then(thisPage.parseSavedData.bind(thisPage))
-    .then(() => thisPage.infoBox = new InfoBox(thisPage))
+    .then(function() { thisPage.infoBox = new InfoBox(thisPage) })
     .then(didLoadAndParse)
     .catch(failedToLoadAndParse);
 };

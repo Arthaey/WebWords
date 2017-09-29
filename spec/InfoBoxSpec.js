@@ -23,7 +23,7 @@ describe("InfoBox", function() {
     });
 
     it("shows count of known words", function() {
-      pending("TODO");
+      pending("FUTURE FEATURE");
     });
 
     it("shows percent words known", function() {

@@ -66,7 +66,7 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("considers the page well-known at >= 95% known", function(asyncDone) {
@@ -79,7 +79,7 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("considers the page known at >= 85% known", function(asyncDone) {
@@ -92,7 +92,7 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("considers the page somewhat-known at >= 75% known", function(asyncDone) {
@@ -105,7 +105,7 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("considers the page unknown at < 75% known", function(asyncDone) {
@@ -118,7 +118,7 @@ describe("InfoBox", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
   });
 });

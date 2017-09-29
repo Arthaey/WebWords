@@ -1,5 +1,3 @@
-const FIELDBOOK_URL = "https://api.fieldbook.com/v1/sheetId/";
-
 beforeEach(function() {
   const wordEqualityTester = function(first, second) {
     if (first instanceof Word && second instanceof Word) {
@@ -14,7 +12,6 @@ beforeEach(function() {
   };
 
   WebWords.init(dom.createElement("div", {}, ""));
-  WebWords.fieldbookUrl = FIELDBOOK_URL;
   jasmine.addCustomEqualityTester(wordEqualityTester);
 
   Word.forgetAll();
@@ -24,6 +21,7 @@ beforeEach(function() {
     stylesheet.parentNode.removeChild(stylesheet);
   }
 
+  localStorage.setItem(WebWords.fieldbookBookId, "test-fieldbook-book");
   localStorage.setItem(WebWords.fieldbookKeyId, "test-fieldbook-key");
   localStorage.setItem(WebWords.fieldbookSecretId, "test-fieldbook-secret");
 

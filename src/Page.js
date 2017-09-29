@@ -60,7 +60,7 @@ Page.prototype.parseWords = function(rootElement) {
   originalContainer.appendChild(rootElement);
 
   // ...then go back and re-mark based on saved data.
-  Fieldbook.loadSavedData(this.langCode)
+  Fieldbook.getRecords(this.langCode)
     .then(thisPage.parseSavedData.bind(thisPage))
     .then(() => thisPage.infoBox = new InfoBox(thisPage))
     .then(didLoadAndParse)
@@ -102,16 +102,10 @@ Page.prototype.addWord = function(element) {
   element.addEventListener("click", this.markAsKnown.bind(this, word));
 };
 
-Page.prototype.parseSavedData = function(savedData) {
-  if (!savedData) return;
+Page.prototype.parseSavedData = function(records) {
+  if (!records) return;
 
   const thisPage = this;
-
-  let records = new Array();
-  try {
-    records = JSON.parse(savedData);
-  }
-  catch (e) { /* do nothing */ }
 
   records.forEach(function(record) {
     const wordOnPage = thisPage.words[record.word];

@@ -163,22 +163,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, json);
-    });
-
-    it("adds Fieldbook IDs to words ", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
-      const word = page.words["y"];
-
-      expect(word.fieldbookId).toBeNull();
-
-      page.waitForSavedData().then(function() {
-        expect(word.fieldbookId).not.toBeNull();
-        asyncDone();
-      });
-
-      const records = fakeFieldbookRecords(["y"]);
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
     });
 
     it("marks a word as known when text is clicked", function() {
@@ -201,7 +186,7 @@ describe("Page", function() {
       .then(function() {
         const records = fakeFieldbookRecords(["y"]);
         const promise = page.markAsKnown(word);
-        mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, records);
+        mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
         return promise;
       })
       .then(function() {
@@ -210,7 +195,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
     });
 
     it("does NOT update Fieldbook if word is already known ", function() {
@@ -226,7 +211,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
     });
 
     it("immediately shows the language in the InfoBox on page load ", function() {
@@ -252,33 +237,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "not valid json");
-    });
-
-    it("does not request data if no key set", function(asyncDone) {
-      localStorage.removeItem(WebWords.fieldbookKeyId);
-      localStorage.setItem(WebWords.fieldbookSecretId, "something");
-
-      const page = new Page(Language.SPANISH, elements);
-
-      page.waitForSavedData().catch(function(errorMsg) {
-        expect(errorMsg).toContain("missing Fieldbook key and/or secret");
-        expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
-        asyncDone();
-      });
-    });
-
-    it("does not request data if no secret set", function(asyncDone) {
-      localStorage.removeItem(WebWords.fieldbookSecretId);
-      localStorage.setItem(WebWords.fieldbookKeyId, "something");
-
-      const page = new Page(Language.SPANISH, elements);
-
-      page.waitForSavedData().catch(function(errorMsg) {
-        expect(errorMsg).toContain("missing Fieldbook key and/or secret");
-        expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
-        asyncDone();
-      });
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "not valid json");
     });
   });
 });

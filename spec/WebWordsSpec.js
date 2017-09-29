@@ -68,7 +68,7 @@ describe("WebWords", function() {
       asyncDone();
     });
 
-    mockAjaxRequest(FIELDBOOK_URL + Language.SPANISH, "[]");
+    mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
   });
 
   const countStylesheets = function() {

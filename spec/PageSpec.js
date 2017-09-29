@@ -85,6 +85,40 @@ describe("Page", function() {
     expect(page.pageElements[0].innerText).toEqual(text);
   });
 
+  it("does not include parentheses in the word", function() {
+    const text = "(palabra)";
+    const element = dom.createElement("p", {}, text);
+
+    const page = new Page(Language.SPANISH, element);
+
+    expect(page.pageElements.length).toBe(1);
+    expect(page.pageElements[0].innerText).toEqual(text);
+    expect(page.words["palabra"]).not.toBeUndefined();
+  });
+
+  it("does not include square brackets in the word", function() {
+    const text = "[palabra]";
+    const element = dom.createElement("p", {}, text);
+
+    const page = new Page(Language.SPANISH, element);
+
+    expect(page.pageElements.length).toBe(1);
+    expect(page.pageElements[0].innerText).toEqual(text);
+    expect(page.words["palabra"]).not.toBeUndefined();
+  });
+
+  it("separates words by slashes", function() {
+    const text = "uno/dos";
+    const element = dom.createElement("p", {}, text);
+
+    const page = new Page(Language.SPANISH, element);
+
+    expect(page.pageElements.length).toBe(1);
+    expect(page.pageElements[0].innerText).toEqual(text);
+    expect(page.words["uno"]).not.toBeUndefined();
+    expect(page.words["dos"]).not.toBeUndefined();
+  });
+
   it("ignores numeric 'words'", function() {
     const text = "uno 2 tres 42";
     const element = dom.createElement("p", {}, text);

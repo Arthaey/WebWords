@@ -1,8 +1,8 @@
 'use strict';
 
 const WebWords = {
-  punctRegex:    /[.,:;'"?!¿¡]+/g,
-  splitRegex: /([\s.,:;'"?!¿¡]+)/,
+  punctRegex:    /[\/.,:;'"?!¿¡()[\]]+/g,
+  splitRegex: /([\s\/.,:;'"?!¿¡()[\]]+)/,
   ignoreRegex: /\d+/,
 
   fieldbookBaseUrl: "https://api.fieldbook.com/v1",

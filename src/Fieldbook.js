@@ -30,8 +30,10 @@ Fieldbook.createRecord = function(langCode, word) {
   const promise = Fieldbook._promisifyRequest("POST", url, record);
 
   return promise.then(function(records) {
-    word.learningStatus = records[0].how_well_known;
-    word.fieldbookId = records[0].id;
+    if (records && records.length >= 1) {
+      word.learningStatus = records[0].how_well_known;
+      word.fieldbookId = records[0].id;
+    }
     return records;
   });
 };

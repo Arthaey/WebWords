@@ -50,20 +50,6 @@ describe("Word", function() {
     expect(word.occurrences).toBeEmpty();
   });
 
-  it("marks as known when clicked", function() {
-    const element = dom.createElement("p", {}, "palabra");
-    const word = new Word(element);
-
-    expect(word.learningStatus).toEqual("unknown");
-    expect(word.occurrences[0].classList).toContain("unknown");
-    expect(word.occurrences[0].classList).not.toContain("known");
-
-    element.click();
-    expect(word.learningStatus).toEqual("known");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
-    expect(word.occurrences[0].classList).toContain("known");
-  });
-
   it("ignores when right-clicked", function() {
     pending("TODO");
   });

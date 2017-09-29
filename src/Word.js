@@ -20,7 +20,6 @@ Word.prototype.markAsKnown = function() {
 };
 
 Word.prototype.addOccurrence = function(element) {
-  element.addEventListener("click", this.markAsKnown.bind(this));
   this.occurrences.push(element);
   this.updateCssClasses();
 };

@@ -22,6 +22,10 @@ Page.prototype.reset = function() {
 };
 
 Page.prototype.markAsKnown = function(word) {
+  if (word.learningStatus === Word.KNOWN) {
+    return Promise.resolve([]);
+  }
+
   word.markAsKnown();
   if (this.infoBox) {
     this.infoBox.addKnownWord(word);

@@ -14,7 +14,7 @@ describe("Fieldbook", function() {
   }
 
   it("generates a url from a language code", function() {
-    const expectedUrl = "https://api.fieldbook.com/v1/test-fieldbook-book/es";
+    const expectedUrl = "http://example.com/test-fieldbook-book/es";
     expect(Fieldbook.getUrl(Language.SPANISH)).toEqual(expectedUrl);
   });
 
@@ -82,9 +82,11 @@ describe("Fieldbook", function() {
 
     it("handles when records are invalid json", function(asyncDone) {
       setFieldbookLocalStorageItems();
+      spyOn(console, "error");
 
       Fieldbook.getRecords(Language.SPANISH).then(function(records) {
-        expect(records).toBeEmpty()
+        expect(records).toBeEmpty();
+        expect(console.error).toHaveBeenCalled();
         asyncDone();
       });
 
@@ -121,6 +123,18 @@ describe("Fieldbook", function() {
 
       const records = fakeFieldbookRecords(["palabra"]);
       mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
+    });
+
+    it("handles when no record is returned", function(asyncDone) {
+      setFieldbookLocalStorageItems();
+      const word = Word.create("palabra");
+
+      Fieldbook.createRecord(Language.SPANISH, word).then(function(records) {
+        expect(records).toBeEmpty()
+        asyncDone();
+      });
+
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
     });
 
     it("does not send data if required info is missing", function(asyncDone) {

@@ -128,13 +128,13 @@ describe("Page", function() {
       const json = `[
         {
           "id": 1,
-          "record_url": "https://fieldbook.com/records/abc",
+          "record_url": "http://example.com/records/abc",
           "word": "es",
           "how_well_known": "known"
         },
         {
           "id": 2,
-          "record_url": "https://fieldbook.com/records/xyz",
+          "record_url": "http://example.com/records/xyz",
           "word": "y",
           "how_well_known": "known"
         }
@@ -198,8 +198,22 @@ describe("Page", function() {
       mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
     });
 
-    it("does NOT update Fieldbook if word is already known ", function() {
-      pending("TODO");
+    it("does NOT update Fieldbook if word is already known ", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+      const word = page.words["y"];
+
+      page.waitForSavedData().then(function() {
+        expect(word.occurrences[0].classList).toContain("known");
+        expect(word.fieldbookId).not.toBeNull();
+        return page.markAsKnown(word);
+      })
+      .then(function() {
+        expect(jasmine.Ajax.requests.count()).toBe(1);
+        asyncDone();
+      });
+
+      const records = fakeFieldbookRecords(["y"]);
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("creates an InfoBox", function(asyncDone) {
@@ -232,8 +246,10 @@ describe("Page", function() {
 
     it("does not blow up on bad Fieldbook records", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
+      spyOn(console, "error");
 
       page.waitForSavedData().then(function() {
+        expect(console.error).toHaveBeenCalled();
         asyncDone();
       });
 

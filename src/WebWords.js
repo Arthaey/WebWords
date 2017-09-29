@@ -6,7 +6,7 @@ const WebWords = {
   ignoreRegex: /\d+/,
 
   fieldbookBaseUrl: "https://api.fieldbook.com/v1",
-  fieldbookKeyBookId: "WebWords-FieldbookBook",
+  fieldbookBookId: "WebWords-FieldbookBook",
   fieldbookKeyId: "WebWords-FieldbookKey",
   fieldbookSecretId: "WebWords-FieldbookSecret",
 

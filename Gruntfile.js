@@ -3,11 +3,11 @@ module.exports = function(grunt) {
   var mainFile = "dist/src.js";
 
   grunt.initConfig({
-    "pkg": grunt.file.readJSON("package.json"),
+    pkg: grunt.file.readJSON("package.json"),
 
-    "karma": {
-      "unit": {
-        "configFile": "karma.conf.js"
+    karma: {
+      unit: {
+        configFile: "karma.conf.js"
       }
     }
   });

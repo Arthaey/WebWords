@@ -20,7 +20,16 @@ module.exports = function(config) {
       "spec/InfoBoxSpec.js",
     ],
 
-    reporters: ["spec"],
+    reporters: ["spec", "coverage"],
+
+    preprocessors: {
+      "**/src/*.js": "coverage"
+    },
+
+    coverageReporter: {
+      type: "lcov",
+      dir: "spec/coverage/",
+    },
 
     customLaunchers: {
       Chrome_travis_ci: {

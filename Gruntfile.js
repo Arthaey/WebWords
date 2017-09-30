@@ -9,10 +9,20 @@ module.exports = function(grunt) {
       unit: {
         configFile: "karma.conf.js"
       }
+    },
+
+    coveralls: {
+      options: {
+        debug: true,
+        coverageDir: "spec/coverage",
+        force: true,
+        recursive: true
+      }
     }
   });
 
   grunt.loadNpmTasks("grunt-karma");
+  grunt.loadNpmTasks("grunt-karma-coveralls");
 
   grunt.registerTask("default", ["test"]);
 

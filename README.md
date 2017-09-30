@@ -1,5 +1,6 @@
 # WebWords
 
+[![Build Status](https://travis-ci.org/Arthaey/WebWords.svg?branch=master)](https://travis-ci.org/Arthaey/WebWords)
 [![Code Climate](https://codeclimate.com/github/Arthaey/WebWords.png)](https://codeclimate.com/github/Arthaey/WebWords)
 
 

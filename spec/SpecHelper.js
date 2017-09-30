@@ -110,10 +110,8 @@ const dom = (function() {
     cleanup: function() {
       for (let i in elements) {
         const element = elements[i];
-        if (element && element.parentNode) {
-          element.parentNode.removeChild(element);
-        }
         elements.pop(element);
+        element.remove();
       }
     }
   };

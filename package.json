@@ -2,17 +2,35 @@
   "name": "webwords",
   "version": "0.1.0",
   "description": "[![Code Climate](https://codeclimate.com/github/Arthaey/WebWords.png)](https://codeclimate.com/github/Arthaey/WebWords)",
-  "main": "src.js",
+  "main": "dist/src.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arthaey/WebWords.git"
   },
-  "author": "Arthaey Angosii <arthaey@gmail.com>",
+  "author": {
+    "name": "Arthaey Angosii",
+    "email": "arthaey@gmail.com"
+  },
   "bugs": {
     "url": "https://github.com/Arthaey/WebWords/issues"
   },
-  "homepage": "https://github.com/Arthaey/WebWords#readme"
+  "homepage": "https://github.com/Arthaey/WebWords#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-karma": "^2.0.0",
+    "jasmine-core": "^2.8.0",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-html-detailed-reporter": "^1.1.21",
+    "karma-jasmine": "^1.1.0",
+    "karma-jasmine-ajax": "^0.1.13",
+    "karma-spec-reporter": "0.0.31"
+  }
 }

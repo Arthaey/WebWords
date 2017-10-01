@@ -50,7 +50,11 @@ describe("Word", function() {
     expect(word.occurrences).toBeEmpty();
   });
 
-  it("ignores when right-clicked", function() {
+  it("ignores word when right-clicked", function() {
+    pending("FUTURE FEATURE");
+  });
+
+  it("marks word as unknown ... somehow?", function() {
     pending("FUTURE FEATURE");
   });
 

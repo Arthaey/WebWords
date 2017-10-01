@@ -8,12 +8,10 @@ WebWords.STYLESHEET_ID = "webwords-stylesheet";
 WebWords.init = function(rootElement) {
   if (!rootElement) return null;
 
-  const langCode = Language.identify(rootElement.innerText);
-  if (!langCode) return null;
-
   WebWords.addCssRules(Word.cssRules);
   WebWords.addCssRules(InfoBox.cssRules);
 
+  const langCode = Language.identify(rootElement.innerText);
   return new Page(langCode, rootElement);
 };
 

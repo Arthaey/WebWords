@@ -8,6 +8,7 @@ module.exports = function(config) {
       "src/Constants.js",
       "src/Fieldbook.js",
       "src/Language.js",
+      "src/Statistics.js",
       "src/WebWords.js",
       "src/Word.js",
       "src/Page.js",

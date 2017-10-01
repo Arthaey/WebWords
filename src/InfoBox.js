@@ -1,43 +1,41 @@
 'use strict';
 
-const InfoBox = function(page) {
-  this.langCode = page ? page.langCode : Language.UNKNOWN;
-  this.element = document.createElement("div");
+const InfoBox = function(langCode) {
+  this.langCode = langCode || Language.UNKNOWN;
+  this.element = null;
+  this.markUpPageButton = null;
 
+  this.initialUI();
+};
+
+InfoBox.prototype.initialUI = function() {
+  this.element = document.createElement("div");
   this.element.classList.add("webwords-infobox");
   document.body.appendChild(this.element);
 
-  this.setStatisticsFromPage(page);
-  this.update();
+  this._addSection(`identified ${this.langCode.toUpperCase()}`);
+
+  if (this.langCode !== Language.UNKNOWN) {
+    this.markUpPageButton = document.createElement("button");
+    this.markUpPageButton.appendChild(document.createTextNode("Mark up words"));
+    this.element.appendChild(this.markUpPageButton);
+  }
 };
 
-InfoBox.prototype.setStatisticsFromPage = function(page) {
-  this.totalWordCount = page.totalWordCount;
-  this.uniqueWordCount = page.uniqueWordCount;
-  this.totalKnownWordCount = page.totalKnownWordCount;
-  this.uniqueKnownWordCount = page.uniqueKnownWordCount;
+InfoBox.prototype.addMarkUpPageHandler = function(handler) {
+  if (!handler || !this.markUpPageButton) return;
+  this.markUpPageButton.addEventListener("click", handler);
 };
 
-InfoBox.prototype.update = function() {
-  this.element.innerHTML = "";
+InfoBox.prototype.update = function(stats) {
+  this._removeElements();
 
-  const langCodeEl = document.createElement("p");
-  langCodeEl.innerHTML = `language: ${this.langCode.toUpperCase()}`;
-  this.element.appendChild(langCodeEl);
+  this._addSection(`language: ${this.langCode.toUpperCase()}`);
+  this._addSection(`${stats.totalWordCount} words, ${stats.uniqueWordCount} unique`);
+  this._addSection(`${this.percentKnownUniqueWords(stats)}% words known`);
+  this._addSection(`${this.percentKnownPageWords(stats)}% page known`);
 
-  const wordCountEl = document.createElement("p");
-  wordCountEl.innerHTML = `${this.totalWordCount} words, ${this.uniqueWordCount} unique`;
-  this.element.appendChild(wordCountEl);
-
-  const percentWordsKnownEl = document.createElement("p");
-  percentWordsKnownEl.innerHTML = `${this.percentKnownUniqueWords()}% words known`;
-  this.element.appendChild(percentWordsKnownEl);
-
-  const percentPageKnownEl = document.createElement("p");
-  percentPageKnownEl.innerHTML = `${this.percentKnownPageWords()}% page known`;
-  this.element.appendChild(percentPageKnownEl);
-
-  const percent = this.percentKnownPageWords();
+  const percent = this.percentKnownPageWords(stats);
   if (percent >= 95) {
     this.element.classList.add("well-known");
   } else if (percent >= 85) {
@@ -47,24 +45,33 @@ InfoBox.prototype.update = function() {
   } else {
     this.element.classList.add("unknown");
   }
+
+  return Promise.resolve();
 };
 
-InfoBox.prototype.addKnownWord = function(word) {
-  this.uniqueKnownWordCount += 1;
-  this.totalKnownWordCount += word.occurrences.length;
-  this.update();
+InfoBox.prototype.percentKnownUniqueWords = function(stats) {
+  return InfoBox._formatPercent(stats.uniqueKnownWordCount, stats.uniqueWordCount);
 };
 
-InfoBox.prototype.percentKnownUniqueWords = function() {
-  return InfoBox._formatPercent(this.uniqueKnownWordCount, this.uniqueWordCount);
-};
-
-InfoBox.prototype.percentKnownPageWords = function() {
-  return InfoBox._formatPercent(this.totalKnownWordCount, this.totalWordCount);
+InfoBox.prototype.percentKnownPageWords = function(stats) {
+  return InfoBox._formatPercent(stats.totalKnownWordCount, stats.totalWordCount);
 };
 
 InfoBox._formatPercent = function(nominator, denominator) {
   return Math.round(nominator * 100.0 / denominator);
+};
+
+InfoBox.prototype._addSection = function(text) {
+  const elem = document.createElement("p");
+  elem.classList.add("webwords-ignore");
+  elem.appendChild(document.createTextNode(text));
+  this.element.appendChild(elem);
+};
+
+InfoBox.prototype._removeElements = function() {
+  while (this.element.firstChild) {
+    this.element.removeChild(this.element.firstChild);
+  }
 };
 
 InfoBox.cssRules = [

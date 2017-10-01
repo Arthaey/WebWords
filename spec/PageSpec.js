@@ -4,12 +4,10 @@ describe("Page", function() {
   it("starts with no words", function() {
     const page = new Page();
     expect(page.langCode).toEqual(Language.UNKNOWN);
-    expect(page.totalWordCount).toBe(0);
-    expect(page.uniqueWordCount).toBe(0);
-    expect(page.totalKnownWordCount).toBe(0);
-    expect(page.uniqueKnownWordCount).toBe(0);
+    expect(page.stats).toEqual(new Statistics());
     expect(page.words).toBeEmpty();
-    expect(page.infoBox).toBeNull();
+    expect(page.infoBox).not.toBeUndefined();
+    expect(page.infoBox).not.toBeNull();
   });
 
   it("creates a Word for each supported element", function() {
@@ -27,10 +25,12 @@ describe("Page", function() {
     const page = new Page(Language.SPANISH, elements);
 
     expect(page.langCode).toEqual(Language.SPANISH);
-    expect(page.totalWordCount).toBe(8);
-    expect(page.uniqueWordCount).toBe(8);
-    expect(page.totalKnownWordCount).toBe(0);
-    expect(page.uniqueKnownWordCount).toBe(0);
+    expect(page.stats).toEqual(new Statistics({
+      totalWordCount: 8,
+      uniqueWordCount: 8,
+      totalKnownWordCount: 0,
+      uniqueKnownWordCount: 0,
+    }));
     expect(page.words["uno"].occurrences.length).toBe(1);
     expect(page.words["dos"].occurrences.length).toBe(1);
     expect(page.words["tres"].occurrences.length).toBe(1);
@@ -39,6 +39,7 @@ describe("Page", function() {
     expect(page.words["seis"].occurrences.length).toBe(1);
     expect(page.words["siete"].occurrences.length).toBe(1);
     expect(page.words["ocho"].occurrences.length).toBe(1);
+    expect(page.infoBox).not.toBeNull();
   });
 
   it("counts unique words", function() {
@@ -50,10 +51,12 @@ describe("Page", function() {
 
     const page = new Page(Language.SPANISH, elements);
 
-    expect(page.totalWordCount).toBe(5);
-    expect(page.uniqueWordCount).toBe(3);
-    expect(page.totalKnownWordCount).toBe(0);
-    expect(page.uniqueKnownWordCount).toBe(0);
+    expect(page.stats).toEqual(new Statistics({
+      totalWordCount: 5,
+      uniqueWordCount: 3,
+      totalKnownWordCount: 0,
+      uniqueKnownWordCount: 0,
+    }));
     expect(page.words["uno"].occurrences.length).toBe(2);
     expect(page.words["dos"].occurrences.length).toBe(2);
     expect(page.words["tres"].occurrences.length).toBe(1);
@@ -127,7 +130,7 @@ describe("Page", function() {
 
     expect(page.pageElements.length).toBe(1);
     expect(page.pageElements[0].innerText).toEqual(text);
-    expect(page.totalWordCount).toBe(2);
+    expect(page.stats.totalWordCount).toBe(2);
     expect(page.words["uno"].text).toBe("uno");
     expect(page.words["tres"].text).toBe("tres");
   });
@@ -142,10 +145,12 @@ describe("Page", function() {
 
     const page = new Page(Language.SPANISH, element);
 
-    expect(page.totalWordCount).toBe(6);
-    expect(page.uniqueWordCount).toBe(4);
-    expect(page.totalKnownWordCount).toBe(2);
-    expect(page.uniqueKnownWordCount).toBe(1);
+    expect(page.stats).toEqual(new Statistics({
+      totalWordCount: 6,
+      uniqueWordCount: 4,
+      totalKnownWordCount: 2,
+      uniqueKnownWordCount: 1,
+    }));
   });
 
   describe("with saved data", function() {
@@ -176,20 +181,24 @@ describe("Page", function() {
 
       const page = new Page(Language.SPANISH, elements);
 
-      expect(page.totalWordCount).toBe(8);
-      expect(page.uniqueWordCount).toBe(6);
-      expect(page.totalKnownWordCount).toBe(0);
-      expect(page.uniqueKnownWordCount).toBe(0);
+      expect(page.stats).toEqual(new Statistics({
+        totalWordCount: 8,
+        uniqueWordCount: 6,
+        totalKnownWordCount: 0,
+        uniqueKnownWordCount: 0,
+      }));
 
       expect(page.words["es"].occurrences[0].classList).toContain("unknown");
       expect(page.words["es"].occurrences[1].classList).toContain("unknown");
       expect(page.words["y"].occurrences[0].classList).toContain("unknown");
 
-      page.waitForSavedData().then(function() {
-        expect(page.totalWordCount).toBe(8);
-        expect(page.uniqueWordCount).toBe(6);
-        expect(page.totalKnownWordCount).toBe(3);
-        expect(page.uniqueKnownWordCount).toBe(2);
+      page.getSavedWords().then(function() {
+        expect(page.stats).toEqual(new Statistics({
+          totalWordCount: 8,
+          uniqueWordCount: 6,
+          totalKnownWordCount: 3,
+          uniqueKnownWordCount: 2,
+        }));
 
         expect(page.words["es"].occurrences[0].classList).toContain("known");
         expect(page.words["es"].occurrences[1].classList).toContain("known");
@@ -212,18 +221,22 @@ describe("Page", function() {
 
       const page = new Page(Language.SPANISH, elements);
 
-      expect(page.totalWordCount).toBe(8);
-      expect(page.uniqueWordCount).toBe(6);
-      expect(page.totalKnownWordCount).toBe(0);
-      expect(page.uniqueKnownWordCount).toBe(0);
+      expect(page.stats).toEqual(new Statistics({
+        totalWordCount: 8,
+        uniqueWordCount: 6,
+        totalKnownWordCount: 0,
+        uniqueKnownWordCount: 0,
+      }));
 
       expect(page.words["y"].occurrences[0].classList).toContain("unknown");
 
-      page.waitForSavedData().then(function() {
-        expect(page.totalWordCount).toBe(8);
-        expect(page.uniqueWordCount).toBe(6);
-        expect(page.totalKnownWordCount).toBe(0);
-        expect(page.uniqueKnownWordCount).toBe(0);
+      page.getSavedWords().then(function() {
+        expect(page.stats).toEqual(new Statistics({
+          totalWordCount: 8,
+          uniqueWordCount: 6,
+          totalKnownWordCount: 0,
+          uniqueKnownWordCount: 0,
+        }));
 
         expect(page.words["y"].occurrences[0].classList).toContain("unknown");
         asyncDone();
@@ -245,13 +258,13 @@ describe("Page", function() {
 
       const page = new Page(Language.SPANISH, elements);
 
-      expect(page.totalKnownWordCount).toBe(0);
-      expect(page.uniqueKnownWordCount).toBe(0);
+      expect(page.stats.totalKnownWordCount).toBe(0);
+      expect(page.stats.uniqueKnownWordCount).toBe(0);
       expect(page.words["nada"]).toBeUndefined();
 
-      page.waitForSavedData().then(function() {
-        expect(page.totalKnownWordCount).toBe(0);
-        expect(page.uniqueKnownWordCount).toBe(0);
+      page.getSavedWords().then(function() {
+        expect(page.stats.totalKnownWordCount).toBe(0);
+        expect(page.stats.uniqueKnownWordCount).toBe(0);
         expect(page.words["nada"]).toBeUndefined();
         asyncDone();
       });
@@ -261,18 +274,23 @@ describe("Page", function() {
 
     it("marks a word as known when text is clicked", function() {
       const page = new Page(Language.SPANISH, elements);
+      expect(page.infoBox).not.toBeUndefined();
+      expect(page.infoBox).not.toBeNull();
+
       spyOn(Fieldbook, "createRecord");
+      spyOn(page.infoBox, "update");
 
       page.words["y"].occurrences[0].click();
 
       expect(Fieldbook.createRecord).toHaveBeenCalled();
+      expect(page.infoBox.update).toHaveBeenCalled();
     });
 
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
       const word = page.words["y"];
 
-      page.waitForSavedData().then(function() {
+      page.getSavedWords().then(function() {
         expect(word.occurrences[0].classList).toContain("unknown");
         expect(word.fieldbookId).toBeNull();
       })
@@ -295,7 +313,7 @@ describe("Page", function() {
       const page = new Page(Language.SPANISH, elements);
       const word = page.words["y"];
 
-      page.waitForSavedData().then(function() {
+      page.getSavedWords().then(function() {
         expect(word.occurrences[0].classList).toContain("known");
         expect(word.fieldbookId).not.toBeNull();
         return page.markAsKnown(word);
@@ -309,39 +327,11 @@ describe("Page", function() {
       mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
     });
 
-    it("creates an InfoBox", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
-      expect(page.infoBox).toBeNull();
-
-      page.waitForSavedData().then(function() {
-        expect(page.infoBox).not.toBeNull();
-        asyncDone();
-      });
-
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
-    });
-
-    it("immediately shows the language in the InfoBox on page load ", function() {
-      pending("FUTURE FEATURE");
-    });
-
-    it("updates the InfoBox after the page is parsed ", function() {
-      pending("FUTURE FEATURE");
-    });
-
-    it("updates the InfoBox after saved data is loaded ", function() {
-      pending("FUTURE FEATURE");
-    });
-
-    it("updates the InfoBox after marking a word as known ", function() {
-      pending("FUTURE FEATURE");
-    });
-
     it("does not blow up on bad Fieldbook records", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
       spyOn(console, "error");
 
-      page.waitForSavedData().then(function() {
+      page.getSavedWords().then(function() {
         expect(console.error).toHaveBeenCalled();
         asyncDone();
       });

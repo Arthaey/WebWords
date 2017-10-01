@@ -26,6 +26,7 @@ module.exports = function(grunt) {
           "src/Constants.js",
           "src/Fieldbook.js",
           "src/Language.js",
+          "src/Statistics.js",
           "src/WebWords.js",
           "src/Word.js",
           "src/Page.js",
@@ -40,7 +41,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
 
-  grunt.registerTask("default", ["test"]);
+  grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["concat"]);
   grunt.registerTask("test", ["karma"]);

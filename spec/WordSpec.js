@@ -65,7 +65,7 @@ describe("Word", function() {
     const word1 = Word.create(dom.createElement("p", {}, "palabra"));
     const word2 = Word.create(dom.createElement("div", {}, "palabra"));
 
-    expect(word1).toEqual(word2);
+    expect(word1).toBe(word2);
     expect(word1.occurrences.length).toBe(2);
   });
 
@@ -76,6 +76,19 @@ describe("Word", function() {
     expect(word1).not.toBe(word2);
     expect(word1.occurrences.length).toBe(1);
     expect(word2.occurrences.length).toBe(1);
+  });
+
+  it("deletes all created Words", function() {
+    const word1 = Word.create(dom.createElement("p", {}, "palabra"));
+    const word2 = Word.create(dom.createElement("p", {}, "palabra"));
+    expect(word1).toBe(word2);
+    expect(word1.occurrences.length).toBe(2);
+
+    Word.forgetAll();
+
+    const word3 = Word.create(dom.createElement("p", {}, "palabra"));
+    expect(word3).not.toBe(word1);
+    expect(word3.occurrences.length).toBe(1);
   });
 
   it("preserves learning status when creating twice", function() {

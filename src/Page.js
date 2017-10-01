@@ -1,24 +1,17 @@
 'use strict';
 
 const Page = function(langCode, rootElement) {
-  this.reset();
   this.langCode = langCode || Language.UNKNOWN;
-
-  if (rootElement) {
-    this.parseWords(rootElement);
-  }
+  this.reset();
+  this.parseWords(rootElement);
 };
 
 Page.prototype.reset = function() {
-  this.infoBox = null;
-
   this.pageElements = [];
   this.words = [];
-
-  this.totalWordCount = 0;
-  this.uniqueWordCount = 0;
-  this.totalKnownWordCount = 0;
-  this.uniqueKnownWordCount = 0;
+  this.stats = new Statistics();
+  this.infoBox = new InfoBox(this.langCode);
+  this.infoBox.addMarkUpPageHandler(this.getSavedWords.bind(this));
 };
 
 Page.prototype.markAsKnown = function(word) {
@@ -27,18 +20,12 @@ Page.prototype.markAsKnown = function(word) {
   }
 
   word.markAsKnown();
-  if (this.infoBox) {
-    this.infoBox.addKnownWord(word);
-  }
+  this.infoBox.update(this.stats);
   return Fieldbook.createRecord(this.langCode, word);
 };
 
 Page.prototype.parseWords = function(rootElement) {
-  let didLoadAndParse, failedToLoadAndParse;
-  this._loadedAndParsedDataPromise = new Promise((resolve, reject) => {
-    didLoadAndParse = resolve;
-    failedToLoadAndParse = reject;
-  });
+  if (!rootElement || this.langCode === Language.UNKNOWN) return;
 
   const thisPage = this;
 
@@ -48,10 +35,9 @@ Page.prototype.parseWords = function(rootElement) {
   const rootContainerElement = document.createElement("div");
   rootContainerElement.appendChild(rootElement);
 
-  const tagsWithText = "h1, h2, h3, h4, h5, h6, article, p";
+  const tagsWithText = "h1, h2, h3, h4, h5, h6, article, p:not(.webwords-ignore)";
   const elements = rootContainerElement.querySelectorAll(tagsWithText);
 
-  // Mark up each word first...
   elements.forEach(function(element) {
     let texts = element.innerText.trim().split(Constants.splitRegex);
     texts = texts.filter(function(text) {
@@ -62,17 +48,15 @@ Page.prototype.parseWords = function(rootElement) {
     thisPage.pageElements.push(element);
   });
   originalContainer.appendChild(rootElement);
-
-  // ...then go back and re-mark based on saved data.
-  Fieldbook.getRecords(this.langCode)
-    .then(thisPage.parseSavedData.bind(thisPage))
-    .then(function() { thisPage.infoBox = new InfoBox(thisPage) })
-    .then(didLoadAndParse)
-    .catch(failedToLoadAndParse);
 };
 
-Page.prototype.waitForSavedData = function() {
-  return this._loadedAndParsedDataPromise;
+Page.prototype.getSavedWords = function() {
+  const thisPage = this;
+  const thisInfoBox = this.infoBox;
+
+  return Fieldbook.getRecords(this.langCode)
+    .then(thisPage.parseSavedData.bind(thisPage))
+    .then(thisInfoBox.update.bind(thisInfoBox, thisPage.stats))
 };
 
 Page.prototype.wrapWord = function(text) {
@@ -97,10 +81,10 @@ Page.prototype.addWord = function(element) {
   const isNew = !this.words[textKey];
   const isKnown = (word.learningStatus === Word.KNOWN);
 
-  this.totalWordCount += 1;
-  if (isNew) this.uniqueWordCount += 1;
-  if (isKnown) this.totalKnownWordCount += 1;
-  if (isNew && isKnown) this.uniqueKnownWordCount += 1;
+  this.stats.totalWordCount += 1;
+  if (isNew) this.stats.uniqueWordCount += 1;
+  if (isKnown) this.stats.totalKnownWordCount += 1;
+  if (isNew && isKnown) this.stats.uniqueKnownWordCount += 1;
 
   this.words[textKey] = word;
   element.addEventListener("click", this.markAsKnown.bind(this, word));
@@ -116,8 +100,8 @@ Page.prototype.parseSavedData = function(records) {
     wordOnPage.fieldbookId = record.id;
 
     if (wordOnPage.learningStatus !== Word.KNOWN && record.how_well_known === Word.KNOWN) {
-      thisPage.uniqueKnownWordCount += 1;
-      thisPage.totalKnownWordCount += wordOnPage.occurrences.length;
+      thisPage.stats.uniqueKnownWordCount += 1;
+      thisPage.stats.totalKnownWordCount += wordOnPage.occurrences.length;
       wordOnPage.markAsKnown();
     }
   });

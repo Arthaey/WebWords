@@ -3,7 +3,7 @@
 const Language = function() {
 };
 
-Language.UKNOWN = null;
+Language.UNKNOWN = "??";
 Language.FRENCH  = "fr";
 Language.SPANISH = "es";
 

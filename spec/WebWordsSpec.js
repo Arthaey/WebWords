@@ -24,7 +24,9 @@ describe("WebWords", function() {
     const element = dom.createElement("p", {}, "?");
     const page = WebWords.init(element);
 
-    expect(page).toBeNull()
+    expect(page.langCode).toBe(Language.UNKNOWN);
+    expect(page.words).toBeEmpty();
+    expect(page.pageElements).toBeEmpty();
   });
 
   it("runs on the page when it identifies the language", function() {
@@ -32,7 +34,7 @@ describe("WebWords", function() {
     const page = WebWords.init(element);
 
     expect(page.langCode).toEqual(Language.SPANISH);
-    expect(page.totalWordCount).toEqual(3);
+    expect(page.stats.totalWordCount).toEqual(3);
   });
 
   it("prompts to run on the page when it identifies the language", function() {
@@ -62,19 +64,13 @@ describe("WebWords", function() {
     expect(WebWords.addCssRules).toHaveBeenCalledWith(InfoBox.cssRules);
   });
 
-  it("adds Words and an InfoBox", function(asyncDone) {
+  it("adds an InfoBox on page load", function() {
     const element = dom.createElement("p", {}, "palabras con ñ");
     const page = WebWords.init(element);
 
     expect(page.words).not.toEqual({});
-
-    page.waitForSavedData().then(function() {
-      expect(page.infoBox).not.toBeUndefined();
-      expect(page.infoBox).not.toBeNull();
-      asyncDone();
-    });
-
-    mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
+    expect(page.infoBox.element).toHaveText("Mark up words");
+    expect(jasmine.Ajax.requests.count()).toBe(0);
   });
 
   const countStylesheets = function() {

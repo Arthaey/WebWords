@@ -1,6 +1,7 @@
 # contains private repo token
 .coveralls.yml
 
+dist/
 .grunt/
 node_modules/
 spec/coverage/

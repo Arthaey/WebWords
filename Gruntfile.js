@@ -18,13 +18,29 @@ module.exports = function(grunt) {
         force: true,
         recursive: true
       }
+    },
+
+    concat: {
+      dist: {
+        src: [
+          "src/Fieldbook.js",
+          "src/Language.js",
+          "src/WebWords.js",
+          "src/Word.js",
+          "src/Page.js",
+          "src/InfoBox.js"
+        ],
+        dest: "dist/src.js"
+      }
     }
   });
 
+  grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
 
   grunt.registerTask("default", ["test"]);
 
+  grunt.registerTask("build", ["concat"]);
   grunt.registerTask("test", ["karma"]);
 }

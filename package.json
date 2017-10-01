@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Arthaey/WebWords#readme",
   "devDependencies": {
+    "camo-purge": "^1.0.2",
     "coveralls": "^3.0.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",

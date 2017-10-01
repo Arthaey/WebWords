@@ -17,3 +17,5 @@ To validate Travis config:
 gem install travis --no-rdoc --no-ri
 travis list .travis.yml
 ```
+
+If the Github status badges are stale, run `camo-purge` and force-reload.

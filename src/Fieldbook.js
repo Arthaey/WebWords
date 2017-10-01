@@ -38,9 +38,9 @@ Fieldbook.createRecord = function(langCode, word) {
   });
 };
 
-Fieldbook.updateRecord = function(langCode, wordId) {
-  const url = Fieldbook.getUrl(langCode) + "/" + wordId;
-  const record = JSON.stringify({how_well_known: "known"});
+Fieldbook.updateRecord = function(langCode, word) {
+  const url = Fieldbook.getUrl(langCode) + "/" + word.fieldbookId;
+  const record = JSON.stringify({how_well_known: word.learningStatus});
   return Fieldbook._promisifyRequest("PATCH", url, record);
 };
 

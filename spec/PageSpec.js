@@ -200,6 +200,65 @@ describe("Page", function() {
       mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
     });
 
+    it("ignores Fieldbook words that aren't known", function(asyncDone) {
+      const json = `[
+        {
+          "id": 1,
+          "record_url": "http://example.com/records/abc",
+          "word": "y",
+          "how_well_known": "unknown"
+        }
+      ]`;
+
+      const page = new Page(Language.SPANISH, elements);
+
+      expect(page.totalWordCount).toBe(8);
+      expect(page.uniqueWordCount).toBe(6);
+      expect(page.totalKnownWordCount).toBe(0);
+      expect(page.uniqueKnownWordCount).toBe(0);
+
+      expect(page.words["y"].occurrences[0].classList).toContain("unknown");
+
+      page.waitForSavedData().then(function() {
+        expect(page.totalWordCount).toBe(8);
+        expect(page.uniqueWordCount).toBe(6);
+        expect(page.totalKnownWordCount).toBe(0);
+        expect(page.uniqueKnownWordCount).toBe(0);
+
+        expect(page.words["y"].occurrences[0].classList).toContain("unknown");
+        asyncDone();
+      });
+
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
+    });
+
+
+    it("ignores Fieldbook words that aren't on this page", function(asyncDone) {
+      const json = `[
+        {
+          "id": 1,
+          "record_url": "http://example.com/records/abc",
+          "word": "nada",
+          "how_well_known": "known"
+        }
+      ]`;
+
+      const page = new Page(Language.SPANISH, elements);
+
+      expect(page.totalKnownWordCount).toBe(0);
+      expect(page.uniqueKnownWordCount).toBe(0);
+      expect(page.words["nada"]).toBeUndefined();
+
+      page.waitForSavedData().then(function() {
+        expect(page.totalKnownWordCount).toBe(0);
+        expect(page.uniqueKnownWordCount).toBe(0);
+        expect(page.words["nada"]).toBeUndefined();
+        asyncDone();
+      });
+
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
+    });
+
     it("marks a word as known when text is clicked", function() {
       const page = new Page(Language.SPANISH, elements);
       spyOn(Fieldbook, "createRecord");

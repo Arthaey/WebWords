@@ -44,7 +44,7 @@ Page.prototype.parseWords = function(rootElement) {
 
   this.reset();
 
-  const originalContainer = rootElement.parentNode || document.body;
+  const originalContainer = rootElement.parentNode;
   const rootContainerElement = document.createElement("div");
   rootContainerElement.appendChild(rootElement);
 
@@ -107,8 +107,6 @@ Page.prototype.addWord = function(element) {
 };
 
 Page.prototype.parseSavedData = function(records) {
-  if (!records) return;
-
   const thisPage = this;
 
   records.forEach(function(record) {

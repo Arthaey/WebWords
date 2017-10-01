@@ -13,6 +13,12 @@ describe("Fieldbook", function() {
     localStorage.setItem(WebWords.fieldbookSecretId, "qux");
   }
 
+  it("constructor does nothing", function() {
+    const fieldbook = new Fieldbook();
+    expect(fieldbook).not.toBeUndefined();
+    expect(fieldbook).not.toBeNull();
+  });
+
   it("generates a url from a language code", function() {
     const expectedUrl = "http://example.com/test-fieldbook-book/es";
     expect(Fieldbook.getUrl(Language.SPANISH)).toEqual(expectedUrl);
@@ -149,6 +155,56 @@ describe("Fieldbook", function() {
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         expect(word.learningStatus).toBe(Word.UNKNOWN);
         expect(word.fieldbookId).toBeNull();
+        asyncDone();
+      });
+    });
+  });
+
+  describe("updateRecord", function() {
+    const expectedFieldbookId = 42;
+    let word;
+
+    beforeEach(function() {
+      word = Word.create("palabra");
+      word.fieldbookId = expectedFieldbookId;
+    });
+
+    it("updates an existing word", function(asyncDone) {
+      setFieldbookLocalStorageItems();
+
+      expect(word.learningStatus).toBe(Word.UNKNOWN);
+      expect(word.fieldbookId).toBe(expectedFieldbookId);
+
+      Fieldbook.updateRecord(Language.SPANISH, word).then(function(records) {
+        expect(records.length).toBe(1);
+        expect(word.learningStatus).toBe(Word.UNKNOWN);
+        expect(word.fieldbookId).toBe(expectedFieldbookId);
+        asyncDone();
+      });
+
+      const url = Fieldbook.getUrl(Language.SPANISH) + "/" + expectedFieldbookId;
+      const records = fakeFieldbookRecords(["cantTestFieldbookSideEffects"]);
+      mockAjaxRequest(url, records);
+    });
+
+    it("handles when no record is returned", function(asyncDone) {
+      setFieldbookLocalStorageItems();
+
+      Fieldbook.updateRecord(Language.SPANISH, word).then(function(records) {
+        expect(records).toBeEmpty()
+        asyncDone();
+      });
+
+      const url = Fieldbook.getUrl(Language.SPANISH) + "/" + expectedFieldbookId;
+      mockAjaxRequest(url, "[]");
+    });
+
+    it("does not send data if required info is missing", function(asyncDone) {
+      removeFieldbookLocalStorageItems();
+
+      Fieldbook.updateRecord(Language.SPANISH, word).catch(function(errorMsg) {
+        expect(errorMsg).toContain("missing Fieldbook book ID, key, or secret");
+        expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
         asyncDone();
       });
     });

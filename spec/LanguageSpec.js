@@ -1,6 +1,12 @@
 'use strict';
 
 describe("Language", function() {
+  it("constructor does nothing", function() {
+    const language = new Language();
+    expect(language).not.toBeUndefined();
+    expect(language).not.toBeNull();
+  });
+
   it("returns null when no text is given", function() {
     expect(Language.identify(null)).toEqual(Language.UNKNOWN);
   });

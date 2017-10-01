@@ -53,7 +53,7 @@ Page.prototype.parseWords = function(rootElement) {
 
   // Mark up each word first...
   elements.forEach(function(element) {
-    let texts = element.innerText.trim().split(WebWords.splitRegex);
+    let texts = element.innerText.trim().split(Constants.splitRegex);
     texts = texts.filter(function(text) {
       return text !== "";
     });
@@ -78,7 +78,7 @@ Page.prototype.waitForSavedData = function() {
 Page.prototype.wrapWord = function(text) {
   let element;
 
-  if (text.match(WebWords.splitRegex) || text.match(WebWords.ignoreRegex)) {
+  if (text.match(Constants.splitRegex) || text.match(Constants.ignoreRegex)) {
     // punctuation, spaces, etc
     element = document.createTextNode(text);
   } else {

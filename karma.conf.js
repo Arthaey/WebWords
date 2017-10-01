@@ -5,6 +5,7 @@ module.exports = function(config) {
     singleRun: true,
 
     files: [
+      "src/Constants.js",
       "src/Fieldbook.js",
       "src/Language.js",
       "src/WebWords.js",
@@ -12,12 +13,7 @@ module.exports = function(config) {
       "src/Page.js",
       "src/InfoBox.js",
       "spec/SpecHelper.js",
-      "spec/FieldbookSpec.js",
-      "spec/LanguageSpec.js",
-      "spec/WebWordsSpec.js",
-      "spec/WordSpec.js",
-      "spec/PageSpec.js",
-      "spec/InfoBoxSpec.js",
+      "spec/*Spec.js",
     ],
 
     reporters: ["spec", "coverage"],

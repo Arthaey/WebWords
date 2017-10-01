@@ -1,46 +1,38 @@
 'use strict';
 
-const WebWords = {
-  punctRegex:    /[\/.,:;'"?!¿¡()[\]]+/g,
-  splitRegex: /([\s\/.,:;'"?!¿¡()[\]]+)/,
-  ignoreRegex: /\d+/,
+const WebWords = function() {
+};
 
-  fieldbookBaseUrl: "https://api.fieldbook.com/v1",
-  fieldbookBookId: "WebWords-FieldbookBook",
-  fieldbookKeyId: "WebWords-FieldbookKey",
-  fieldbookSecretId: "WebWords-FieldbookSecret",
+WebWords.STYLESHEET_ID = "webwords-stylesheet";
 
-  stylesheetId: "webwords-stylesheet",
+WebWords.init = function(rootElement) {
+  if (!rootElement) return null;
 
-  init: function(rootElement) {
-    if (!rootElement) return null;
+  const langCode = Language.identify(rootElement.innerText);
+  if (!langCode) return null;
 
-    const langCode = Language.identify(rootElement.innerText);
-    if (!langCode) return null;
+  WebWords.addCssRules(Word.cssRules);
+  WebWords.addCssRules(InfoBox.cssRules);
 
-    WebWords.addCssRules(Word.cssRules);
-    WebWords.addCssRules(InfoBox.cssRules);
+  return new Page(langCode, rootElement);
+};
 
-    return new Page(langCode, rootElement);
-  },
+WebWords.addCssRules = function(rules) {
+  rules.forEach(function(rule) {
+    const stylesheet = WebWords._getOrCreateStylesheet();
+    stylesheet.insertRule(rule, stylesheet.cssRules.length);
+  });
+};
 
-  addCssRules: function(rules) {
-    rules.forEach(function(rule) {
-      const stylesheet = WebWords._getOrCreateStylesheet();
-      stylesheet.insertRule(rule, stylesheet.cssRules.length);
-    });
-  },
+WebWords._getOrCreateStylesheet = function() {
+  const existingStyleElem = document.getElementById(WebWords.STYLESHEET_ID);
+  if (existingStyleElem) {
+    return existingStyleElem.sheet;
+  }
 
-  _getOrCreateStylesheet: function() {
-    const existingStyleElem = document.getElementById(WebWords.stylesheetId);
-    if (existingStyleElem) {
-      return existingStyleElem.sheet;
-    }
+  const styleElem = document.createElement("style");
+  styleElem.id = WebWords.STYLESHEET_ID;
+  document.head.appendChild(styleElem);
 
-    const styleElem = document.createElement("style");
-    styleElem.id = WebWords.stylesheetId;
-    document.head.appendChild(styleElem);
-
-    return styleElem.sheet;
-  },
+  return styleElem.sheet;
 };

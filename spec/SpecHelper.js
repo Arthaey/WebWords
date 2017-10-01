@@ -11,20 +11,20 @@ beforeEach(function() {
     }
   };
 
-  WebWords.fieldbookBaseUrl = "http://example.com";
+  Fieldbook.BASE_URL = "http://example.com";
   WebWords.init(dom.createElement("div", {}, ""));
   jasmine.addCustomEqualityTester(wordEqualityTester);
 
   Word.forgetAll();
 
-  const stylesheet = document.getElementById(WebWords.stylesheetId);
+  const stylesheet = document.getElementById(WebWords.STYLESHEET_ID);
   if (stylesheet && stylesheet.parentNode) {
     stylesheet.parentNode.removeChild(stylesheet);
   }
 
-  localStorage.setItem(WebWords.fieldbookBookId, "test-fieldbook-book");
-  localStorage.setItem(WebWords.fieldbookKeyId, "test-fieldbook-key");
-  localStorage.setItem(WebWords.fieldbookSecretId, "test-fieldbook-secret");
+  localStorage.setItem(Fieldbook.CONFIG_BOOK, "test-fieldbook-book");
+  localStorage.setItem(Fieldbook.CONFIG_KEY, "test-fieldbook-key");
+  localStorage.setItem(Fieldbook.CONFIG_SECRET, "test-fieldbook-secret");
 
   jasmine.Ajax.install();
 

@@ -7,6 +7,12 @@ describe("WebWords", function() {
     startingStylesheetCount = countStylesheets();
   });
 
+  it("constructor does nothing", function() {
+    const webWords = new WebWords();
+    expect(webWords).not.toBeUndefined();
+    expect(webWords).not.toBeNull();
+  });
+
   it("does not runs when there are no elements", function() {
     const page = WebWords.init(null);
 

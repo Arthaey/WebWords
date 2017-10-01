@@ -3,15 +3,20 @@
 const Fieldbook = function() {
 };
 
+Fieldbook.BASE_URL = "https://api.fieldbook.com/v1";
+Fieldbook.CONFIG_BOOK = "WebWords-FieldbookBook";
+Fieldbook.CONFIG_KEY = "WebWords-FieldbookKey";
+Fieldbook.CONFIG_SECRET = "WebWords-FieldbookSecret";
+
 Fieldbook.getUrl = function(langCode) {
-  const fieldbookBook = localStorage.getItem(WebWords.fieldbookBookId);
-  return `${WebWords.fieldbookBaseUrl}/${fieldbookBook}/${langCode}`;
+  const fieldbookBook = localStorage.getItem(Fieldbook.CONFIG_BOOK);
+  return `${Fieldbook.BASE_URL}/${fieldbookBook}/${langCode}`;
 };
 
 Fieldbook.getAuthToken = function() {
-  const fieldbookBook = localStorage.getItem(WebWords.fieldbookBookId);
-  const fieldbookKey = localStorage.getItem(WebWords.fieldbookKeyId);
-  const fieldbookSecret = localStorage.getItem(WebWords.fieldbookSecretId);
+  const fieldbookBook = localStorage.getItem(Fieldbook.CONFIG_BOOK);
+  const fieldbookKey = localStorage.getItem(Fieldbook.CONFIG_KEY);
+  const fieldbookSecret = localStorage.getItem(Fieldbook.CONFIG_SECRET);
 
   if (fieldbookBook && fieldbookKey && fieldbookSecret) {
     return btoa(`${fieldbookKey}:${fieldbookSecret}`);

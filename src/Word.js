@@ -68,7 +68,7 @@ Word.create = function(textOrElement, learningStatus) {
 
 Word.normalizeText = function(textOrElement) {
   const text = Word.isString(textOrElement) ? textOrElement : textOrElement.innerText;
-  return text.trim().toLowerCase().replace(WebWords.punctRegex, "");
+  return text.trim().toLowerCase().replace(Constants.punctRegex, "");
 };
 
 Word.isString = function(textOrElement) {

@@ -23,6 +23,7 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
+          "src/Constants.js",
           "src/Fieldbook.js",
           "src/Language.js",
           "src/WebWords.js",

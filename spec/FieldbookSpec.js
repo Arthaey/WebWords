@@ -2,15 +2,15 @@
 
 describe("Fieldbook", function() {
   function removeFieldbookLocalStorageItems() {
-    localStorage.removeItem(WebWords.fieldbookBookId);
-    localStorage.removeItem(WebWords.fieldbookKeyId);
-    localStorage.removeItem(WebWords.fieldbookSecretId);
+    localStorage.removeItem(Fieldbook.CONFIG_BOOK);
+    localStorage.removeItem(Fieldbook.CONFIG_KEY);
+    localStorage.removeItem(Fieldbook.CONFIG_SECRET);
   }
 
   function setFieldbookLocalStorageItems() {
-    localStorage.setItem(WebWords.fieldbookBookId, "foo");
-    localStorage.setItem(WebWords.fieldbookKeyId, "bar");
-    localStorage.setItem(WebWords.fieldbookSecretId, "qux");
+    localStorage.setItem(Fieldbook.CONFIG_BOOK, "foo");
+    localStorage.setItem(Fieldbook.CONFIG_KEY, "bar");
+    localStorage.setItem(Fieldbook.CONFIG_SECRET, "qux");
   }
 
   it("constructor does nothing", function() {
@@ -27,9 +27,9 @@ describe("Fieldbook", function() {
   describe("getAuthToken", function() {
     it("returns a token when all required info is set", function() {
       removeFieldbookLocalStorageItems();
-      localStorage.setItem(WebWords.fieldbookBookId, "foo");
-      localStorage.setItem(WebWords.fieldbookKeyId, "bar");
-      localStorage.setItem(WebWords.fieldbookSecretId, "qux");
+      localStorage.setItem(Fieldbook.CONFIG_BOOK, "foo");
+      localStorage.setItem(Fieldbook.CONFIG_KEY, "bar");
+      localStorage.setItem(Fieldbook.CONFIG_SECRET, "qux");
 
       expect(Fieldbook.getAuthToken()).not.toBeUndefined();
       expect(Fieldbook.getAuthToken()).not.toBeNull();
@@ -37,24 +37,24 @@ describe("Fieldbook", function() {
 
     it("returns null when book is missing", function() {
       removeFieldbookLocalStorageItems();
-      localStorage.setItem(WebWords.fieldbookKeyId, "bar");
-      localStorage.setItem(WebWords.fieldbookSecretId, "qux");
+      localStorage.setItem(Fieldbook.CONFIG_KEY, "bar");
+      localStorage.setItem(Fieldbook.CONFIG_SECRET, "qux");
 
       expect(Fieldbook.getAuthToken()).toBeNull();
     });
 
     it("returns null when key is missing", function() {
       removeFieldbookLocalStorageItems();
-      localStorage.setItem(WebWords.fieldbookBookId, "foo");
-      localStorage.setItem(WebWords.fieldbookSecretId, "qux");
+      localStorage.setItem(Fieldbook.CONFIG_BOOK, "foo");
+      localStorage.setItem(Fieldbook.CONFIG_SECRET, "qux");
 
       expect(Fieldbook.getAuthToken()).toBeNull();
     });
 
     it("returns null when secret is missing", function() {
       removeFieldbookLocalStorageItems();
-      localStorage.setItem(WebWords.fieldbookBookId, "foo");
-      localStorage.setItem(WebWords.fieldbookKeyId, "bar");
+      localStorage.setItem(Fieldbook.CONFIG_BOOK, "foo");
+      localStorage.setItem(Fieldbook.CONFIG_KEY, "bar");
 
       expect(Fieldbook.getAuthToken()).toBeNull();
     });

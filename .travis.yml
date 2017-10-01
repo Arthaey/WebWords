@@ -1,4 +1,6 @@
 language: node_js
+node_js:
+  - 8
 
 before_install:
   - export CHROME_BIN=chromium-browser
@@ -8,4 +10,4 @@ before_install:
 script: grunt test
 
 after_script:
-  - npm install grunt-karma-coveralls && grunt coveralls
+  - grunt coveralls

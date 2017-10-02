@@ -5,10 +5,10 @@ const InfoBox = function(langCode) {
   this.element = null;
   this.markUpPageButton = null;
 
-  this.initialUI();
+  this.initializeUI();
 };
 
-InfoBox.prototype.initialUI = function() {
+InfoBox.prototype.initializeUI = function() {
   this.element = document.createElement("div");
   this.element.classList.add("webwords-infobox");
   document.body.appendChild(this.element);
@@ -76,7 +76,7 @@ InfoBox.prototype._removeElements = function() {
 
 InfoBox.cssRules = [
   `.webwords-infobox {
-      position: absolute;
+      position: fixed;
       top: 0px;
       right: 0px;
       margin: 10px;

@@ -57,7 +57,7 @@ describe("WebWords", function() {
     const page = WebWords.init(element);
 
     expect(page.words).not.toEqual({});
-    expect(page.infoBox.element).toHaveText("Mark up words");
+    expect(page.infoBox.element).toHaveText("ES: mark up words");
     expect(jasmine.Ajax.requests.count()).toBe(0);
   });
 

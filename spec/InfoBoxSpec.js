@@ -9,15 +9,13 @@ describe("InfoBox", function() {
 
   it("defaults to unknown language with no button", function() {
     const infoBox = new InfoBox();
-    expect(infoBox.element).toHaveText("identified ??");
-    expect(infoBox.element).not.toHaveText("Mark up words");
+    expect(infoBox.element).not.toHaveText("mark up words");
   });
 
   it("shows the language and a button", function() {
     const infoBox = new InfoBox(Language.SPANISH);
 
-    expect(infoBox.element).toHaveText("identified ES");
-    expect(infoBox.element).toHaveText("Mark up words");
+    expect(infoBox.element).toHaveText("ES: mark up words");
   });
 
   it("updates with given statistics", function() {

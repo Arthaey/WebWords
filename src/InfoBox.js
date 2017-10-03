@@ -13,11 +13,10 @@ InfoBox.prototype.initializeUI = function() {
   this.element.classList.add("webwords-infobox");
   document.body.appendChild(this.element);
 
-  this._addSection(`identified ${this.langCode.toUpperCase()}`);
-
   if (this.langCode !== Language.UNKNOWN) {
+    const buttonText = `${this.langCode.toUpperCase()}: mark up words`;
     this.markUpPageButton = document.createElement("button");
-    this.markUpPageButton.appendChild(document.createTextNode("Mark up words"));
+    this.markUpPageButton.appendChild(document.createTextNode(buttonText));
     this.element.appendChild(this.markUpPageButton);
   }
 };
@@ -118,7 +117,24 @@ InfoBox.cssRules = [
       background-color: #ebb1b1;
   }`,
   `.webwords-infobox p {
+      font-size: 14px;
+      font-weight: normal;
       margin: 0px;
       padding: 0px;
+  }`,
+  `.webwords-infobox button {
+      font-size: 14px;
+      color: white;
+      background: linear-gradient(to bottom, #1496fc, #1172c2);
+      border: 1px solid #0c548f;
+      border-radius: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+  }`,
+  `.webwords-infobox button:hover {
+      background: linear-gradient(to top, #1496fc, #1172c2);
+  }`,
+  `.webwords-infobox button:focus {
+      outline: none;
   }`
 ];

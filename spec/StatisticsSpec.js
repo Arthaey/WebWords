@@ -28,5 +28,6 @@ describe("Statistics", function() {
     page.stats = new Statistics({ totalWordCount: 42 });
     const stats = Statistics.fromPage(page);
     expect(stats.totalWordCount).toBe(42);
+    page.destroy();
   });
 });

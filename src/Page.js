@@ -7,11 +7,21 @@ const Page = function(langCode, rootElement) {
 };
 
 Page.prototype.reset = function() {
+  this.destroy();
+
   this.pageElements = [];
   this.words = [];
   this.stats = new Statistics();
+
   this.infoBox = new InfoBox(this.langCode);
   this.infoBox.addMarkUpPageHandler(this.getSavedWords.bind(this));
+};
+
+Page.prototype.destroy = function() {
+  if (this.infoBox) {
+    this.infoBox.destroy();
+    this.infoBox = null;
+  }
 };
 
 Page.prototype.markAsKnown = function(word) {

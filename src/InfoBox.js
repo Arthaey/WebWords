@@ -10,7 +10,7 @@ const InfoBox = function(langCode) {
 
 InfoBox.prototype.initializeUI = function() {
   this.element = document.createElement("div");
-  this.element.classList.add("webwords-infobox");
+  this.element.classList.add(InfoBox.className);
   document.body.appendChild(this.element);
 
   if (this.langCode !== Language.UNKNOWN) {
@@ -50,6 +50,14 @@ InfoBox.prototype.update = function(stats) {
   return Promise.resolve();
 };
 
+InfoBox.prototype.destroy = function() {
+  if (this.element) {
+    this._removeElements();
+    this.element.parentNode.removeChild(this.element);
+    this.element = null;
+  }
+};
+
 InfoBox._hue = function(percentInt) {
   const percent = percentInt / 100.0;
   const skewedPercent = (percent < .75) ? percent/2 : percent;
@@ -81,8 +89,10 @@ InfoBox.prototype._removeElements = function() {
   }
 };
 
+InfoBox.className = "webwords-infobox";
+
 InfoBox.cssRules = [
-  `.webwords-infobox {
+  `.${InfoBox.className} {
       position: fixed;
       top: 0px;
       right: 0px;
@@ -94,25 +104,13 @@ InfoBox.cssRules = [
       font-weight: bold;
       z-index: 100;
   }`,
-  `.webwords-infobox.well-known {
-      background-color: #a9bcaa;
-  }`,
-  `.webwords-infobox.known {
-      background-color: #f7eb81;
-  }`,
-  `.webwords-infobox.somewhat-known {
-      background-color: #f7c481;
-  }`,
-  `.webwords-infobox.unknown {
-      background-color: #ebb1b1;
-  }`,
-  `.webwords-infobox p {
+  `.${InfoBox.className} p {
       font-size: 14px;
       font-weight: normal;
       margin: 0px;
       padding: 0px;
   }`,
-  `.webwords-infobox button {
+  `.${InfoBox.className} button {
       font-size: 14px;
       color: white;
       background: linear-gradient(to bottom, #1496fc, #1172c2);
@@ -121,10 +119,10 @@ InfoBox.cssRules = [
       padding: 0.25rem 0.5rem;
       cursor: pointer;
   }`,
-  `.webwords-infobox button:hover {
+  `.${InfoBox.className} button:hover {
       background: linear-gradient(to top, #1496fc, #1172c2);
   }`,
-  `.webwords-infobox button:focus {
+  `.${InfoBox.className} button:focus {
       outline: none;
   }`
 ];

@@ -12,7 +12,6 @@ beforeEach(function() {
   };
 
   Fieldbook.BASE_URL = "http://example.com";
-  WebWords.init(dom.createElement("div", {}, ""));
   jasmine.addCustomEqualityTester(wordEqualityTester);
 
   Word.forgetAll();

@@ -1,8 +1,14 @@
 'use strict';
 
 describe("Page", function() {
+  let page;
+
+  afterEach(function() {
+    if (page) page.destroy();
+  });
+
   it("starts with no words", function() {
-    const page = new Page();
+    page = new Page();
     expect(page.langCode).toEqual(Language.UNKNOWN);
     expect(page.stats).toEqual(new Statistics());
     expect(page.words).toBeEmpty();
@@ -22,7 +28,7 @@ describe("Page", function() {
       dom.createElement("article", {}, "ocho")
     );
 
-    const page = new Page(Language.SPANISH, elements);
+    page = new Page(Language.SPANISH, elements);
 
     expect(page.langCode).toEqual(Language.SPANISH);
     expect(page.stats).toEqual(new Statistics({
@@ -51,7 +57,7 @@ describe("Page", function() {
       dom.createElement("p", {}, "tres dos uno")
     );
 
-    const page = new Page(Language.SPANISH, elements);
+    page = new Page(Language.SPANISH, elements);
 
     expect(page.stats).toEqual(new Statistics({
       totalWordCount: 5,
@@ -73,11 +79,34 @@ describe("Page", function() {
       '<span class="L2 unverified">dos</span> ' +
       '<span class="L2 unverified">tres</span>';
 
-    const page = new Page(Language.SPANISH, element);
+    page = new Page(Language.SPANISH, element);
 
     expect(page.pageElements.length).toBe(1);
     expect(page.pageElements[0].innerText).toEqual(text);
     expect(page.pageElements[0].innerHTML).toEqual(expectedHTML);
+  });
+
+  it("counts known vs unknown words, and unique words", function() {
+    Word.create("dos", "known");
+    const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");
+
+    page = new Page(Language.SPANISH, element);
+
+    expect(page.stats).toEqual(new Statistics({
+      totalWordCount: 6,
+      uniqueWordCount: 4,
+      totalKnownWordCount: 2,
+      uniqueKnownWordCount: 1,
+    }));
+  });
+
+  it("destroys itself", function() {
+    page = new Page();
+    expect(page.infoBox).not.toBeUndefined();
+    expect(page.infoBox).not.toBeNull();
+
+    page.destroy();
+    expect(page.infoBox).toBeNull();
   });
 
   describe("ignores non-word content", function() {
@@ -85,7 +114,7 @@ describe("Page", function() {
       const text = "'¿Uno, dos?'";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -95,7 +124,7 @@ describe("Page", function() {
       const text = "(palabra)";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -106,7 +135,7 @@ describe("Page", function() {
       const text = "[palabra]";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -117,7 +146,7 @@ describe("Page", function() {
       const text = "<palabra>";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -128,7 +157,7 @@ describe("Page", function() {
       const text = "«palabra»";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -139,7 +168,7 @@ describe("Page", function() {
       const text = "“palabra”";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -150,7 +179,7 @@ describe("Page", function() {
       const text = "uno/dos";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -162,7 +191,7 @@ describe("Page", function() {
       const text = "uno 2 tres 42";
       const element = dom.createElement("p", {}, text);
 
-      const page = new Page(Language.SPANISH, element);
+      page = new Page(Language.SPANISH, element);
 
       expect(page.pageElements.length).toBe(1);
       expect(page.pageElements[0].innerText).toEqual(text);
@@ -170,20 +199,6 @@ describe("Page", function() {
       expect(page.words["uno"].text).toBe("uno");
       expect(page.words["tres"].text).toBe("tres");
     });
-  });
-
-  it("counts known vs unknown words, and unique words", function() {
-    Word.create("dos", "known");
-    const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");
-
-    const page = new Page(Language.SPANISH, element);
-
-    expect(page.stats).toEqual(new Statistics({
-      totalWordCount: 6,
-      uniqueWordCount: 4,
-      totalKnownWordCount: 2,
-      uniqueKnownWordCount: 1,
-    }));
   });
 
   describe("with saved data", function() {
@@ -212,7 +227,7 @@ describe("Page", function() {
         }
       ]`;
 
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
 
       expect(page.stats).toEqual(new Statistics({
         totalWordCount: 8,
@@ -254,7 +269,7 @@ describe("Page", function() {
         }
       ]`;
 
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
 
       expect(page.stats.totalKnownWordCount).toBe(0);
       expect(page.stats.uniqueKnownWordCount).toBe(0);
@@ -271,7 +286,7 @@ describe("Page", function() {
     });
 
     it("marks a word as known when text is clicked", function() {
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
       expect(page.infoBox).not.toBeUndefined();
       expect(page.infoBox).not.toBeNull();
 
@@ -285,7 +300,7 @@ describe("Page", function() {
     });
 
     it("does nothing when a known word is clicked", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
 
       const word = page.words["y"];
       const records = fakeFieldbookRecords(["y"]);
@@ -307,7 +322,7 @@ describe("Page", function() {
     });
 
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
 
       const word = page.words["y"];
       const records = fakeFieldbookRecords(["y"]);
@@ -335,7 +350,7 @@ describe("Page", function() {
     });
 
     it("does NOT update Fieldbook if word is already known ", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
       const word = page.words["y"];
 
       page.getSavedWords().then(function() {
@@ -353,7 +368,7 @@ describe("Page", function() {
     });
 
     it("does not blow up on bad Fieldbook records", function(asyncDone) {
-      const page = new Page(Language.SPANISH, elements);
+      page = new Page(Language.SPANISH, elements);
       spyOn(console, "error");
 
       page.getSavedWords().then(function() {

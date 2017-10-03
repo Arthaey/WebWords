@@ -9,6 +9,8 @@ before_install:
 
 script: grunt test
 
+after_success:
+  - grunt release --release-username=$RELEASE_USERNAME --release-password=$RELEASE_PASSWORD
+
 after_script:
   - grunt coveralls
-  - grunt release --release-username=$RELEASE_USERNAME --release-password=$RELEASE_PASSWORD

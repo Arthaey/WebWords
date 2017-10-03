@@ -8,6 +8,21 @@ WebWords is currently under active development, but it's not really ready for us
 But if you like living on the bleeding, unsupported edge ;) then you're welcome to try it.
 
 
+## Screenshots
+
+<div>
+  <img alt="Initial button after running bookmarklet"
+       src="../assets/screenshots/MarkUpWords.jpg?raw=true"
+       height="400" style="margin-right: 20px;" />
+  <img alt="Highlights all unknown words"
+       src="../assets/screenshots/LoadedWords.jpg?raw=true"
+       height="400" style="margin-right: 20px;" />
+  <img alt="After clicking words to mark them as known"
+       src="../assets/screenshots/MarkedAsKnown.jpg?raw=true"
+       height="400" />
+</div>
+
+
 ## Usage
 
 ### Fieldbook

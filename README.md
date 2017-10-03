@@ -7,6 +7,7 @@
 WebWords is currently under active development, but it's not really ready for users yet.
 But if you like living on the bleeding, unsupported edge ;) then you're welcome to try it.
 
+
 ## Usage
 
 ### Fieldbook
@@ -16,22 +17,15 @@ per language code (eg, "ES" or "FR"). Each sheet should have two columns:
 "Word" and "How Well Known".
 
 Then, open the sidebar and go to the API section to generate your key and secret.
+You will need these, plus your book's ID, to fill in the bookmarklet or user script below.
 
-For now, you have to set 3 values in localStorage for each domain you want to run WebWords on:
-
-```
-localStorage.setItem("WebWords-FieldbookBook", "<book id>");
-localStorage.setItem("WebWords-FieldbookKey", "<book key>");
-localStorage.setItem("WebWords-FieldbookSecret", "<book secret>");
-```
-
-This is a pain, but that's how alpha software is. :)
 
 ### Bookmarklet
 
 ```
-javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){localStorage.setItem("WebWords-FieldbookBook","<book-id>");localStorage.setItem("WebWords-FieldbookKey","key>");localStorage.setItem("WebWords-FieldbookSecret","<secret>");WebWords.init(document.body)})
+javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){localStorage.setItem("WebWords-FieldbookBook","<book-id>");localStorage.setItem("WebWords-FieldbookKey","<key>");localStorage.setItem("WebWords-FieldbookSecret","<secret>");WebWords.init(document.body)})
 ```
+
 
 ### Greasemonkey / Tampermonkey user script
 
@@ -48,6 +42,9 @@ javascript:function loadScript(url,callback){var head=document.getElementsByTagN
 // ==/UserScript==
 
 (function() {
+  localStorage.setItem("WebWords-FieldbookBook", "<book-id>");
+  localStorage.setItem("WebWords-FieldbookKey", "<key>");
+  localStorage.setItem("WebWords-FieldbookSecret", "<secret>");
   WebWords.init(document.body);
 })();
 ```

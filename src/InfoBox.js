@@ -43,19 +43,18 @@ InfoBox.prototype.update = function(stats) {
     stats.percentKnownUniqueWords()
   ));
 
-  this.element.className = "webwords-infobox";
-  const percent = stats.percentKnownPageWords();
-  if (percent >= 90) {
-    this.element.classList.add("well-known");
-  } else if (percent >= 75) {
-    this.element.classList.add("known");
-  } else if (percent >= 50) {
-    this.element.classList.add("somewhat-known");
-  } else {
-    this.element.classList.add("unknown");
-  }
+  const hue = InfoBox._hue(stats.percentKnownPageWords());
+  this.element.style.backgroundColor = `hsl(${hue}, 100%, 95%)`;
+  this.element.style.borderColor = `hsl(${hue}, 100%, 25%)`;
 
   return Promise.resolve();
+};
+
+InfoBox._hue = function(percentInt) {
+  const percent = percentInt / 100.0;
+  const skewedPercent = (percent < .75) ? percent/2 : percent;
+  const greenHue = 125;
+  return Math.round(greenHue * skewedPercent);
 };
 
 InfoBox._createFieldset = function(type, percentType, known, all, percent) {

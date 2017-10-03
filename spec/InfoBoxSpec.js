@@ -70,38 +70,28 @@ describe("InfoBox", function() {
       });
     }
 
-    it("considers the page well-known at >= 90% known", function() {
+    it("sets green background when 100% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(90));
-      expect(infoBox.element.classList).toContain("well-known");
+      infoBox.update(createStats(100));
+
+      expect(infoBox.element).toHaveStyle("background-color", "rgb(230, 255, 232)");
+      expect(infoBox.element).toHaveStyle("border-color", "rgb(0, 127, 10)");
     });
 
-    it("considers the page known at >= 75% known", function() {
+    it("sets red background when 0% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(75));
-      expect(infoBox.element.classList).toContain("known");
+      infoBox.update(createStats(0));
+
+      expect(infoBox.element).toHaveStyle("background-color", "rgb(255, 230, 230)");
+      expect(infoBox.element).toHaveStyle("border-color", "rgb(127, 0, 0)");
     });
 
-    it("considers the page somewhat-known at >= 50% known", function() {
+    it("sets red background when 0% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(50));
-      expect(infoBox.element.classList).toContain("somewhat-known");
-    });
+      infoBox.update(createStats(42));
 
-    it("considers the page unknown at < 50% known", function() {
-      const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(49));
-      expect(infoBox.element.classList).toContain("unknown");
-    });
-
-    it("updates when percent changes", function() {
-      const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(90));
-      expect(infoBox.element.classList).toContain("well-known");
-      expect(infoBox.element.classList).not.toContain("known");
-      infoBox.update(createStats(75));
-      expect(infoBox.element.classList).not.toContain("well-known");
-      expect(infoBox.element.classList).toContain("known");
+      expect(infoBox.element).toHaveStyle("background-color", "rgb(255, 241, 230)");
+      expect(infoBox.element).toHaveStyle("border-color", "rgb(127, 55, 0)");
     });
   });
 });

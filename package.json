@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Arthaey/WebWords#readme",
   "devDependencies": {
+    "@kyleramirez/grunt-scp": "github:kyleramirez/grunt-scp",
     "camo-purge": "^1.0.2",
     "coveralls": "^3.0.0",
     "grunt": "^1.0.1",

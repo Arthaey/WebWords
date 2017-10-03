@@ -32,7 +32,22 @@ module.exports = function(grunt) {
           "src/Page.js",
           "src/InfoBox.js"
         ],
-        dest: "dist/src.js"
+        dest: mainFile
+      }
+    },
+
+    scp: {
+      options: {
+        host: "arthaey.com",
+        username: grunt.option("release-username"),
+        password: grunt.option("release-password"),
+      },
+      dist: {
+        files: [{
+          src: "src.js",
+          cwd: "dist",
+          dest: "www/arthaey.com/live/tech/programming/webwords",
+        }]
       }
     }
   });
@@ -40,9 +55,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
+  grunt.loadNpmTasks("@kyleramirez/grunt-scp");
 
   grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["concat"]);
   grunt.registerTask("test", ["karma"]);
+  grunt.registerTask("release", ["build", "scp"]);
 }

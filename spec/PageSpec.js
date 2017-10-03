@@ -135,6 +135,17 @@ describe("Page", function() {
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
+    it("does not include curly quotes in the word", function() {
+      const text = "“palabra”";
+      const element = dom.createElement("p", {}, text);
+
+      const page = new Page(Language.SPANISH, element);
+
+      expect(page.pageElements.length).toBe(1);
+      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.words["palabra"]).not.toBeUndefined();
+    });
+
     it("separates words by slashes", function() {
       const text = "uno/dos";
       const element = dom.createElement("p", {}, text);

@@ -35,6 +35,7 @@ InfoBox.prototype.update = function(stats) {
   this._addSection(`${this.percentKnownUniqueWords(stats)}% words known`);
   this._addSection(`${this.percentKnownPageWords(stats)}% page known`);
 
+  this.element.className = "webwords-infobox";
   const percent = this.percentKnownPageWords(stats);
   if (percent >= 95) {
     this.element.classList.add("well-known");

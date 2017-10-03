@@ -67,44 +67,45 @@ describe("InfoBox", function() {
   });
 
   describe("styles itself depending on percent known", function() {
+    function createStats(percentKnown) {
+      return new Statistics({
+        totalKnownWordCount: percentKnown,
+        totalWordCount: 100,
+      });
+    }
+
     it("considers the page well-known at >= 95% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(new Statistics({
-        totalWordCount: 100,
-        totalKnownWordCount: 95,
-      }));
-
+      infoBox.update(createStats(95));
       expect(infoBox.element.classList).toContain("well-known");
     });
 
     it("considers the page known at >= 85% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(new Statistics({
-        totalWordCount: 100,
-        totalKnownWordCount: 85,
-      }));
-
+      infoBox.update(createStats(85));
       expect(infoBox.element.classList).toContain("known");
     });
 
     it("considers the page somewhat-known at >= 75% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(new Statistics({
-        totalWordCount: 100,
-        totalKnownWordCount: 75,
-      }));
-
+      infoBox.update(createStats(75));
       expect(infoBox.element.classList).toContain("somewhat-known");
     });
 
     it("considers the page unknown at < 75% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(new Statistics({
-        totalWordCount: 100,
-        totalKnownWordCount: 74,
-      }));
-
+      infoBox.update(createStats(74));
       expect(infoBox.element.classList).toContain("unknown");
+    });
+
+    it("updates when percent changes", function() {
+      const infoBox = new InfoBox(Language.SPANISH);
+      infoBox.update(createStats(95));
+      expect(infoBox.element.classList).toContain("well-known");
+      expect(infoBox.element.classList).not.toContain("known");
+      infoBox.update(createStats(85));
+      expect(infoBox.element.classList).not.toContain("well-known");
+      expect(infoBox.element.classList).toContain("known");
     });
   });
 });

@@ -29,8 +29,6 @@ InfoBox.prototype.addMarkUpPageHandler = function(handler) {
 InfoBox.prototype.update = function(stats) {
   this._removeElements();
 
-  this._addSection(`language: ${this.langCode.toUpperCase()}`);
-
   this.element.appendChild(InfoBox._createFieldset(
     "Total", "page",
     stats.totalKnownWordCount,
@@ -77,13 +75,6 @@ InfoBox._createFieldset = function(type, percentType, known, all, percent) {
   `;
   return fieldset;
 }
-
-InfoBox.prototype._addSection = function(text) {
-  const elem = document.createElement("p");
-  elem.classList.add("webwords-ignore");
-  elem.appendChild(document.createTextNode(text));
-  this.element.appendChild(elem);
-};
 
 InfoBox.prototype._removeElements = function() {
   while (this.element.firstChild) {

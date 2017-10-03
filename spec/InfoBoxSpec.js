@@ -29,7 +29,6 @@ describe("InfoBox", function() {
       uniqueWordCount: 6,
     }));
 
-    expect(infoBox.element).toHaveText("language: ES");
     expect(infoBox.element).toHaveText("0 known / 8 total");
     expect(infoBox.element).toHaveText("0 known / 6 unique");
     expect(infoBox.element).toHaveText("0% page known");
@@ -42,7 +41,6 @@ describe("InfoBox", function() {
       uniqueWordCount: 7,
     }));
 
-    expect(infoBox.element).toHaveText("language: ES");
     expect(infoBox.element).toHaveText("987 known / 1,234 total");
     expect(infoBox.element).toHaveText("2 known / 7 unique");
     expect(infoBox.element).toHaveText("80% page known");

@@ -2,7 +2,7 @@
 
 const Word = function(textOrElement, learningStatus) {
   this.text = Word.normalizeText(textOrElement);
-  this.learningStatus = learningStatus || Word.UNKNOWN;
+  this.learningStatus = learningStatus || Word.UNVERIFIED;
   this.fieldbookId = null;
   this.occurrences = [];
 
@@ -13,9 +13,16 @@ const Word = function(textOrElement, learningStatus) {
 
 Word.KNOWN = "known";
 Word.UNKNOWN = "unknown";
+Word.UNVERIFIED = "unverified";
+Word.LEARNING_STATUSES = [Word.KNOWN, Word.UNKNOWN, Word.UNVERIFIED];
 
 Word.prototype.markAsKnown = function() {
   this.learningStatus = Word.KNOWN;
+  this.updateCssClasses();
+};
+
+Word.prototype.markAsUnknown = function() {
+  this.learningStatus = Word.UNKNOWN;
   this.updateCssClasses();
 };
 
@@ -25,13 +32,17 @@ Word.prototype.addOccurrence = function(element) {
 };
 
 Word.prototype.updateCssClasses = function() {
-  const otherStatus = (this.learningStatus === Word.KNOWN) ? Word.UNKNOWN : Word.KNOWN;
-
   const thisWord = this;
+  const otherStatuses = Word.LEARNING_STATUSES.filter(function(status) {
+    return status !== thisWord.learningStatus;
+  });
+
   this.occurrences.forEach(function(element) {
     element.classList.add("L2");
     element.classList.add(thisWord.learningStatus);
-    element.classList.remove(otherStatus);
+    otherStatuses.forEach(function(otherStatus) {
+      element.classList.remove(otherStatus);
+    });
   });
 };
 
@@ -46,7 +57,7 @@ Word.create = function(textOrElement, learningStatus) {
   let word = Word.allWordsByText[text];
 
   if (!word) {
-    word = new Word(text, learningStatus || Word.UNKNOWN);
+    word = new Word(text, learningStatus || Word.UNVERIFIED);
   }
 
   if (learningStatus) {

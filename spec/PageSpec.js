@@ -40,6 +40,8 @@ describe("Page", function() {
     expect(page.words["siete"].occurrences.length).toBe(1);
     expect(page.words["ocho"].occurrences.length).toBe(1);
     expect(page.infoBox).not.toBeNull();
+
+    expect(page.words["uno"].occurrences[0].classList).not.toContain("unknown");
   });
 
   it("counts unique words", function() {
@@ -67,9 +69,9 @@ describe("Page", function() {
     const text = "uno dos tres";
     const element = dom.createElement("p", {}, text);
     const expectedHTML =
-      '<span class="L2 unknown">uno</span> ' +
-      '<span class="L2 unknown">dos</span> ' +
-      '<span class="L2 unknown">tres</span>';
+      '<span class="L2 unverified">uno</span> ' +
+      '<span class="L2 unverified">dos</span> ' +
+      '<span class="L2 unverified">tres</span>';
 
     const page = new Page(Language.SPANISH, element);
 
@@ -175,46 +177,6 @@ describe("Page", function() {
           "id": 2,
           "record_url": "http://example.com/records/xyz",
           "word": "y",
-          "how_well_known": "known"
-        }
-      ]`;
-
-      const page = new Page(Language.SPANISH, elements);
-
-      expect(page.stats).toEqual(new Statistics({
-        totalWordCount: 8,
-        uniqueWordCount: 6,
-        totalKnownWordCount: 0,
-        uniqueKnownWordCount: 0,
-      }));
-
-      expect(page.words["es"].occurrences[0].classList).toContain("unknown");
-      expect(page.words["es"].occurrences[1].classList).toContain("unknown");
-      expect(page.words["y"].occurrences[0].classList).toContain("unknown");
-
-      page.getSavedWords().then(function() {
-        expect(page.stats).toEqual(new Statistics({
-          totalWordCount: 8,
-          uniqueWordCount: 6,
-          totalKnownWordCount: 3,
-          uniqueKnownWordCount: 2,
-        }));
-
-        expect(page.words["es"].occurrences[0].classList).toContain("known");
-        expect(page.words["es"].occurrences[1].classList).toContain("known");
-        expect(page.words["y"].occurrences[0].classList).toContain("known");
-        asyncDone();
-      });
-
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
-    });
-
-    it("ignores Fieldbook words that aren't known", function(asyncDone) {
-      const json = `[
-        {
-          "id": 1,
-          "record_url": "http://example.com/records/abc",
-          "word": "y",
           "how_well_known": "unknown"
         }
       ]`;
@@ -228,23 +190,28 @@ describe("Page", function() {
         uniqueKnownWordCount: 0,
       }));
 
-      expect(page.words["y"].occurrences[0].classList).toContain("unknown");
+      expect(page.words["es"].occurrences[0].classList).toContain("unverified");
+      expect(page.words["es"].occurrences[1].classList).toContain("unverified");
+      expect(page.words["y"].occurrences[0].classList).toContain("unverified");
+      expect(page.words["otra"].occurrences[0].classList).toContain("unverified");
 
       page.getSavedWords().then(function() {
         expect(page.stats).toEqual(new Statistics({
           totalWordCount: 8,
           uniqueWordCount: 6,
-          totalKnownWordCount: 0,
-          uniqueKnownWordCount: 0,
+          totalKnownWordCount: 2,
+          uniqueKnownWordCount: 1,
         }));
 
+        expect(page.words["es"].occurrences[0].classList).toContain("known");
+        expect(page.words["es"].occurrences[1].classList).toContain("known");
         expect(page.words["y"].occurrences[0].classList).toContain("unknown");
+        expect(page.words["otra"].occurrences[0].classList).toContain("unknown");
         asyncDone();
       });
 
       mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
     });
-
 
     it("ignores Fieldbook words that aren't on this page", function(asyncDone) {
       const json = `[

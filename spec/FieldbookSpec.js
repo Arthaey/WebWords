@@ -115,7 +115,7 @@ describe("Fieldbook", function() {
       setFieldbookLocalStorageItems();
       const word = Word.create("palabra");
 
-      expect(word.learningStatus).toBe(Word.UNKNOWN);
+      expect(word.learningStatus).toBe(Word.UNVERIFIED);
       expect(word.fieldbookId).toBeNull();
 
       Fieldbook.createRecord(Language.SPANISH, word).then(function(records) {
@@ -147,13 +147,13 @@ describe("Fieldbook", function() {
       removeFieldbookLocalStorageItems();
       const word = Word.create("palabra");
 
-      expect(word.learningStatus).toBe(Word.UNKNOWN);
+      expect(word.learningStatus).toBe(Word.UNVERIFIED);
       expect(word.fieldbookId).toBeNull();
 
       Fieldbook.createRecord(Language.SPANISH, word).catch(function(errorMsg) {
         expect(errorMsg).toContain("missing Fieldbook book ID, key, or secret");
         expect(jasmine.Ajax.requests.mostRecent()).toBeUndefined();
-        expect(word.learningStatus).toBe(Word.UNKNOWN);
+        expect(word.learningStatus).toBe(Word.UNVERIFIED);
         expect(word.fieldbookId).toBeNull();
         asyncDone();
       });
@@ -165,7 +165,7 @@ describe("Fieldbook", function() {
     let word;
 
     beforeEach(function() {
-      word = Word.create("palabra");
+      word = Word.create("palabra", "unknown");
       word.fieldbookId = expectedFieldbookId;
     });
 

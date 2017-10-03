@@ -30,9 +30,9 @@ describe("Word", function() {
     expect(word.text).toEqual("palabra");
   });
 
-  it("defaults to unknown", function() {
+  it("defaults to unverified", function() {
     const word = new Word("palabra");
-    expect(word.learningStatus).toEqual("unknown");
+    expect(word.learningStatus).toEqual("unverified");
   });
 
   it("defaults to no Fieldbook ID", function() {
@@ -41,8 +41,42 @@ describe("Word", function() {
   });
 
   it("can have custom learning status", function() {
-    const word = new Word("palabra", "known");
+    const word = new Word("palabra", "aoeu");
+    expect(word.learningStatus).toEqual("aoeu");
+  });
+
+  it("marks a word as known", function() {
+    const element = dom.createElement("p", {}, "palabra");
+    const word = new Word(element);
+
+    expect(word.learningStatus).toEqual("unverified");
+    expect(word.occurrences[0].classList).toContain("unverified");
+    expect(word.occurrences[0].classList).not.toContain("unknown");
+    expect(word.occurrences[0].classList).not.toContain("known");
+
+    word.markAsKnown();
+
     expect(word.learningStatus).toEqual("known");
+    expect(word.occurrences[0].classList).not.toContain("unverified");
+    expect(word.occurrences[0].classList).not.toContain("unknown");
+    expect(word.occurrences[0].classList).toContain("known");
+  });
+
+  it("marks a word as unknown", function() {
+    const element = dom.createElement("p", {}, "palabra");
+    const word = new Word(element, "known");
+
+    expect(word.learningStatus).toEqual("known");
+    expect(word.occurrences[0].classList).not.toContain("unverified");
+    expect(word.occurrences[0].classList).not.toContain("unknown");
+    expect(word.occurrences[0].classList).toContain("known");
+
+    word.markAsUnknown();
+
+    expect(word.learningStatus).toEqual("unknown");
+    expect(word.occurrences[0].classList).not.toContain("unverified");
+    expect(word.occurrences[0].classList).toContain("unknown");
+    expect(word.occurrences[0].classList).not.toContain("known");
   });
 
   it("starts with no occurrences", function() {

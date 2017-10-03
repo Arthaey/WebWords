@@ -105,6 +105,17 @@ Page.prototype.parseSavedData = function(records) {
       wordOnPage.markAsKnown();
     }
   });
+
+  const unverifiedWords = [];
+  Object.keys(this.words).forEach(function(text) {
+    const word = thisPage.words[text];
+    if (word.learningStatus === Word.UNVERIFIED) {
+      unverifiedWords.push(word);
+    }
+  });
+  unverifiedWords.forEach(function(word) {
+    word.markAsUnknown();
+  });
 };
 
 Page.replaceContents = function(containerElement, childElements) {

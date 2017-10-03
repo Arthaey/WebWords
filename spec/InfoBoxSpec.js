@@ -51,7 +51,7 @@ describe("InfoBox", function() {
     expect(infoBox.element).toHaveText("33% page known");
   });
 
-  it("updates after clicking the button", function(asyncDone) {
+  it("calls handler after clicking the button", function(asyncDone) {
     const stats = new Statistics({ totalKnownWordCount: 8 });
     const infoBox = new InfoBox(Language.SPANISH);
     spyOn(infoBox, "update");

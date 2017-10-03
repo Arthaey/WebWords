@@ -255,14 +255,17 @@ describe("Page", function() {
 
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
+
       const word = page.words["y"];
+      const records = fakeFieldbookRecords(["y"]);
 
       page.getSavedWords().then(function() {
         expect(word.occurrences[0].classList).toContain("unknown");
         expect(word.fieldbookId).toBeNull();
+        expect(page.infoBox.element).toHaveText("0% words known");
+        expect(page.infoBox.element).toHaveText("0% page known");
       })
       .then(function() {
-        const records = fakeFieldbookRecords(["y"]);
         const promise = page.markAsKnown(word);
         mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
         return promise;
@@ -270,6 +273,8 @@ describe("Page", function() {
       .then(function() {
         expect(word.occurrences[0].classList).toContain("known");
         expect(word.fieldbookId).not.toBeNull();
+        expect(page.infoBox.element).toHaveText("17% words known");
+        expect(page.infoBox.element).toHaveText("13% page known");
         asyncDone();
       });
 

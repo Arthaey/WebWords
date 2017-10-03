@@ -20,7 +20,11 @@ Page.prototype.markAsKnown = function(word) {
   }
 
   word.markAsKnown();
+
+  this.stats.totalKnownWordCount += word.occurrences.length;
+  this.stats.uniqueKnownWordCount += 1;
   this.infoBox.update(this.stats);
+
   return Fieldbook.createRecord(this.langCode, word);
 };
 
@@ -76,9 +80,7 @@ Page.prototype.wrapWord = function(text) {
 
 Page.prototype.addWord = function(element) {
   const word = Word.create(element);
-  const textKey = element.innerText.toLowerCase();
-
-  const isNew = !this.words[textKey];
+  const isNew = !this.words[word.text];
   const isKnown = (word.learningStatus === Word.KNOWN);
 
   this.stats.totalWordCount += 1;
@@ -86,7 +88,7 @@ Page.prototype.addWord = function(element) {
   if (isKnown) this.stats.totalKnownWordCount += 1;
   if (isNew && isKnown) this.stats.uniqueKnownWordCount += 1;
 
-  this.words[textKey] = word;
+  this.words[word.text] = word;
   element.addEventListener("click", this.markAsKnown.bind(this, word));
 };
 
@@ -106,16 +108,23 @@ Page.prototype.parseSavedData = function(records) {
     }
   });
 
+  this._unverifiedWords().forEach(function(word) {
+    word.markAsUnknown();
+  });
+};
+
+Page.prototype._unverifiedWords = function() {
+  const thisPage = this;
   const unverifiedWords = [];
+
   Object.keys(this.words).forEach(function(text) {
     const word = thisPage.words[text];
     if (word.learningStatus === Word.UNVERIFIED) {
       unverifiedWords.push(word);
     }
   });
-  unverifiedWords.forEach(function(word) {
-    word.markAsUnknown();
-  });
+
+  return unverifiedWords;
 };
 
 Page.replaceContents = function(containerElement, childElements) {

@@ -11,3 +11,4 @@ script: grunt test
 
 after_script:
   - grunt coveralls
+  - grunt release --release-username=$RELEASE_USERNAME --release-password=$RELEASE_PASSWORD

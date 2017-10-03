@@ -86,14 +86,6 @@ describe("Word", function() {
     expect(word.occurrences).toBeEmpty();
   });
 
-  it("ignores word when right-clicked", function() {
-    pending("FUTURE FEATURE");
-  });
-
-  it("marks word as unknown ... somehow?", function() {
-    pending("FUTURE FEATURE");
-  });
-
   it("adds CSS classes to the element", function() {
     const element = dom.createElement("p", {}, "palabra");
     const word = new Word(element);

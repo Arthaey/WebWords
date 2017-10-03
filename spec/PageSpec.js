@@ -161,10 +161,6 @@ describe("Page", function() {
     });
   });
 
-  it("preserves links", function() {
-    pending("FUTURE FEATURE");
-  });
-
   it("counts known vs unknown words, and unique words", function() {
     Word.create("dos", "known");
     const element = dom.createElement("p", {}, "uno dos tres cuatro tres dos");

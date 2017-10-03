@@ -37,14 +37,6 @@ describe("WebWords", function() {
     expect(page.stats.totalWordCount).toEqual(3);
   });
 
-  it("prompts again when 'not now' was selected", function() {
-    pending("FUTURE FEATURE");
-  });
-
-  it("does NOT prompt again when 'never' was selected", function() {
-    pending("FUTURE FEATURE");
-  });
-
   it("adds exactly one stylesheet", function() {
     WebWords.addCssRules([".foo { color: red }", ".bar { color: blue }"]);
     expect(countStylesheets()).toBe(startingStylesheetCount + 1);
@@ -58,10 +50,6 @@ describe("WebWords", function() {
 
     expect(WebWords.addCssRules).toHaveBeenCalledWith(Word.cssRules);
     expect(WebWords.addCssRules).toHaveBeenCalledWith(InfoBox.cssRules);
-  });
-
-  it("does not highlight unknown words until 'Mark up words' is clicked", function() {
-    pending("FUTURE FEATURE");
   });
 
   it("adds an InfoBox on page load", function() {

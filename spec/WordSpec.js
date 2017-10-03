@@ -15,19 +15,21 @@ describe("Word", function() {
     expect(word.text).toEqual("palabra");
   });
 
-  it("strips whitespace", function() {
-    const word = new Word( "  palabra  ");
-    expect(word.text).toEqual("palabra");
-  });
+  describe("ignores non-word content", function() {
+    it("strips whitespace", function() {
+      const word = new Word( "  palabra  ");
+      expect(word.text).toEqual("palabra");
+    });
 
-  it("is case-insensitive", function() {
-    const word = new Word( "Palabra");
-    expect(word.text).toEqual("palabra");
-  });
+    it("is case-insensitive", function() {
+      const word = new Word( "Palabra");
+      expect(word.text).toEqual("palabra");
+    });
 
-  it("ignores punctuation", function() {
-    const word = new Word( "'Palabra.'");
-    expect(word.text).toEqual("palabra");
+    it("ignores punctuation", function() {
+      const word = new Word( "'Palabra.'");
+      expect(word.text).toEqual("palabra");
+    });
   });
 
   it("defaults to unverified", function() {

@@ -15,3 +15,15 @@ Statistics.fromPage = function(page) {
   stats.uniqueKnownWordCount = page.stats.uniqueKnownWordCount;
   return stats;
 };
+
+Statistics.prototype.percentKnownUniqueWords = function() {
+  return Statistics._formatPercent(this.uniqueKnownWordCount, this.uniqueWordCount);
+};
+
+Statistics.prototype.percentKnownPageWords = function() {
+  return Statistics._formatPercent(this.totalKnownWordCount, this.totalWordCount);
+};
+
+Statistics._formatPercent = function(nominator, denominator) {
+  return Math.round(nominator * 100.0 / denominator);
+};

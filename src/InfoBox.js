@@ -31,17 +31,28 @@ InfoBox.prototype.update = function(stats) {
   this._removeElements();
 
   this._addSection(`language: ${this.langCode.toUpperCase()}`);
-  this._addSection(`${stats.totalWordCount} words, ${stats.uniqueWordCount} unique`);
-  this._addSection(`${this.percentKnownUniqueWords(stats)}% words known`);
-  this._addSection(`${this.percentKnownPageWords(stats)}% page known`);
+
+  this.element.appendChild(InfoBox._createFieldset(
+    "Total", "page",
+    stats.totalKnownWordCount,
+    stats.totalWordCount,
+    stats.percentKnownPageWords()
+  ));
+
+  this.element.appendChild(InfoBox._createFieldset(
+    "Unique", "words",
+    stats.uniqueKnownWordCount,
+    stats.uniqueWordCount,
+    stats.percentKnownUniqueWords()
+  ));
 
   this.element.className = "webwords-infobox";
-  const percent = this.percentKnownPageWords(stats);
-  if (percent >= 95) {
+  const percent = stats.percentKnownPageWords();
+  if (percent >= 90) {
     this.element.classList.add("well-known");
-  } else if (percent >= 85) {
-    this.element.classList.add("known");
   } else if (percent >= 75) {
+    this.element.classList.add("known");
+  } else if (percent >= 50) {
     this.element.classList.add("somewhat-known");
   } else {
     this.element.classList.add("unknown");
@@ -50,17 +61,23 @@ InfoBox.prototype.update = function(stats) {
   return Promise.resolve();
 };
 
-InfoBox.prototype.percentKnownUniqueWords = function(stats) {
-  return InfoBox._formatPercent(stats.uniqueKnownWordCount, stats.uniqueWordCount);
-};
-
-InfoBox.prototype.percentKnownPageWords = function(stats) {
-  return InfoBox._formatPercent(stats.totalKnownWordCount, stats.totalWordCount);
-};
-
-InfoBox._formatPercent = function(nominator, denominator) {
-  return Math.round(nominator * 100.0 / denominator);
-};
+InfoBox._createFieldset = function(type, percentType, known, all, percent) {
+  const fieldset = document.createElement("fieldset");
+  fieldset.innerHTML = `
+    <legend>
+      ${type} Words
+    </legend>
+    <p>
+      ${known.toLocaleString()} known
+      /
+      ${all.toLocaleString()} ${type.toLowerCase()}
+    </p>
+    <p>
+      ${percent}% ${percentType} known
+    </p>
+  `;
+  return fieldset;
+}
 
 InfoBox.prototype._addSection = function(text) {
   const elem = document.createElement("p");
@@ -103,5 +120,5 @@ InfoBox.cssRules = [
   `.webwords-infobox p {
       margin: 0px;
       padding: 0px;
-  }`,
+  }`
 ];

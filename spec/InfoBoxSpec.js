@@ -25,30 +25,30 @@ describe("InfoBox", function() {
     expect(infoBox.element).not.toHaveText("8 words");
 
     infoBox.update(new Statistics({
-      totalWordCount: 8,
-      uniqueWordCount: 6,
       totalKnownWordCount: 0,
+      totalWordCount: 8,
       uniqueKnownWordCount: 0,
+      uniqueWordCount: 6,
     }));
 
     expect(infoBox.element).toHaveText("language: ES");
-    expect(infoBox.element).toHaveText("8 words");
-    expect(infoBox.element).toHaveText("6 unique");
-    expect(infoBox.element).toHaveText("0% words known");
+    expect(infoBox.element).toHaveText("0 known / 8 total");
+    expect(infoBox.element).toHaveText("0 known / 6 unique");
     expect(infoBox.element).toHaveText("0% page known");
+    expect(infoBox.element).toHaveText("0% words known");
 
     infoBox.update(new Statistics({
-      totalWordCount: 9,
-      uniqueWordCount: 7,
-      totalKnownWordCount: 3,
+      totalKnownWordCount: 987,
+      totalWordCount: 1234,
       uniqueKnownWordCount: 2,
+      uniqueWordCount: 7,
     }));
 
     expect(infoBox.element).toHaveText("language: ES");
-    expect(infoBox.element).toHaveText("9 words");
-    expect(infoBox.element).toHaveText("7 unique");
+    expect(infoBox.element).toHaveText("987 known / 1,234 total");
+    expect(infoBox.element).toHaveText("2 known / 7 unique");
+    expect(infoBox.element).toHaveText("80% page known");
     expect(infoBox.element).toHaveText("29% words known");
-    expect(infoBox.element).toHaveText("33% page known");
   });
 
   it("calls handler after clicking the button", function(asyncDone) {
@@ -74,36 +74,36 @@ describe("InfoBox", function() {
       });
     }
 
-    it("considers the page well-known at >= 95% known", function() {
+    it("considers the page well-known at >= 90% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(95));
+      infoBox.update(createStats(90));
       expect(infoBox.element.classList).toContain("well-known");
     });
 
-    it("considers the page known at >= 85% known", function() {
+    it("considers the page known at >= 75% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(85));
+      infoBox.update(createStats(75));
       expect(infoBox.element.classList).toContain("known");
     });
 
-    it("considers the page somewhat-known at >= 75% known", function() {
+    it("considers the page somewhat-known at >= 50% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(75));
+      infoBox.update(createStats(50));
       expect(infoBox.element.classList).toContain("somewhat-known");
     });
 
-    it("considers the page unknown at < 75% known", function() {
+    it("considers the page unknown at < 50% known", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(74));
+      infoBox.update(createStats(49));
       expect(infoBox.element.classList).toContain("unknown");
     });
 
     it("updates when percent changes", function() {
       const infoBox = new InfoBox(Language.SPANISH);
-      infoBox.update(createStats(95));
+      infoBox.update(createStats(90));
       expect(infoBox.element.classList).toContain("well-known");
       expect(infoBox.element.classList).not.toContain("known");
-      infoBox.update(createStats(85));
+      infoBox.update(createStats(75));
       expect(infoBox.element.classList).not.toContain("well-known");
       expect(infoBox.element.classList).toContain("known");
     });

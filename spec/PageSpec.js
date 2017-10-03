@@ -253,6 +253,28 @@ describe("Page", function() {
       expect(page.infoBox.update).toHaveBeenCalled();
     });
 
+    it("does nothing when a known word is clicked", function(asyncDone) {
+      const page = new Page(Language.SPANISH, elements);
+
+      const word = page.words["y"];
+      const records = fakeFieldbookRecords(["y"]);
+
+      page.getSavedWords().then(function() {
+        expect(word.learningStatus).toBe(Word.KNOWN);
+        spyOn(Fieldbook, "createRecord");
+        spyOn(page.infoBox, "update");
+
+        word.occurrences[0].click();
+
+        expect(Fieldbook.createRecord).not.toHaveBeenCalled();
+        expect(page.infoBox.update).not.toHaveBeenCalled();
+        expect(word.learningStatus).toBe(Word.KNOWN);
+        asyncDone();
+      })
+
+      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
+    });
+
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
       const page = new Page(Language.SPANISH, elements);
 

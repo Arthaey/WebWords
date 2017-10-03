@@ -30,7 +30,7 @@ This is a pain, but that's how alpha software is. :)
 ### Bookmarklet
 
 ```
-javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){WebWords.init(document.body)})
+javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){localStorage.setItem("WebWords-FieldbookBook","<book-id>");localStorage.setItem("WebWords-FieldbookKey","key>");localStorage.setItem("WebWords-FieldbookSecret","<secret>");WebWords.init(document.body)})
 ```
 
 ### Greasemonkey / Tampermonkey user script

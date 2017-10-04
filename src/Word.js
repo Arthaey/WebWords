@@ -36,7 +36,7 @@ Word.prototype.addOccurrence = function(element) {
 Word.prototype.addClickHandler = function(element, handler) {
   for (let i = 0; i < this.occurrences.length; i++) {
     const occurrence = this.occurrences[i];
-    if (occurrence == element) {
+    if (occurrence === element) {
       occurrence.addEventListener("click", handler);
       this.clickHandlers[i] = handler;
     }

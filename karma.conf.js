@@ -1,8 +1,16 @@
+'use strict';
+
+const istanbul = require("browserify-istanbul");
+
 module.exports = function(config) {
   config.set({
+    basePath: "",
+    color: true,
+    logLevel: config.LOG_INFO,
+    singleRun: true,
+
     frameworks: ["browserify", "jasmine-ajax", "jasmine"],
     browsers: ["ChromeHeadless"],
-    singleRun: true,
 
     files: [
       "spec/SpecHelper.js",
@@ -19,17 +27,28 @@ module.exports = function(config) {
     reporters: ["spec", "coverage"],
 
     preprocessors: {
-      "src/*.js": ["coverage"],
-      "spec/*.js": ["browserify"]
+      "src/*.js": ["browserify", "coverage"],
+      "spec/*.js": ["browserify", "coverage"]
     },
 
     browserify: {
-      debug: true
+      debug: true,
+      extensions: [".js"],
+      transform: [
+        istanbul({
+          instrumenterConfig: {
+            embedSource: true
+          }
+        })
+      ]
     },
 
     coverageReporter: {
-      type: "lcov",
       dir: "spec/coverage/",
+      reporters: [
+        { type: "text-summary" },
+        { type: "lcov" }
+      ]
     },
 
     customLaunchers: {

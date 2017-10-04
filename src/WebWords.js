@@ -50,3 +50,6 @@ WebWords._getOrCreateStylesheet = function() {
 };
 
 module.exports = WebWords;
+
+// expose just WebWords to the global namespace, so the browser can call init.
+global.WebWords = WebWords;

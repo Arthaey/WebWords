@@ -73,7 +73,7 @@ You will need these, plus your book's ID, to fill in the bookmarklet or user scr
 ### Bookmarklet
 
 ```
-javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){localStorage.setItem("WebWords-FieldbookBook","<book-id>");localStorage.setItem("WebWords-FieldbookKey","<key>");localStorage.setItem("WebWords-FieldbookSecret","<secret>");WebWords.init(document.body)})
+javascript:function loadScript(url,callback){var head=document.getElementsByTagName("head")[0];var script=document.createElement("script");script.src=url;script.onload=callback;head.appendChild(script)};loadScript("https://www.arthaey.com/tech/programming/webwords/src.js",function(){localStorage.setItem("WebWords-FieldbookBook","<BOOK-ID>");localStorage.setItem("WebWords-FieldbookKey","<KEY>");localStorage.setItem("WebWords-FieldbookSecret","<SECRET>");WebWords.init(document.body)})
 ```
 
 
@@ -92,12 +92,10 @@ javascript:function loadScript(url,callback){var head=document.getElementsByTagN
 // @require      http://www.arthaey.com/tech/programming/webwords/src.js
 // ==/UserScript==
 
-(function() {
-  localStorage.setItem("WebWords-FieldbookBook", "<book-id>");
-  localStorage.setItem("WebWords-FieldbookKey", "<key>");
-  localStorage.setItem("WebWords-FieldbookSecret", "<secret>");
-  WebWords.init(document.body);
-})();
+localStorage.setItem("WebWords-FieldbookBook", "<BOOK-ID>");
+localStorage.setItem("WebWords-FieldbookKey", "<KEY>");
+localStorage.setItem("WebWords-FieldbookSecret", "<SECRET>");
+WebWords.init(document.body);
 ```
 
 Note that this will <strong>not</strong> auto-update. Sorry. Alpha software, etc etc.

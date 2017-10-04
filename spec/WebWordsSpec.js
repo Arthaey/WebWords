@@ -13,6 +13,10 @@ describe("WebWords", function() {
     WebWords.destroy();
   });
 
+  it("init method is globally accessible", function() {
+    expect(global.WebWords.init).toBe(WebWords.init);
+  });
+
   it("constructor does nothing", function() {
     const webWords = new WebWords();
     expect(webWords).not.toBeUndefined();

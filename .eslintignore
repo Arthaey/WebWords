@@ -1,2 +1,4 @@
 **/*{.,-}min.js
 spec/lib/**/*.js
+spec/SpecBundle.js
+dist/*.js

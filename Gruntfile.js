@@ -1,7 +1,8 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var sourceFiles = "src/*.js";
+  var srcFiles = "src/*.js";
+  var specFiles = "spec/*.js";
   var mainFile = "dist/src.js";
 
   grunt.initConfig({
@@ -10,7 +11,7 @@ module.exports = function(grunt) {
     browserify: {
       dist: {
         files: {
-          "dist/src.js": [sourceFiles]
+          "dist/src.js": [srcFiles]
         },
         options: {
           browserifyOptions: {
@@ -55,6 +56,14 @@ module.exports = function(grunt) {
       }
     },
 
+    eslint: {
+      target: [
+        srcFiles,
+        specFiles,
+        "!spec/SpecBundle.js"
+      ]
+    },
+
     scp: {
       options: {
         host: "arthaey.com",
@@ -72,6 +81,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-browserify");
+  grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
   grunt.loadNpmTasks("@kyleramirez/grunt-scp");
@@ -79,6 +89,6 @@ module.exports = function(grunt) {
   grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["browserify"]);
-  grunt.registerTask("test", ["karma"]);
+  grunt.registerTask("test", ["eslint", "karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

@@ -1,26 +1,30 @@
 module.exports = function(config) {
   config.set({
-    frameworks: ["jasmine-ajax", "jasmine"],
+    frameworks: ["browserify", "jasmine-ajax", "jasmine"],
     browsers: ["ChromeHeadless"],
     singleRun: true,
 
     files: [
-      "src/Constants.js",
-      "src/Fieldbook.js",
-      "src/Language.js",
-      "src/Statistics.js",
-      "src/WebWords.js",
-      "src/Word.js",
-      "src/Page.js",
-      "src/InfoBox.js",
       "spec/SpecHelper.js",
-      "spec/*Spec.js",
+      "spec/ConstantsSpec.js",
+      "spec/FieldbookSpec.js",
+      "spec/InfoBoxSpec.js",
+      "spec/LanguageSpec.js",
+      "spec/PageSpec.js",
+      "spec/StatisticsSpec.js",
+      "spec/WebWordsSpec.js",
+      "spec/WordSpec.js",
     ],
 
     reporters: ["spec", "coverage"],
 
     preprocessors: {
-      "**/src/*.js": "coverage"
+      "src/*.js": ["coverage"],
+      "spec/*.js": ["browserify"]
+    },
+
+    browserify: {
+      debug: true
     },
 
     coverageReporter: {

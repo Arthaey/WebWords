@@ -1,5 +1,10 @@
 'use strict';
 
+const InfoBox = require("./InfoBox.js");
+const Language = require("./Language.js");
+const Page = require("./Page.js");
+const Word = require("./Word.js");
+
 const WebWords = function() {
 };
 
@@ -15,6 +20,11 @@ WebWords.init = function(rootElement) {
   return new Page(langCode, rootElement);
 };
 
+WebWords.destroy = function() {
+  const style = WebWords._getStyleElement();
+  if (style) style.parentNode.removeChild(style);
+};
+
 WebWords.addCssRules = function(rules) {
   rules.forEach(function(rule) {
     const stylesheet = WebWords._getOrCreateStylesheet();
@@ -22,8 +32,12 @@ WebWords.addCssRules = function(rules) {
   });
 };
 
+WebWords._getStyleElement = function() {
+  return document.getElementById(WebWords.STYLESHEET_ID);
+};
+
 WebWords._getOrCreateStylesheet = function() {
-  const existingStyleElem = document.getElementById(WebWords.STYLESHEET_ID);
+  const existingStyleElem = WebWords._getStyleElement();
   if (existingStyleElem) {
     return existingStyleElem.sheet;
   }
@@ -34,3 +48,5 @@ WebWords._getOrCreateStylesheet = function() {
 
   return styleElem.sheet;
 };
+
+module.exports = WebWords;

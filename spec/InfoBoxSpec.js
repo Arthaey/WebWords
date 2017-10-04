@@ -1,5 +1,9 @@
 'use strict';
 
+const InfoBox = require("../src/InfoBox.js");
+const Language = require("../src/Language");
+const Statistics = require("../src/Statistics.js");
+
 describe("InfoBox", function() {
   let stats;
   let infoBox;

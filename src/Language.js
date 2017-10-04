@@ -20,3 +20,5 @@ Language.identify = function(text) {
 
   return Language.UNKNOWN;
 };
+
+module.exports = Language;

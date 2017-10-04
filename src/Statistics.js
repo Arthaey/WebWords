@@ -27,3 +27,5 @@ Statistics.prototype.percentKnownPageWords = function() {
 Statistics._formatPercent = function(nominator, denominator) {
   return Math.round(nominator * 100.0 / denominator);
 };
+
+module.exports = Statistics;

@@ -1,5 +1,7 @@
 'use strict';
 
+const Word = require("../src/Word.js");
+
 describe("Word", function() {
   it("requires text", function() {
     expect(function() { new Word() }).toThrow(); /* eslint no-new: "off" */

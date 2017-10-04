@@ -1,5 +1,12 @@
 'use strict';
 
+const Constants = require("./Constants.js");
+const Fieldbook = require("./Fieldbook.js");
+const InfoBox = require("./InfoBox.js");
+const Language = require("./Language.js");
+const Statistics = require("./Statistics.js");
+const Word = require("./Word.js");
+
 const Page = function(langCode, rootElement) {
   this.langCode = langCode || Language.UNKNOWN;
   this.rootElement = rootElement;
@@ -165,3 +172,5 @@ Page.prototype._unverifiedWords = function() {
 
   return unverifiedWords;
 };
+
+module.exports = Page;

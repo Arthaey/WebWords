@@ -1,9 +1,44 @@
 module.exports = function(grunt) {
+  'use strict';
+
   var sourceFiles = "src/*.js";
   var mainFile = "dist/src.js";
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
+
+    browserify: {
+      dist: {
+        files: {
+          "dist/srcBundle.js": ["src/main.js"]
+        },
+        options: {
+          browserifyOptions: {
+            debug: true
+          }
+        }
+      },
+      test: {
+        files: {
+          "spec/SpecBundle.js": [
+            "spec/SpecHelper.js",
+            "spec/ConstantsSpec.js",
+            "spec/FieldbookSpec.js",
+            "spec/InfoBoxSpec.js",
+            "spec/LanguageSpec.js",
+            "spec/PageSpec.js",
+            "spec/StatisticsSpec.js",
+            "spec/WebWordsSpec.js",
+            "spec/WordSpec.js",
+          ]
+        },
+        options: {
+          browserifyOptions: {
+            debug: true
+          }
+        }
+      }
+    },
 
     karma: {
       unit: {
@@ -52,6 +87,7 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
@@ -59,7 +95,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("default", ["test", "build"]);
 
-  grunt.registerTask("build", ["concat"]);
+  grunt.registerTask("build", ["browserify", "concat"]);
   grunt.registerTask("test", ["karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

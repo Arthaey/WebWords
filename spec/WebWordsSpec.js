@@ -1,15 +1,16 @@
 'use strict';
 
-describe("WebWords", function() {
-  let startingStylesheetCount;
-  let page;
+const InfoBox = require("../src/InfoBox.js");
+const Language = require("../src/Language.js");
+const WebWords = require("../src/WebWords.js");
+const Word = require("../src/Word.js");
 
-  beforeEach(function() {
-    startingStylesheetCount = countStylesheets();
-  });
+describe("WebWords", function() {
+  let page;
 
   afterEach(function() {
     if (page) page.destroy();
+    WebWords.destroy();
   });
 
   it("constructor does nothing", function() {
@@ -18,7 +19,18 @@ describe("WebWords", function() {
     expect(webWords).not.toBeNull();
   });
 
+  it("destructor removes stylesheet", function() {
+    const startingStylesheetCount = countStylesheets();
+
+    WebWords.addCssRules([".foo { color: red }"]);
+    expect(countStylesheets()).toEqual(startingStylesheetCount + 1);
+
+    WebWords.destroy();
+    expect(countStylesheets()).toEqual(startingStylesheetCount);
+  });
+
   it("does not runs when there are no elements", function() {
+    const startingStylesheetCount = countStylesheets();
     page = WebWords.init(null);
 
     expect(page).toBeNull();
@@ -43,6 +55,7 @@ describe("WebWords", function() {
   });
 
   it("adds exactly one stylesheet", function() {
+    const startingStylesheetCount = countStylesheets();
     WebWords.addCssRules([".foo { color: red }", ".bar { color: blue }"]);
     expect(countStylesheets()).toBe(startingStylesheetCount + 1);
   });

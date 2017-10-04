@@ -83,3 +83,5 @@ Fieldbook._promisifyRequest = function(method, url, body) {
     return [];
   });
 };
+
+module.exports = Fieldbook;

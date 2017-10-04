@@ -1,5 +1,7 @@
 'use strict';
 
+const Language = require("../src/Language.js");
+
 describe("Language", function() {
   it("constructor does nothing", function() {
     const language = new Language();

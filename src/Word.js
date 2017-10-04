@@ -1,5 +1,7 @@
 'use strict';
 
+const Constants = require("../src/Constants.js");
+
 const Word = function(textOrElement, learningStatus) {
   this.text = Word.normalizeText(textOrElement);
   this.learningStatus = learningStatus || Word.UNVERIFIED;
@@ -119,3 +121,5 @@ Word.cssRules = [
       border-bottom: 2px solid green;
   }`
 ];
+
+module.exports = Word;

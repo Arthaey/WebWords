@@ -1,5 +1,9 @@
 'use strict';
 
+const Fieldbook = require("../src/Fieldbook.js");
+const Language = require("../src/Language.js");
+const Word = require("../src/Word.js");
+
 describe("Fieldbook", function() {
   function removeFieldbookLocalStorageItems() {
     localStorage.removeItem(Fieldbook.CONFIG_BOOK);

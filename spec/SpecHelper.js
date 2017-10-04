@@ -1,25 +1,80 @@
-beforeEach(function() {
-  const wordEqualityTester = function(first, second) {
-    if (first instanceof Word && second instanceof Word) {
-      return first.text === second.text &&
-             first.learningStatus === second.learningStatus &&
-             first.occurrences.length === second.occurrences.length &&
-             first.occurrences.every(function(el, i) {
-               return Word.normalizeText(el) === Word.normalizeText(second.occurrences[i])
-             })
-             ;
+'use strict';
+
+const Fieldbook = require("../src/Fieldbook.js");
+const Word = require("../src/Word.js");
+
+global.wordEqualityTester = function(first, second) {
+  if (first instanceof Word && second instanceof Word) {
+    return first.text === second.text &&
+           first.learningStatus === second.learningStatus &&
+           first.occurrences.length === second.occurrences.length &&
+           first.occurrences.every(function(el, i) {
+             return Word.normalizeText(el) === Word.normalizeText(second.occurrences[i])
+           })
+           ;
+  }
+};
+
+global.mockAjaxRequest = function(expectedUrl, expectedResponse) {
+    const request = jasmine.Ajax.requests.mostRecent();
+
+    request.respondWith({
+      status: 200,
+      responseText: expectedResponse,
+    });
+
+    expect(request.url).toEqual(expectedUrl);
+    expect(request.responseText).toEqual(expectedResponse);
+};
+
+global.fakeFieldbookRecords = function(texts) {
+  const records = [];
+  texts.forEach(function(text) {
+    records.push({id: 0, record_url: "", word: text, how_well_known: "known"})
+  });
+  return JSON.stringify(records);
+};
+
+global.dom = (function() {
+  const elements = [];
+
+  return {
+    createElement: function(tag, attrs, ...content) {
+      const element = document.createElement(tag);
+
+      for (let attr in attrs) {
+        element[attr] = attrs[attr];
+      }
+
+      if (content.length === 1 && "string" === typeof content[0]) {
+        element.innerText = content[0];
+      } else {
+        for (let i = 0; i < content.length; i++) {
+          element.appendChild(content[i]);
+        }
+      }
+
+      document.body.insertBefore(element, null);
+      elements.push(element);
+
+      return element;
+    },
+
+    cleanup: function() {
+      for (let i in elements) {
+        const element = elements[i];
+        elements.pop(element);
+        element.remove();
+      }
     }
   };
+}());
 
+beforeEach(function() {
   Fieldbook.BASE_URL = "http://example.com";
   jasmine.addCustomEqualityTester(wordEqualityTester);
 
   Word.forgetAll();
-
-  const stylesheet = document.getElementById(WebWords.STYLESHEET_ID);
-  if (stylesheet && stylesheet.parentNode) {
-    stylesheet.parentNode.removeChild(stylesheet);
-  }
 
   localStorage.setItem(Fieldbook.CONFIG_BOOK, "test-fieldbook-book");
   localStorage.setItem(Fieldbook.CONFIG_KEY, "test-fieldbook-key");
@@ -80,58 +135,3 @@ afterEach(function() {
   jasmine.Ajax.uninstall();
   dom.cleanup();
 });
-
-const dom = (function() {
-  const elements = [];
-
-  return {
-    createElement: function(tag, attrs, ...content) {
-      const element = document.createElement(tag);
-
-      for (let attr in attrs) {
-        element[attr] = attrs[attr];
-      }
-
-      if (content.length === 1 && "string" === typeof content[0]) {
-        element.innerText = content[0];
-      } else {
-        for (let i = 0; i < content.length; i++) {
-          element.appendChild(content[i]);
-        }
-      }
-
-      document.body.insertBefore(element, null);
-      elements.push(element);
-
-      return element;
-    },
-
-    cleanup: function() {
-      for (let i in elements) {
-        const element = elements[i];
-        elements.pop(element);
-        element.remove();
-      }
-    }
-  };
-}());
-
-const mockAjaxRequest = function(expectedUrl, expectedResponse) {
-    const request = jasmine.Ajax.requests.mostRecent();
-
-    request.respondWith({
-      status: 200,
-      responseText: expectedResponse,
-    });
-
-    expect(request.url).toEqual(expectedUrl);
-    expect(request.responseText).toEqual(expectedResponse);
-};
-
-  const fakeFieldbookRecords = function(texts) {
-    const records = [];
-    texts.forEach(function(text) {
-      records.push({id: 0, record_url: "", word: text, how_well_known: "known"})
-    });
-    return JSON.stringify(records);
-  };

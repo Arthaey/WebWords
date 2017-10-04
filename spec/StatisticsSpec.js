@@ -1,5 +1,8 @@
 'use strict';
 
+const Page = require("../src/Page.js");
+const Statistics = require("../src/Statistics.js");
+
 describe("Statistics", function() {
   it("defaults to all zeros", function() {
     const stats = new Statistics();

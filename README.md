@@ -25,6 +25,41 @@ But if you like living on the bleeding, unsupported edge ;) then you're welcome 
 
 ## Usage
 
+1. Create a **[Fieldbook](#fieldbook)** account and sheet to store your known words.
+
+1. **Set up WebWords** as either a [bookmarklet](#bookmarklet) or a [user script](#userscript).
+
+1. **Go to some web page** in the foreign language you're learning.
+
+1. **Run WebWords**, depending on how you set it up:
+     - if you're using it as a **user script**, WebWords will run **automatically**
+     - if you're using it as a **bookmarklet**, **click** the bookmarklet
+
+1. A gray **info box** with a blue button will appear in the upper right corner of the page.
+   
+   Before you've clicked the blue button to "mark up words", the web page won't look any different.
+
+1. **Click the "mark up words" button**.
+
+   WebWords will download all your known words from your Fieldbook sheet.
+   Known words won't change, except that if you hover\* over them, they now have a green underline.
+   **Unknown words will be highlighted in yellow**. (Unknown words that also happen to be links will
+   be yellow with a blue underline.)
+   
+   The info box in upper right corner shows **statistics** about how many words are on the page vs
+   how many you know. The background color of the info box will gradually change from red to yellow
+   to green as you mark more words as known.
+
+\* or tap, on mobile
+
+
+## Setup
+
+Due to limitations imposed by Apple, a bookmarklet is the only way to run WebWords with
+the built-in Safari browser on an iPhone or iPad. Other platforms can chose whether to
+use WebWords as a bookmarklet or as a user script.
+
+
 ### Fieldbook
 
 Create a [Fieldbook](https://fieldbook.com) account and create a book with one sheet
@@ -42,6 +77,7 @@ javascript:function loadScript(url,callback){var head=document.getElementsByTagN
 ```
 
 
+<a name="userscript"></a>
 ### Greasemonkey / Tampermonkey user script
 
 ```

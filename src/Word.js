@@ -5,6 +5,7 @@ const Word = function(textOrElement, learningStatus) {
   this.learningStatus = learningStatus || Word.UNVERIFIED;
   this.fieldbookId = null;
   this.occurrences = [];
+  this.clickHandlers = [];
 
   if (!Word.isString(textOrElement)) {
     this.addOccurrence(textOrElement);
@@ -28,7 +29,27 @@ Word.prototype.markAsUnknown = function() {
 
 Word.prototype.addOccurrence = function(element) {
   this.occurrences.push(element);
+  this.clickHandlers.push(null);
   this.updateCssClasses();
+};
+
+Word.prototype.addClickHandler = function(element, handler) {
+  for (let i = 0; i < this.occurrences.length; i++) {
+    const occurrence = this.occurrences[i];
+    if (occurrence == element) {
+      occurrence.addEventListener("click", handler);
+      this.clickHandlers[i] = handler;
+    }
+  }
+};
+
+Word.prototype.removeClickHandlers = function() {
+  const thisWord = this;
+  this.clickHandlers.forEach(function(handler, ndx) {
+    if (handler) {
+      thisWord.occurrences[ndx].removeEventListener("click", handler);
+    }
+  });
 };
 
 Word.prototype.updateCssClasses = function() {
@@ -91,7 +112,10 @@ Word.cssRules = [
       border-radius: 2px;
       background-color: yellow;
   }`,
+  `a .L2.unknown {
+      border-bottom: 1px solid blue;
+  }`,
   `.L2.known:hover {
       border-bottom: 2px solid green;
-  }`,
+  }`
 ];

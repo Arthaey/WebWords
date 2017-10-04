@@ -31,7 +31,7 @@ describe("WebWords", function() {
 
     expect(page.langCode).toBe(Language.UNKNOWN);
     expect(page.words).toBeEmpty();
-    expect(page.pageElements).toBeEmpty();
+    expect(page.rootElement.querySelectorAll(".L2")).toBeEmpty();
   });
 
   it("runs on the page when it identifies the language", function() {

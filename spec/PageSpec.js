@@ -81,9 +81,9 @@ describe("Page", function() {
 
     page = new Page(Language.SPANISH, element);
 
-    expect(page.pageElements.length).toBe(1);
-    expect(page.pageElements[0].innerText).toEqual(text);
-    expect(page.pageElements[0].innerHTML).toEqual(expectedHTML);
+    expect(page.rootElement.innerText).toEqual(text);
+    expect(page.rootElement.innerHTML).toEqual(expectedHTML);
+    expect(page.rootElement.querySelectorAll(".L2").length).toBe(3);
   });
 
   it("counts known vs unknown words, and unique words", function() {
@@ -116,8 +116,39 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(2);
+    });
+
+    it("preserves links and other HTML tags", function() {
+      const element = dom.createElement("p", {},
+        document.createTextNode("uno "),
+        dom.createElement("em", {}, "dos"),
+        document.createTextNode(" "),
+        dom.createElement("a", {href: "example.com"}, "tres"),
+        document.createTextNode(" cuatro cinco. Seis!")
+      );
+
+      page = new Page(Language.SPANISH, element);
+
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(6);
+
+      expect(page.rootElement.innerText).toEqual("uno dos tres cuatro cinco. Seis!");
+
+      const pageElements = page.rootElement.childNodes;
+      expect(page.words["uno"].occurrences[0].innerText).toEqual("uno");
+      expect(page.words["dos"].occurrences[0].innerText).toEqual("dos");
+      expect(page.words["tres"].occurrences[0].innerText).toEqual("tres");
+      expect(page.words["cuatro"].occurrences[0].innerText).toEqual("cuatro");
+      expect(page.words["cinco"].occurrences[0].innerText).toEqual("cinco");
+      expect(page.words["seis"].occurrences[0].innerText).toEqual("Seis");
+
+      expect(page.words["uno"].occurrences[0].parentNode.tagName).toEqual("P");
+      expect(page.words["dos"].occurrences[0].parentNode.tagName).toEqual("EM");
+      expect(page.words["tres"].occurrences[0].parentNode.tagName).toEqual("A");
+      expect(page.words["cuatro"].occurrences[0].parentNode.tagName).toEqual("P");
+      expect(page.words["cinco"].occurrences[0].parentNode.tagName).toEqual("P");
+      expect(page.words["seis"].occurrences[0].parentNode.tagName).toEqual("P");
     });
 
     it("does not include parentheses in the word", function() {
@@ -126,8 +157,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(1);
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
@@ -137,8 +168,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(1);
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
@@ -148,8 +179,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(1);
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
@@ -159,8 +190,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(1);
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
@@ -170,8 +201,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(1);
       expect(page.words["palabra"]).not.toBeUndefined();
     });
 
@@ -181,8 +212,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(2);
       expect(page.words["uno"]).not.toBeUndefined();
       expect(page.words["dos"]).not.toBeUndefined();
     });
@@ -193,8 +224,8 @@ describe("Page", function() {
 
       page = new Page(Language.SPANISH, element);
 
-      expect(page.pageElements.length).toBe(1);
-      expect(page.pageElements[0].innerText).toEqual(text);
+      expect(page.rootElement.innerText).toEqual(text);
+      expect(page.rootElement.querySelectorAll(".L2").length).toBe(2);
       expect(page.stats.totalWordCount).toBe(2);
       expect(page.words["uno"].text).toBe("uno");
       expect(page.words["tres"].text).toBe("tres");

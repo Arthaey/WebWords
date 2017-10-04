@@ -2,14 +2,15 @@
 
 const Page = function(langCode, rootElement) {
   this.langCode = langCode || Language.UNKNOWN;
+  this.rootElement = rootElement;
+
   this.reset();
-  this.parseWords(rootElement);
+  this.parseWords();
 };
 
 Page.prototype.reset = function() {
   this.destroy();
 
-  this.pageElements = [];
   this.words = [];
   this.stats = new Statistics();
 
@@ -30,6 +31,7 @@ Page.prototype.markAsKnown = function(word) {
   }
 
   word.markAsKnown();
+  word.removeClickHandlers();
 
   this.stats.totalKnownWordCount += word.occurrences.length;
   this.stats.uniqueKnownWordCount += 1;
@@ -38,30 +40,52 @@ Page.prototype.markAsKnown = function(word) {
   return Fieldbook.createRecord(this.langCode, word);
 };
 
-Page.prototype.parseWords = function(rootElement) {
-  if (!rootElement || this.langCode === Language.UNKNOWN) return;
+Page.prototype.parseWords = function() {
+  if (!this.rootElement || this.langCode === Language.UNKNOWN) return;
 
   const thisPage = this;
 
   this.reset();
 
-  const originalContainer = rootElement.parentNode;
+  const originalContainer = this.rootElement.parentNode;
   const rootContainerElement = document.createElement("div");
-  rootContainerElement.appendChild(rootElement);
+  rootContainerElement.appendChild(this.rootElement);
 
   const tagsWithText = "h1, h2, h3, h4, h5, h6, article, p:not(.webwords-ignore)";
   const elements = rootContainerElement.querySelectorAll(tagsWithText);
+  this.wrapElements(elements);
 
+  originalContainer.appendChild(this.rootElement);
+};
+
+Page.prototype.wrapElements = function(elements) {
+  const thisPage = this;
   elements.forEach(function(element) {
-    let texts = element.innerText.trim().split(Constants.splitRegex);
-    texts = texts.filter(function(text) {
-      return text !== "";
-    });
-    let wrappedElements = texts.map(thisPage.wrapWord, thisPage);
-    Page.replaceContents(element, wrappedElements);
-    thisPage.pageElements.push(element);
+    if (element.nodeType === Node.TEXT_NODE) {
+      thisPage.wrapText(element);
+    } else {
+      const nonLiveChildNodes = [].slice.call(element.childNodes);
+      thisPage.wrapElements(nonLiveChildNodes);
+    }
   });
-  originalContainer.appendChild(rootElement);
+};
+
+Page.prototype.wrapText = function(element) {
+  const texts = Page.splitText(element);
+  const wrappedWords = texts.map(this.wrapWord, this);
+  const parentNode = element.parentNode;
+
+  wrappedWords.forEach(function(wrappedWord) {
+    element.parentNode.insertBefore(wrappedWord, element);
+  });
+  element.parentNode.removeChild(element);
+};
+
+Page.splitText = function(element) {
+  const texts = element.textContent.split(Constants.splitRegex);
+  return texts.filter(function(text) {
+    return text !== "";
+   });
 };
 
 Page.prototype.getSavedWords = function() {
@@ -89,6 +113,7 @@ Page.prototype.wrapWord = function(text) {
 };
 
 Page.prototype.addWord = function(element) {
+  const thisPage = this;
   const word = Word.create(element);
   const isNew = !this.words[word.text];
   const isKnown = (word.learningStatus === Word.KNOWN);
@@ -98,8 +123,12 @@ Page.prototype.addWord = function(element) {
   if (isKnown) this.stats.totalKnownWordCount += 1;
   if (isNew && isKnown) this.stats.uniqueKnownWordCount += 1;
 
+  word.addClickHandler(element, function(e) {
+    e.preventDefault();
+    thisPage.markAsKnown(word);
+  });
+
   this.words[word.text] = word;
-  element.addEventListener("click", this.markAsKnown.bind(this, word));
 };
 
 Page.prototype.parseSavedData = function(records) {
@@ -135,11 +164,4 @@ Page.prototype._unverifiedWords = function() {
   });
 
   return unverifiedWords;
-};
-
-Page.replaceContents = function(containerElement, childElements) {
-  containerElement.innerHTML = "";
-  childElements.forEach(function(childElement) {
-    containerElement.appendChild(childElement);
-  });
 };

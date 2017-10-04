@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     browserify: {
       dist: {
         files: {
-          "dist/srcBundle.js": ["src/main.js"]
+          "dist/src.js": [sourceFiles]
         },
         options: {
           browserifyOptions: {
@@ -55,22 +55,6 @@ module.exports = function(grunt) {
       }
     },
 
-    concat: {
-      dist: {
-        src: [
-          "src/Constants.js",
-          "src/Fieldbook.js",
-          "src/Language.js",
-          "src/Statistics.js",
-          "src/WebWords.js",
-          "src/Word.js",
-          "src/Page.js",
-          "src/InfoBox.js"
-        ],
-        dest: mainFile
-      }
-    },
-
     scp: {
       options: {
         host: "arthaey.com",
@@ -88,14 +72,13 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-browserify");
-  grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
   grunt.loadNpmTasks("@kyleramirez/grunt-scp");
 
   grunt.registerTask("default", ["test", "build"]);
 
-  grunt.registerTask("build", ["browserify", "concat"]);
+  grunt.registerTask("build", ["browserify"]);
   grunt.registerTask("test", ["karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

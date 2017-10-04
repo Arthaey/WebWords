@@ -10,7 +10,7 @@ describe("Page", function() {
   let page;
 
   afterEach(function() {
-    if (page) page.destroy();
+    page.destroy();
   });
 
   it("starts with no words", function() {
@@ -53,7 +53,7 @@ describe("Page", function() {
     expect(page.words["ocho"].occurrences.length).toBe(1);
     expect(page.infoBox).not.toBeNull();
 
-    expect(page.words["uno"].occurrences[0].classList).not.toContain("unknown");
+    expect(page.words["uno"].occurrences[0]).not.toHaveClass("unknown");
   });
 
   it("counts unique words", function() {
@@ -273,10 +273,10 @@ describe("Page", function() {
         uniqueKnownWordCount: 0,
       }));
 
-      expect(page.words["es"].occurrences[0].classList).toContain("unverified");
-      expect(page.words["es"].occurrences[1].classList).toContain("unverified");
-      expect(page.words["y"].occurrences[0].classList).toContain("unverified");
-      expect(page.words["otra"].occurrences[0].classList).toContain("unverified");
+      expect(page.words["es"].occurrences[0]).toHaveClass("unverified");
+      expect(page.words["es"].occurrences[1]).toHaveClass("unverified");
+      expect(page.words["y"].occurrences[0]).toHaveClass("unverified");
+      expect(page.words["otra"].occurrences[0]).toHaveClass("unverified");
 
       page.getSavedWords().then(function() {
         expect(page.stats).toEqual(new Statistics({
@@ -286,10 +286,10 @@ describe("Page", function() {
           uniqueKnownWordCount: 1,
         }));
 
-        expect(page.words["es"].occurrences[0].classList).toContain("known");
-        expect(page.words["es"].occurrences[1].classList).toContain("known");
-        expect(page.words["y"].occurrences[0].classList).toContain("unknown");
-        expect(page.words["otra"].occurrences[0].classList).toContain("unknown");
+        expect(page.words["es"].occurrences[0]).toHaveClass("known");
+        expect(page.words["es"].occurrences[1]).toHaveClass("known");
+        expect(page.words["y"].occurrences[0]).toHaveClass("unknown");
+        expect(page.words["otra"].occurrences[0]).toHaveClass("unknown");
         asyncDone();
       });
 
@@ -365,7 +365,7 @@ describe("Page", function() {
       const records = fakeFieldbookRecords(["y"]);
 
       page.getSavedWords().then(function() {
-        expect(word.occurrences[0].classList).toContain("unknown");
+        expect(word.occurrences[0]).toHaveClass("unknown");
         expect(word.fieldbookId).toBeNull();
         expect(page.infoBox.element).toHaveText("0% words known");
         expect(page.infoBox.element).toHaveText("0% page known");
@@ -376,7 +376,7 @@ describe("Page", function() {
         return promise;
       })
       .then(function() {
-        expect(word.occurrences[0].classList).toContain("known");
+        expect(word.occurrences[0]).toHaveClass("known");
         expect(word.fieldbookId).not.toBeNull();
         expect(page.infoBox.element).toHaveText("17% words known");
         expect(page.infoBox.element).toHaveText("13% page known");
@@ -391,7 +391,7 @@ describe("Page", function() {
       const word = page.words["y"];
 
       page.getSavedWords().then(function() {
-        expect(word.occurrences[0].classList).toContain("known");
+        expect(word.occurrences[0]).toHaveClass("known");
         expect(word.fieldbookId).not.toBeNull();
         return page.markAsKnown(word);
       })

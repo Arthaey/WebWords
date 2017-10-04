@@ -13,7 +13,7 @@ describe("InfoBox", function() {
   });
 
   afterEach(function() {
-    if (infoBox) infoBox.destroy();
+    infoBox.destroy();
   });
 
   it("defaults to unknown language with no button", function() {

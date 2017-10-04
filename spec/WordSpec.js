@@ -54,16 +54,16 @@ describe("Word", function() {
     const word = new Word(element);
 
     expect(word.learningStatus).toEqual("unverified");
-    expect(word.occurrences[0].classList).toContain("unverified");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
-    expect(word.occurrences[0].classList).not.toContain("known");
+    expect(word.occurrences[0]).toHaveClass("unverified");
+    expect(word.occurrences[0]).not.toHaveClass("unknown");
+    expect(word.occurrences[0]).not.toHaveClass("known");
 
     word.markAsKnown();
 
     expect(word.learningStatus).toEqual("known");
-    expect(word.occurrences[0].classList).not.toContain("unverified");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
-    expect(word.occurrences[0].classList).toContain("known");
+    expect(word.occurrences[0]).not.toHaveClass("unverified");
+    expect(word.occurrences[0]).not.toHaveClass("unknown");
+    expect(word.occurrences[0]).toHaveClass("known");
   });
 
   it("marks a word as unknown", function() {
@@ -71,16 +71,16 @@ describe("Word", function() {
     const word = new Word(element, "known");
 
     expect(word.learningStatus).toEqual("known");
-    expect(word.occurrences[0].classList).not.toContain("unverified");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
-    expect(word.occurrences[0].classList).toContain("known");
+    expect(word.occurrences[0]).not.toHaveClass("unverified");
+    expect(word.occurrences[0]).not.toHaveClass("unknown");
+    expect(word.occurrences[0]).toHaveClass("known");
 
     word.markAsUnknown();
 
     expect(word.learningStatus).toEqual("unknown");
-    expect(word.occurrences[0].classList).not.toContain("unverified");
-    expect(word.occurrences[0].classList).toContain("unknown");
-    expect(word.occurrences[0].classList).not.toContain("known");
+    expect(word.occurrences[0]).not.toHaveClass("unverified");
+    expect(word.occurrences[0]).toHaveClass("unknown");
+    expect(word.occurrences[0]).not.toHaveClass("known");
   });
 
   it("starts with no occurrences", function() {
@@ -92,7 +92,7 @@ describe("Word", function() {
     const element = dom.createElement("p", {}, "palabra");
     const word = new Word(element);
 
-    expect(word.occurrences[0].classList).toContain("L2");
+    expect(word.occurrences[0]).toHaveClass("L2");
   });
 
   it("adds occurrences to the same Word with same text", function() {
@@ -132,8 +132,8 @@ describe("Word", function() {
 
     Word.create("palabra");
     expect(word.learningStatus).toEqual("known");
-    expect(word.occurrences[0].classList).toContain("known");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
+    expect(word.occurrences[0]).toHaveClass("known");
+    expect(word.occurrences[0]).not.toHaveClass("unknown");
   });
 
   it("can change learning status when creating twice", function() {
@@ -143,7 +143,56 @@ describe("Word", function() {
 
     Word.create("palabra", "known");
     expect(word.learningStatus).toEqual("known");
-    expect(word.occurrences[0].classList).toContain("known");
-    expect(word.occurrences[0].classList).not.toContain("unknown");
+    expect(word.occurrences[0]).toHaveClass("known");
+    expect(word.occurrences[0]).not.toHaveClass("unknown");
+  });
+
+  describe("equality", function() {
+    it("is equal when all properties match", function() {
+      const element = dom.createElement("p", {}, "palabra");
+      const word1 = new Word(element, "known");
+      const word2 = new Word(element, "known");
+      expect(word1).toEqual(word2);
+    });
+
+    it("is not equal when other object is not a Word", function() {
+      const element = dom.createElement("p", {}, "palabra");
+      const word1 = new Word(element, "known");
+      const obj = new Object();
+      expect(word1).not.toEqual(obj);
+    });
+
+    it("is not equal when text does not match", function() {
+      const word1 = new Word(dom.createElement("p", {}, "uno"), "known");
+      const word2 = new Word(dom.createElement("p", {}, "dos"), "known");
+      expect(word1).not.toEqual(word2);
+    });
+
+    it("is not equal when learning status does not match", function() {
+      const element = dom.createElement("p", {}, "palabra");
+      const word1 = new Word(element, "unknown");
+      const word2 = new Word(element, "known");
+      expect(word1).not.toEqual(word2);
+    });
+
+    it("is not equal when Fieldbook IDs do not match", function() {
+      const element = dom.createElement("p", {}, "palabra");
+      const word1 = new Word(element, "known");
+      word1.fieldbookId = 1;
+      const word2 = new Word(element, "known");
+      word2.fieldbookId = 2;
+      expect(word1).not.toEqual(word2);
+    });
+
+    it("is not equal when number of occurrences do not match", function() {
+      const element = dom.createElement("p", {}, "palabra");
+      const word1 = new Word(element, "known");
+      const word2 = new Word(element, "known");
+      word2.addOccurrence(element);
+
+      expect(word1.occurrences.length).toBe(1);
+      expect(word2.occurrences.length).toBe(2);
+      expect(word1).not.toEqual(word2);
+    });
   });
 });

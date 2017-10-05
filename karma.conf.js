@@ -44,6 +44,9 @@ module.exports = function(config) {
       ]
     },
 
+    watchify: {
+    },
+
     coverageReporter: {
       dir: "spec/coverage/",
       reporters: [

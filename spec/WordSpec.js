@@ -172,6 +172,7 @@ describe("Word", function() {
     const element = dom.createElement("p", {}, "palabra");
     const word = new Word(element);
 
+    /* istanbul ignore next */
     const doNotCallHandler = function() {
       fail("should not have called click handler");
     };

@@ -51,7 +51,7 @@ Fieldbook.updateRecord = function(langCode, word) {
 
 Fieldbook._makeRequest = function(method, url, body, authToken, resolve, reject) {
   const xhr = new XMLHttpRequest();
-  xhr.open(method, url);
+  xhr.open(method, url); /* eslint security/detect-non-literal-fs-filename: "off" */
   xhr.setRequestHeader("Accept", "application/json");
   if (method === "POST") {
     xhr.setRequestHeader("Content-Type", "application/json");

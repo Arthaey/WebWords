@@ -1,12 +1,14 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var srcFiles = "src/*.js";
-  var specFiles = "spec/*.js";
-  var mainFile = "dist/src.js";
+  const packageJson = grunt.file.readJSON("package.json");
+
+  const srcFiles = "src/*.js";
+  const specFiles = "spec/*.js";
+  const mainFile = "dist/src.js";
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON("package.json"),
+    pkg: packageJson,
 
     browserify: {
       dist: {
@@ -64,6 +66,10 @@ module.exports = function(grunt) {
       ]
     },
 
+    nsp: {
+      package: packageJson
+    },
+
     scp: {
       options: {
         host: "arthaey.com",
@@ -84,11 +90,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
+  grunt.loadNpmTasks("grunt-nsp");
   grunt.loadNpmTasks("@kyleramirez/grunt-scp");
 
   grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["browserify"]);
-  grunt.registerTask("test", ["eslint", "karma"]);
+  grunt.registerTask("test", ["eslint", "nsp", "karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

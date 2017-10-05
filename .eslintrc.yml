@@ -1,4 +1,9 @@
 ---
+plugins:
+  - security
+extends:
+  - plugin:security/recommended
+
 parserOptions:
   sourceType: module
   ecmaFeatures:
@@ -275,3 +280,6 @@ rules:
   symbol-description: off
   template-curly-spacing: off
   yield-star-spacing: off
+
+  # Security plugin
+  security/detect-object-injection: off

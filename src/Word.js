@@ -52,6 +52,7 @@ Word.prototype.removeClickHandlers = function() {
   this.clickHandlers.forEach(function(handler, ndx) {
     if (handler) {
       thisWord.occurrences[ndx].removeEventListener("click", handler);
+      thisWord.clickHandlers[ndx] = null;
     }
   });
 };

@@ -13,6 +13,7 @@ module.exports = function(config) {
     browsers: ["ChromeHeadless"],
 
     files: [
+      "spec/lib/jasmine-2.8.0/mock-ajax.js", // delete after jasmine-ajax PR #176
       "spec/SpecHelper.js",
       "spec/ConstantsSpec.js",
       "spec/FieldbookSpec.js",

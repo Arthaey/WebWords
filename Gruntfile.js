@@ -96,6 +96,6 @@ module.exports = function(grunt) {
   grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["browserify"]);
-  grunt.registerTask("test", ["eslint", "nsp", "karma"]);
+  grunt.registerTask("test", ["eslint", "nsp", "browserify:test", "karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

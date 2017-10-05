@@ -28,6 +28,21 @@ describe("Fieldbook", function() {
     expect(Fieldbook.getUrl(Language.SPANISH)).toEqual(expectedUrl);
   });
 
+  it("handles errors with status text", function(asyncDone) {
+    setFieldbookLocalStorageItems();
+    spyOn(console, "error");
+
+    Fieldbook.getRecords(Language.SPANISH).then(function(records) {
+      const errorMsg = "ERROR with http://example.com/foo/es: '404 Not Found'";
+      expect(console.error).toHaveBeenCalledWith(errorMsg);
+      expect(records).toBeEmpty();
+      asyncDone();
+    });
+
+    const request = jasmine.Ajax.requests.mostRecent();
+    request.responseError({ status: 404, statusText: "404 Not Found" });
+  });
+
   describe("getAuthToken", function() {
     it("returns a token when all required info is set", function() {
       removeFieldbookLocalStorageItems();

@@ -58,7 +58,7 @@ Fieldbook._makeRequest = function(method, url, body, authToken, resolve, reject)
   }
   xhr.setRequestHeader("Authorization", "Basic " + authToken);
   xhr.onload = () => resolve(xhr.responseText);
-  xhr.onerror = (progressEvent) => reject(progressEvent, xhr.statusText);
+  xhr.onerror = (progressEvent) => reject(progressEvent.target);
   xhr.send(body);
   return xhr;
 };
@@ -75,11 +75,12 @@ Fieldbook._promisifyRequest = function(method, url, body) {
   .then(function(responseText) {
     return JSON.parse(responseText);
   })
-  .catch(function(progressEvent, statusText) {
+  .catch(function(response) {
     let errorMsg = `ERROR with ${url}`;
-    if (statusText) errorMsg += `: '${statusText}'`;
+    const status = response.statusText || response.status;
+    if (status ) errorMsg += `: '${status}'`;
     console.error(errorMsg);
-    console.error(progressEvent);
+    console.error(response);
     return [];
   });
 };

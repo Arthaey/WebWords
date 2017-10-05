@@ -147,6 +147,43 @@ describe("Word", function() {
     expect(word.occurrences[0]).not.toHaveClass("unknown");
   });
 
+  it("adds and removes click handlers", function() {
+    const element = dom.createElement("p", {}, "palabra");
+    const word = new Word(element);
+    let callCount = 0;
+
+    const handler = function() {
+      callCount += 1;
+      expect(callCount).toBe(1);
+
+      word.removeClickHandlers();
+      word.clickHandlers.forEach(function(noHandler) {
+        expect(noHandler).toBeNull();
+      });
+
+      element.click(); // should not increment callCount anymore
+    };
+
+    word.addClickHandler(element, handler);
+    element.click();
+  });
+
+  it("doesn't blow up if a click handler has been deleted", function() {
+    const element = dom.createElement("p", {}, "palabra");
+    const word = new Word(element);
+
+    const doNotCallHandler = function() {
+      fail("should not have called click handler");
+    };
+
+    word.addClickHandler(element, doNotCallHandler);
+    word.removeClickHandlers();
+    word.removeClickHandlers();
+
+    element.click();
+    expect(word.clickHandlers[0]).toBeNull();
+  });
+
   describe("equality", function() {
     it("is equal when all properties match", function() {
       const element = dom.createElement("p", {}, "palabra");

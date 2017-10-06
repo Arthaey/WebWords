@@ -36,6 +36,12 @@ module.exports = function(grunt) {
       }
     },
 
+    clean: [
+      "dist/",
+      "spec/coverage/",
+      "spec/SpecBundle.js"
+    ],
+
     karma: {
       unit: {
         configFile: "karma.conf.js"
@@ -76,6 +82,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-browserify");
+  grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");

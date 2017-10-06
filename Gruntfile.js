@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
   'use strict';
 
+  const packageJson = grunt.file.readJSON("package.json");
+
   const srcFiles = ["src/*.js"];
 
   const specFiles = [
@@ -9,11 +11,12 @@ module.exports = function(grunt) {
     "!spec/SpecBundle.js"
   ];
 
-  const packageJson = grunt.file.readJSON("package.json");
+  const allFiles = srcFiles.concat(specFiles);
 
   const browserifyOpts = {
     browserifyOptions: {
       debug: true,
+      watch: true,
       paths: ["."]
     }
   };
@@ -58,7 +61,7 @@ module.exports = function(grunt) {
     },
 
     eslint: {
-      target: srcFiles.concat(specFiles)
+      target: allFiles
     },
 
     nsp: {
@@ -78,11 +81,17 @@ module.exports = function(grunt) {
           dest: "www/arthaey.com/live/tech/programming/webwords",
         }]
       }
+    },
+
+    watch: {
+      files: allFiles,
+      tasks: ["build"]
     }
   });
 
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-karma-coveralls");
@@ -93,6 +102,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("build", ["browserify"]);
   grunt.registerTask("build:test", ["browserify:test"]);
-  grunt.registerTask("test", ["eslint", "nsp", "browserify:test", "karma"]);
+  grunt.registerTask("dev", ["build", "watch"]);
+  grunt.registerTask("test", ["eslint", "nsp", "build:test", "karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

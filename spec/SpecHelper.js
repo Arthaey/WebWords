@@ -7,7 +7,7 @@ global.wordEqualityTester = function(first, second) {
   if (first instanceof Word && second instanceof Word) {
     return first.text === second.text &&
            first.learningStatus === second.learningStatus &&
-           first.fieldbookId === second.fieldbookId &&
+           first.dataStoreId === second.dataStoreId &&
            first.occurrences.length === second.occurrences.length
            ;
   }

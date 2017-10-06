@@ -10,6 +10,7 @@ const Word = require("src/Word.js");
 const Page = function(langCode, rootElement) {
   this.langCode = langCode || Language.UNKNOWN;
   this.rootElement = rootElement;
+  this.fieldbook = new Fieldbook();
 
   this.reset();
   this.parseWords();
@@ -44,7 +45,7 @@ Page.prototype.markAsKnown = function(word) {
   this.stats.uniqueKnownWordCount += 1;
   this.infoBox.update(this.stats);
 
-  return Fieldbook.createRecord(this.langCode, word);
+  return this.fieldbook.createRecord(this.langCode, word);
 };
 
 Page.prototype.parseWords = function() {
@@ -99,7 +100,7 @@ Page.prototype.getSavedWords = function() {
   const thisPage = this;
   const thisInfoBox = this.infoBox;
 
-  return Fieldbook.getRecords(this.langCode)
+  return this.fieldbook.getRecords(this.langCode)
     .then(thisPage.parseSavedData.bind(thisPage))
     .then(thisInfoBox.update.bind(thisInfoBox, thisPage.stats))
 };
@@ -145,7 +146,7 @@ Page.prototype.parseSavedData = function(records) {
     const wordOnPage = thisPage.words[record.word];
     if (!wordOnPage) return;
 
-    wordOnPage.fieldbookId = record.id;
+    wordOnPage.dataStoreId = record.id;
 
     if (wordOnPage.learningStatus !== Word.KNOWN && record.how_well_known === Word.KNOWN) {
       thisPage.stats.uniqueKnownWordCount += 1;

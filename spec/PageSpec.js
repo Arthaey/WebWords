@@ -293,7 +293,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), json);
     });
 
     it("ignores Fieldbook words that aren't on this page", function(asyncDone) {
@@ -319,7 +319,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), json);
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), json);
     });
 
     it("marks a word as known when text is clicked", function() {
@@ -327,12 +327,12 @@ describe("Page", function() {
       expect(page.infoBox).not.toBeUndefined();
       expect(page.infoBox).not.toBeNull();
 
-      spyOn(Fieldbook, "createRecord");
+      spyOn(page.fieldbook, "createRecord");
       spyOn(page.infoBox, "update");
 
       page.words["y"].occurrences[0].click();
 
-      expect(Fieldbook.createRecord).toHaveBeenCalled();
+      expect(page.fieldbook.createRecord).toHaveBeenCalled();
       expect(page.infoBox.update).toHaveBeenCalled();
     });
 
@@ -344,18 +344,18 @@ describe("Page", function() {
 
       page.getSavedWords().then(function() {
         expect(word.learningStatus).toBe(Word.KNOWN);
-        spyOn(Fieldbook, "createRecord");
+        spyOn(page.fieldbook, "createRecord");
         spyOn(page.infoBox, "update");
 
         word.occurrences[0].click();
 
-        expect(Fieldbook.createRecord).not.toHaveBeenCalled();
+        expect(page.fieldbook.createRecord).not.toHaveBeenCalled();
         expect(page.infoBox.update).not.toHaveBeenCalled();
         expect(word.learningStatus).toBe(Word.KNOWN);
         asyncDone();
       })
 
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("updates Fieldbook when marking a word as known", function(asyncDone) {
@@ -366,24 +366,24 @@ describe("Page", function() {
 
       page.getSavedWords().then(function() {
         expect(word.occurrences[0]).toHaveClass("unknown");
-        expect(word.fieldbookId).toBeNull();
+        expect(word.dataStoreId).toBeNull();
         expect(page.infoBox.element).toHaveText("0% words known");
         expect(page.infoBox.element).toHaveText("0% page known");
       })
       .then(function() {
         const promise = page.markAsKnown(word);
-        mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
+        mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), records);
         return promise;
       })
       .then(function() {
         expect(word.occurrences[0]).toHaveClass("known");
-        expect(word.fieldbookId).not.toBeNull();
+        expect(word.dataStoreId).not.toBeNull();
         expect(page.infoBox.element).toHaveText("17% words known");
         expect(page.infoBox.element).toHaveText("13% page known");
         asyncDone();
       });
 
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "[]");
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), "[]");
     });
 
     it("does NOT update Fieldbook if word is already known ", function(asyncDone) {
@@ -392,7 +392,7 @@ describe("Page", function() {
 
       page.getSavedWords().then(function() {
         expect(word.occurrences[0]).toHaveClass("known");
-        expect(word.fieldbookId).not.toBeNull();
+        expect(word.dataStoreId).not.toBeNull();
         return page.markAsKnown(word);
       })
       .then(function() {
@@ -401,7 +401,7 @@ describe("Page", function() {
       });
 
       const records = fakeFieldbookRecords(["y"]);
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), records);
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), records);
     });
 
     it("does not blow up on bad Fieldbook records", function(asyncDone) {
@@ -413,7 +413,7 @@ describe("Page", function() {
         asyncDone();
       });
 
-      mockAjaxRequest(Fieldbook.getUrl(Language.SPANISH), "not valid json");
+      mockAjaxRequest(page.fieldbook.getUrl(Language.SPANISH), "not valid json");
     });
   });
 });

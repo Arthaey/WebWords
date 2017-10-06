@@ -41,7 +41,7 @@ describe("Word", function() {
 
   it("defaults to no Fieldbook ID", function() {
     const word = new Word("palabra");
-    expect(word.fieldbookId).toBeNull();
+    expect(word.dataStoreId).toBeNull();
   });
 
   it("can have custom learning status", function() {
@@ -216,9 +216,9 @@ describe("Word", function() {
     it("is not equal when Fieldbook IDs do not match", function() {
       const element = dom.createElement("p", {}, "palabra");
       const word1 = new Word(element, "known");
-      word1.fieldbookId = 1;
+      word1.dataStoreId = 1;
       const word2 = new Word(element, "known");
-      word2.fieldbookId = 2;
+      word2.dataStoreId = 2;
       expect(word1).not.toEqual(word2);
     });
 

@@ -5,7 +5,7 @@ const Constants = require("src/Constants.js");
 const Word = function(textOrElement, learningStatus) {
   this.text = Word.normalizeText(textOrElement);
   this.learningStatus = learningStatus || Word.UNVERIFIED;
-  this.fieldbookId = null;
+  this.dataStoreId = null;
 
   // These two arrays stay in sync, so occurences[i] goes with clickHandlers[i].
   this.occurrences = [];

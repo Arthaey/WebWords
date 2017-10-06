@@ -21,6 +21,18 @@ module.exports = function(grunt) {
     }
   };
 
+  const scpOpts = {
+    host: "arthaey.com",
+    username: grunt.option("release-username") || process.env["USER"]
+  };
+
+  const sshKeyPath = process.env["HOME"] + "/.ssh/id_dsa";
+  if (grunt.file.exists(sshKeyPath)) {
+    scpOpts["privateKey"] = grunt.file.read(sshKeyPath);
+  } else {
+    scpOpts["password"] = grunt.option("release-password");
+  }
+
   grunt.initConfig({
     pkg: packageJson,
 
@@ -69,12 +81,7 @@ module.exports = function(grunt) {
     },
 
     scp: {
-      options: {
-        host: "arthaey.com",
-        username: grunt.option("release-username"),
-        password: grunt.option("release-password"),
-        privateKey: grunt.file.read(process.env["HOME"] + "/.ssh/id_dsa")
-      },
+      options: scpOpts,
       dist: {
         files: [{
           src: "src.js",

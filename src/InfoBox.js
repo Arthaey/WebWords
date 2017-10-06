@@ -1,6 +1,6 @@
 'use strict';
 
-const Language = require("./Language.js");
+const Language = require("src/Language.js");
 
 const InfoBox = function(langCode) {
   this.langCode = langCode || Language.UNKNOWN;

@@ -1,7 +1,7 @@
 'use strict';
 
-const Fieldbook = require("../src/Fieldbook.js");
-const Word = require("../src/Word.js");
+const Fieldbook = require("src/Fieldbook.js");
+const Word = require("src/Word.js");
 
 global.wordEqualityTester = function(first, second) {
   if (first instanceof Word && second instanceof Word) {

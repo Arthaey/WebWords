@@ -1,6 +1,6 @@
 'use strict';
 
-const Word = require("../src/Word.js");
+const Word = require("src/Word.js");
 
 describe("Word", function() {
   it("requires text", function() {

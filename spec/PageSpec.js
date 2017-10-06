@@ -1,10 +1,10 @@
 'use strict';
 
-const Fieldbook = require("../src/Fieldbook.js");
-const Language = require("../src/Language.js");
-const Page = require("../src/Page.js");
-const Statistics = require("../src/Statistics.js");
-const Word = require("../src/Word.js");
+const Fieldbook = require("src/Fieldbook.js");
+const Language = require("src/Language.js");
+const Page = require("src/Page.js");
+const Statistics = require("src/Statistics.js");
+const Word = require("src/Word.js");
 
 describe("Page", function() {
   let page;

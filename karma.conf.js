@@ -15,36 +15,25 @@ module.exports = function(config) {
     files: [
       "spec/lib/jasmine-2.8.0/mock-ajax.js", // delete after jasmine-ajax PR #176
       "spec/SpecHelper.js",
-      "spec/ConstantsSpec.js",
-      "spec/FieldbookSpec.js",
-      "spec/InfoBoxSpec.js",
-      "spec/LanguageSpec.js",
-      "spec/PageSpec.js",
-      "spec/StatisticsSpec.js",
-      "spec/WebWordsSpec.js",
-      "spec/WordSpec.js",
+      "spec/*Spec.js",
     ],
 
     reporters: ["spec", "coverage"],
 
     preprocessors: {
       "src/*.js": ["browserify", "coverage"],
-      "spec/*.js": ["browserify", "coverage"]
+      "spec/SpecHelper.js": ["browserify", "coverage"],
+      "spec/*Spec.js": ["browserify", "coverage"]
     },
 
     browserify: {
       debug: true,
-      extensions: [".js"],
+      paths: ["."],
       transform: [
         istanbul({
-          instrumenterConfig: {
-            embedSource: true
-          }
+          instrumenterConfig: { embedSource: true }
         })
       ]
-    },
-
-    watchify: {
     },
 
     coverageReporter: {

@@ -1,44 +1,37 @@
 module.exports = function(grunt) {
   'use strict';
 
+  const srcFiles = ["src/*.js"];
+
+  const specFiles = [
+    "spec/SpecHelper.js",
+    "spec/*Spec.js",
+    "!spec/SpecBundle.js"
+  ];
+
   const packageJson = grunt.file.readJSON("package.json");
 
-  const srcFiles = "src/*.js";
-  const specFiles = "spec/*.js";
-  const mainFile = "dist/src.js";
+  const browserifyOpts = {
+    browserifyOptions: {
+      debug: true,
+      paths: ["."]
+    }
+  };
 
   grunt.initConfig({
     pkg: packageJson,
 
     browserify: {
       dist: {
+        options: browserifyOpts,
         files: {
-          "dist/src.js": [srcFiles]
-        },
-        options: {
-          browserifyOptions: {
-            debug: true
-          }
+          "dist/src.js": srcFiles
         }
       },
       test: {
+        options: browserifyOpts,
         files: {
-          "spec/SpecBundle.js": [
-            "spec/SpecHelper.js",
-            "spec/ConstantsSpec.js",
-            "spec/FieldbookSpec.js",
-            "spec/InfoBoxSpec.js",
-            "spec/LanguageSpec.js",
-            "spec/PageSpec.js",
-            "spec/StatisticsSpec.js",
-            "spec/WebWordsSpec.js",
-            "spec/WordSpec.js",
-          ]
-        },
-        options: {
-          browserifyOptions: {
-            debug: true
-          }
+          "spec/SpecBundle.js": specFiles
         }
       }
     },
@@ -59,11 +52,7 @@ module.exports = function(grunt) {
     },
 
     eslint: {
-      target: [
-        srcFiles,
-        specFiles,
-        "!spec/SpecBundle.js"
-      ]
+      target: srcFiles.concat(specFiles)
     },
 
     nsp: {
@@ -96,6 +85,7 @@ module.exports = function(grunt) {
   grunt.registerTask("default", ["test", "build"]);
 
   grunt.registerTask("build", ["browserify"]);
+  grunt.registerTask("build:test", ["browserify:test"]);
   grunt.registerTask("test", ["eslint", "nsp", "browserify:test", "karma"]);
   grunt.registerTask("release", ["build", "scp"]);
 }

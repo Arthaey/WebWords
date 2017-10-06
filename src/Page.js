@@ -1,11 +1,11 @@
 'use strict';
 
-const Constants = require("./Constants.js");
-const Fieldbook = require("./Fieldbook.js");
-const InfoBox = require("./InfoBox.js");
-const Language = require("./Language.js");
-const Statistics = require("./Statistics.js");
-const Word = require("./Word.js");
+const Constants = require("src/Constants.js");
+const Fieldbook = require("src/Fieldbook.js");
+const InfoBox = require("src/InfoBox.js");
+const Language = require("src/Language.js");
+const Statistics = require("src/Statistics.js");
+const Word = require("src/Word.js");
 
 const Page = function(langCode, rootElement) {
   this.langCode = langCode || Language.UNKNOWN;

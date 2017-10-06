@@ -1,6 +1,6 @@
 'use strict';
 
-const Constants = require("../src/Constants.js");
+const Constants = require("src/Constants.js");
 
 const Word = function(textOrElement, learningStatus) {
   this.text = Word.normalizeText(textOrElement);

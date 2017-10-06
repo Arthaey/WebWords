@@ -1,9 +1,9 @@
 'use strict';
 
-const InfoBox = require("./InfoBox.js");
-const Language = require("./Language.js");
-const Page = require("./Page.js");
-const Word = require("./Word.js");
+const InfoBox = require("src/InfoBox.js");
+const Language = require("src/Language.js");
+const Page = require("src/Page.js");
+const Word = require("src/Word.js");
 
 const WebWords = function() {
 };

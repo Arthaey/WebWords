@@ -104,5 +104,5 @@ module.exports = function(grunt) {
   grunt.registerTask("build:test", ["browserify:test"]);
   grunt.registerTask("dev", ["build", "watch"]);
   grunt.registerTask("test", ["eslint", "nsp", "build:test", "karma"]);
-  grunt.registerTask("release", ["build", "scp"]);
+  grunt.registerTask("release", ["clean", "build", "scp"]);
 }

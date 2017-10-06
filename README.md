@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/Arthaey/WebWords.svg?branch=master)](https://travis-ci.org/Arthaey/WebWords)
 [![Coverage Status](https://coveralls.io/repos/github/Arthaey/WebWords/badge.svg?branch=master)](https://coveralls.io/github/Arthaey/WebWords?branch=master)
 [![Code Climate](https://codeclimate.com/github/Arthaey/WebWords.png)](https://codeclimate.com/github/Arthaey/WebWords)
-[![Node Vulnerabilities](https://nodesecurity.io/orgs/arthaey/projects/90bdde71-d2b6-447c-9ba6-bd0e5e4ebd85/badge)](https://nodesecurity.io/orgs/arthaey/projects/90bdde71-d2b6-447c-9ba6-bd0e5e4ebd85/badge)
+
 
 WebWords is currently under active development, but it's not really ready for users yet.
 But if you like living on the bleeding, unsupported edge ;) then you're welcome to try it.

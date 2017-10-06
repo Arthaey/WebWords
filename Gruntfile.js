@@ -73,6 +73,7 @@ module.exports = function(grunt) {
         host: "arthaey.com",
         username: grunt.option("release-username"),
         password: grunt.option("release-password"),
+        privateKey: grunt.file.read(process.env["HOME"] + "/.ssh/id_dsa")
       },
       dist: {
         files: [{

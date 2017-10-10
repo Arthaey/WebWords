@@ -1,9 +1,10 @@
 # WebWords
 
 [![Bugs](https://img.shields.io/github/issues/Arthaey/WebWords/bug.svg)](https://github.com/Arthaey/WebWords/issues?q=is:open+is:issue+label:bug)
-[![Build Status](https://travis-ci.org/Arthaey/WebWords.svg?branch=master)](https://travis-ci.org/Arthaey/WebWords)
-[![Coverage Status](https://coveralls.io/repos/github/Arthaey/WebWords/badge.svg?branch=master)](https://coveralls.io/github/Arthaey/WebWords?branch=master)
 [![Code Climate](https://codeclimate.com/github/Arthaey/WebWords.png)](https://codeclimate.com/github/Arthaey/WebWords)
+[![Coverage Status](https://coveralls.io/repos/github/Arthaey/WebWords/badge.svg?branch=master)](https://coveralls.io/github/Arthaey/WebWords?branch=master)
+[![Build Status](https://travis-ci.org/Arthaey/WebWords.svg?branch=master)](https://travis-ci.org/Arthaey/WebWords)
+[![Build History](http://www.arthaey.com/images/travis-build-badges/Arthaey-WebWords.png)](https://travis-ci.org/Arthaey/WebWords/builds)
 
 
 WebWords is currently under active development, but it's not really ready for users yet.

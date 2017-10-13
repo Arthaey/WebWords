@@ -19,3 +19,5 @@ after_success:
 
 after_script:
   - grunt coveralls
+  - curl -o trigger.sh https://raw.githubusercontent.com/Arthaey/travis-build-history-badges/master/bin/trigger_badges_update.sh
+  - sh trigger.sh

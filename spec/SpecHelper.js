@@ -124,6 +124,27 @@ beforeEach(function() {
           };
         }
       };
+    },
+
+    toHaveRGBCloseTo: function() {
+      return {
+        compare: function(actualElement, attribute, expectedRgb) {
+          const styles = window.getComputedStyle(actualElement);
+          const actualValue = styles.getPropertyValue(attribute) ;
+
+          const actualRgb = /rgb\((\d+), (\d+), (\d+)\)/.exec(actualValue);
+          actualRgb.shift(); // get rid of whole match at [0]
+
+          actualRgb.every((x, i) => {
+            expect(parseInt(x, 10)).toBeCloseTo(expectedRgb[i], -1);
+          });
+
+          return {
+            pass: true, // would have thrown above otherwise
+            message: `Expected ${attribute} to be close to '${expectedRgb}' but was '${actualRgb}'`
+          };
+        }
+      };
     }
 
   });

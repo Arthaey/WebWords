@@ -97,24 +97,24 @@ describe("InfoBox", function() {
       infoBox = new InfoBox(Language.SPANISH);
       infoBox.update(createStats(100));
 
-      expect(infoBox.element).toHaveStyle("background-color", "rgb(230, 255, 232)");
-      expect(infoBox.element).toHaveStyle("border-color", "rgb(0, 127, 10)");
+      expect(infoBox.element).toHaveRGBCloseTo("background-color", [230, 255, 232]);
+      expect(infoBox.element).toHaveRGBCloseTo("border-color", [0, 127, 10]);
     });
 
     it("sets red background when 0% known", function() {
       infoBox = new InfoBox(Language.SPANISH);
       infoBox.update(createStats(0));
 
-      expect(infoBox.element).toHaveStyle("background-color", "rgb(255, 230, 230)");
-      expect(infoBox.element).toHaveStyle("border-color", "rgb(127, 0, 0)");
+      expect(infoBox.element).toHaveRGBCloseTo("background-color", [255, 230, 230]);
+      expect(infoBox.element).toHaveRGBCloseTo("border-color", [127, 0, 0]);
     });
 
     it("sets red background when 0% known", function() {
       infoBox = new InfoBox(Language.SPANISH);
       infoBox.update(createStats(42));
 
-      expect(infoBox.element).toHaveStyle("background-color", "rgb(255, 241, 230)");
-      expect(infoBox.element).toHaveStyle("border-color", "rgb(127, 55, 0)");
+      expect(infoBox.element).toHaveRGBCloseTo("background-color", [255, 241, 230]);
+      expect(infoBox.element).toHaveRGBCloseTo("border-color", [127, 55, 0]);
     });
   });
 });

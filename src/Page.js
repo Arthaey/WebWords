@@ -59,7 +59,7 @@ Page.prototype.parseWords = function() {
   const rootContainerElement = document.createElement("div");
   rootContainerElement.appendChild(this.rootElement);
 
-  const tagsWithText = "h1, h2, h3, h4, h5, h6, article, p:not(.webwords-ignore)";
+  const tagsWithText = "h1, h2, h3, h4, h5, h6, article, p:not(.webwords-ignore), .content";
   const elements = rootContainerElement.querySelectorAll(tagsWithText);
   this.wrapElements(elements);
 

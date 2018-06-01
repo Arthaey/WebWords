@@ -1,6 +1,6 @@
 {
   "name": "webwords",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "[![Code Climate](https://codeclimate.com/github/Arthaey/WebWords.png)](https://codeclimate.com/github/Arthaey/WebWords)",
   "main": "dist/src.js",
   "scripts": {

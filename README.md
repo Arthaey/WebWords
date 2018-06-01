@@ -87,7 +87,7 @@ javascript:function loadScript(url,callback){var head=document.getElementsByTagN
 // ==UserScript==
 // @name         WebWords
 // @namespace    http://arthaey.com
-// @version      0.1.0
+// @version      0.1.1
 // @description  https://github.com/Arthaey/WebWords
 // @author       Arthaey Angosii <arthaey@gmail.com>
 // @match        http://*/*

@@ -31,15 +31,16 @@ describe("Page", function() {
       dom.createElement("h5", {}, "cinco"),
       dom.createElement("h6", {}, "seis"),
       dom.createElement("p", {}, "siete"),
-      dom.createElement("article", {}, "ocho")
+      dom.createElement("article", {}, "ocho"),
+      dom.createElement("div", {className: "content"}, "nueve")
     );
 
     page = new Page(Language.SPANISH, elements);
 
     expect(page.langCode).toEqual(Language.SPANISH);
     expect(page.stats).toEqual(new Statistics({
-      totalWordCount: 8,
-      uniqueWordCount: 8,
+      totalWordCount: 9,
+      uniqueWordCount: 9,
       totalKnownWordCount: 0,
       uniqueKnownWordCount: 0,
     }));
@@ -51,6 +52,7 @@ describe("Page", function() {
     expect(page.words["seis"].occurrences.length).toBe(1);
     expect(page.words["siete"].occurrences.length).toBe(1);
     expect(page.words["ocho"].occurrences.length).toBe(1);
+    expect(page.words["nueve"].occurrences.length).toBe(1);
     expect(page.infoBox).not.toBeNull();
 
     expect(page.words["uno"].occurrences[0]).not.toHaveClass("unknown");
